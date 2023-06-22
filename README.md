@@ -22,6 +22,6 @@
 
 ### 个人自用user.js
 
-[个人自用user.js详解版（须将user detail.js重命为user.js）](https://github.com/shuangmuxinwei/FirefoxCustomize/raw/main/Settings/user%20detail.js)
+[个人自用user.js详解版（须将user detail.js重命名为user.js）](https://github.com/shuangmuxinwei/FirefoxCustomize/raw/main/Settings/user%20detail.js)
 
 [个人自用user.js简版](https://github.com/shuangmuxinwei/FirefoxCustomize/raw/main/Settings/user.js)
