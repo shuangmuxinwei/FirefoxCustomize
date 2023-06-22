@@ -37,7 +37,7 @@ user_pref("browser.taskbar.lists.frequent.enabled", false);
 user_pref("browser.taskbar.lists.recent.enabled", false);
 user_pref("browser.taskbar.lists.tasks.enabled", false);
 // 禁止任务栏火狐图标右键显示最近条目：设置——>个性化——>开始——>在开始屏幕或任务栏的跳转列表中显示最近打开的项。Windows 10 does not provide a way to exempt a specific application from having opened files saved in Recent Items; that feature has only an all-or-nothing switch.  HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackDocs = 0 disables tracking, 1 enables. 
-
+/*=====标签页打开方式=====*/
 // 3，在新标签页打开链接；2，在新窗口打开链接；1，强制在当前标签打开链接。enforce links targeting new windows to open in a new tab instead. 3 = divert new window to a new tab (default) . 2 = allow link to open a new window. 1 = force new window into same tab. Stops malicious window sizes and some screen resolution leaks.
 // browser.link.open_newwindow，决定新标签页或新窗口打开链接。browser.link.open_newwindow.restriction精细调整哪些链接受到影响。Some web sites choose to open certain links in new windows. This preference lets you control where to open these links, that would normally open new windows. You can use browser.link.open_newwindow.restriction to fine tune which links will be affected by this preference.
 user_pref("browser.link.open_newwindow", 3);
@@ -178,7 +178,7 @@ user_pref("app.update.background.enabled", false);
 // 禁止更新服务
 // https://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
 user_pref("app.update.service.enabled", false);
-// 禁止火狐使用Win系统的服务Background Intelligent Transfer Service下载更新If set to true, the Update Service will attempt to use Windows BITS（Background Intelligent Transfer Service） to download updates and will fallback to downloading internally if that fails.
+// 禁止火狐使用Win系统服务Background Intelligent Transfer Service下载更新If set to true, the Update Service will attempt to use Windows BITS（Background Intelligent Transfer Service） to download updates and will fallback to downloading internally if that fails.
 user_pref("app.update.BITS.enabled", false);
 // 更新服务下载安装包后，询问是否应用更新If set to true, the Update Service will apply updates in the background when it finishes downloading them.
 // http://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
@@ -192,7 +192,77 @@ user_pref("browser.preferences.defaultPerformanceSettings.enabled", false);
 // 内容进程限制为2
 user_pref("dom.ipc.processCount", 2);
 // 启用硬件加速enable hardware acceleration to reduce graphics fingerprinting
-// [SETTING] General>Performance>Use hardware acceleration when available ***/
+// [SETTING] General>Performance>Use hardware acceleration when available
 user_pref("layers.acceleration.disabled", false);
 // 开启direct2d，用于硬件加速Affects text rendering (fonts will look different), impacts video performance, and parts of Quantum that utilize the GPU will also be affected as they are rolled out.
 // user_pref("gfx.direct2d.disabled", true);
+
+
+/*==========常规>浏览==========*/
+// 取消自动滚屏middle-click enabling auto-scrolling [DEFAULT: false on Linux]
+// [SETTING] General>Browsing>Use autoscrolling
+user_pref("general.autoScroll", false);
+// 取消平滑滚动
+// [SETTING] General>Browsing>Use smooth scrolling
+user_pref("general.smoothScroll", false);
+// 取消“在需要时显示触摸键盘”
+// [SETTING] General>Browsing>Show a touch keyboard when necessary
+user_pref("ui.osk.enabled", false);
+// 取消“使用键盘方向键浏览网页（键盘浏览模式）”
+// [SETTING] General>Browsing>Always use the cursor keys to navigate within pages
+user_pref("accessibility.browsewithcaret", false);
+// 在文本框外输入，则在页面中查找文本
+// [SETTING] General>Browsing>Search for text when you start typing
+user_pref("accessibility.typeaheadfind", true);
+// 画中画Enable Picture in Picture mode
+// [SETTING] General>Browsing>Enable picture-in-picture video controls
+user_pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
+// 取消“通过键盘、耳机或虚拟界面控制媒体”
+// [SETTING] General>Browsing>Control media via keyboard, headset, or virtual interface
+user_pref("media.hardwaremediakeys.enabled", false);
+
+
+
+/*==========主页>新窗口和标签页==========*/
+// 设置主页和新窗口的页面set HOME+NEWWINDOW page. about:home=Firefox Home , custom URL, about:blank
+// [SETTING] Home>New Windows and Tabs>Homepage and new windows
+user_pref("browser.startup.homepage", "chrome://browser/content/places/places.xhtml");
+// 设置新标签页页面set NEWTAB page. true=Firefox Home (default), false=blank page
+// [SETTING] Home>New Windows and Tabs>New tabs
+user_pref("browser.newtabpage.enabled", false);
+
+
+/*==========主页>Firefox主页内容==========*/
+// 禁止主页显示网络搜索、快捷方式（保存或访问过的网站）、赞助商网站disable show Web Search, Shortcuts, Sponsored shortcuts
+// [SETTING] Home>Firefox Home Content>Web Search / Shortcuts
+user_pref("browser.newtabpage.activity-stream.showSearch", false); 
+user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
+user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false); // [FF83+]
+// Firefox主页快捷方式1行显示Shortcuts row number
+user_pref("browser.newtabpage.activity-stream.topSitesRows", 1);
+// [FF58+] Pocket > Sponsored Stories
+user_pref("browser.newtabpage.activity-stream.showSponsored", false); 
+// 禁止主页显示近期访问的网站与内容精选（包括访问过的页面、书签、最近下载）disable show Recent activity (A selection of recent sites and content)
+// [SETTING] Home>Firefox Home Content>Recent activity
+user_pref("browser.newtabpage.activity-stream.feeds.section.highlights", false);
+user_pref("browser.newtabpage.activity-stream.section.highlights.includeVisited", false);
+user_pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks", false);
+user_pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads", false);
+// Firefox主页近期动态1行显示Recent activity row number
+user_pref("browser.newtabpage.activity-stream.section.highlights.rows", 1);
+// 禁止主页显示Mozilla和Firefox的使用窍门与快讯disable show Tips and news from Mozilla and Firefox
+// [SETTING] Home>Firefox Home Content>Snippets
+user_pref("browser.newtabpage.activity-stream.feeds.snippets", false);
+// 清除默认快捷方式网站clear default topsites. [NOTE] This does not block you from adding your own.
+user_pref("browser.newtabpage.activity-stream.default.sites", "");
+// 在Firefox Quantum中禁用“Pocket 推荐”Disable "Recommended by Pocket" in Firefox Quantum
+user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
+// 取消保存在Pocket的页面
+user_pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false); 
+// 禁止浏览时推荐扩展、新功能
+// [SETTING] General>Browsing>Recommend extensions/features as you browse [FF67+]
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
+// 禁用火狐主页（活动流）遥测disable Firefox Home (Activity Stream) telemetry
+user_pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
+user_pref("browser.newtabpage.activity-stream.telemetry", false);
