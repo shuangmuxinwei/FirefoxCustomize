@@ -75,14 +75,14 @@ user_pref("browser.tabs.closeTabByDblclick", true);
 
 
 
-/*==========语言与外观>网站外观==========*/
+/*==========常规>语言与外观>网站外观==========*/
 // 网站深色配色方案：深色0 = Dark . 1 = Light. 2 = Automatic. Some websites adapt their color scheme based on your preferences.
 user_pref("layout.css.prefers-color-scheme.content-override", 0);
 // 禁止已访问链接变色disable coloring of visited links
 user_pref("layout.css.visited_links_enabled", false);
 
 
-/*==========语言与外观>颜色==========*/
+/*==========常规>语言与外观>颜色==========*/
 // 禁止使用系统颜色disable using system colors[DEFAULT: false NON-WINDOWS]
 // [SETTING] General>Language and Appearance>Fonts and Colors>Colors>Use system colors 
 user_pref("browser.display.use_system_colors", false);
@@ -93,7 +93,7 @@ user_pref("browser.underline_anchors", true);
 user_pref("browser.display.document_color_use", 2);
 
 
-/*==========语言与外观>字体==========*/
+/*==========常规>语言与外观>字体==========*/
 // 禁止网站选择字体disable websites choosing fonts (0=block, 1=allow)
 // 禁止网站使用自定义设置的字体，防止网站枚举本机安装的字体（指纹泄露）。Don’t use document specified fonts to prevent installed font enumeration (fingerprinting)
 // General>Language and Appearance>Fonts & Colors>Advanced>Allow pages to choose...
@@ -104,12 +104,12 @@ user_pref("gfx.font_rendering.opentype_svg.enabled", false);
 // user_pref("gfx.font_rendering.graphite.enabled", false);
 
 
-/*==========语言与外观>全局缩放==========*/
+/*==========常规>语言与外观>全局缩放==========*/
 // 全局缩放，不单独缩放文本Don’t  Zoom text only
 user_pref("browser.zoom.full", true);
 
 
-/*==========语言与外观>语言==========*/
+/*==========常规>语言与外观>语言==========*/
 // 设置浏览器语言[FF59+]，v59前general.useragent.locale
 user_pref("intl.locale.requested", "zh-CN,en-US");
 // 设置网页显示的首选语言set preferred language for displaying web pages
@@ -117,3 +117,82 @@ user_pref("intl.locale.requested", "zh-CN,en-US");
 user_pref("intl.accept_languages", "zh-cn,zh,en-us,en,zh-tw,zh-hk");
 // 输入时不检查拼写。0=none, 1-multi-line, 2=multi-line & single-line
 user_pref("layout.spellcheckDefault", 0);
+
+
+/*==========常规>文件与应用程序>下载==========*/
+// 设置浏览器默认下载目录
+user_pref("browser.download.dir", "c:\\Users\\shadow\\Desktop");
+// 下载文件保存在最近下载目录0=desktop, 1=downloads (default), 2=last used
+// [SETTING] General>Downloads>Save files to
+user_pref("browser.download.folderList", 2);
+// 总是询问保存文件的位置
+// [SETTING] General>Downloads>Always ask you where to save files
+user_pref("browser.download.useDownloadDir", false);
+// 取消下载按钮自动隐藏[FF57+]
+user_pref("browser.download.autohideButton", false);
+// 使用FF98+新式下载流程，跳过下载确认对话框In newer versions of Mozilla Firefox (version 98.0 and later), if a user tries to download a file from a website, Firefox starts downloading the file automatically without displaying the classic notification window prompting the user to select open with or save file options. As soon as you click on a download link present on a website, Firefox starts the download and displays the download progress in the new Download panel or flyout icon present on its toolbar.  In previous versions of Firefox, the browser used to show a confirmation dialog box asking the user to select whether Firefox should open the file using an application or save the file on his computer system or cancel the downloading.
+// https://www.askvg.com/tip-restore-classic-download-confirmation-prompt-in-mozilla-firefox/
+user_pref("browser.download.improvements_to_download_panel", true);
+// 禁止每次下载时工具栏自动打开下载面板浮动控件disable downloads panel opening on every download [FF96+]. In newer versions of Mozilla Firefox web browser, when you click on a download link present on a website, Firefox starts downloading the file without asking for confirmation. But to notify the user about the download process, Firefox automatically opens the Download panel flyout present on its toolbar.
+// https://www.askvg.com/tip-enable-fully-automatic-and-silent-download-feature-in-firefox/
+user_pref("browser.download.alwaysOpenPanel", false);
+// 禁用下载对话框的“用……打开”，程序数据隔离disable "open with" in download dialog [FF50+]. Application data isolation. This is very useful to enable when the browser is sandboxed (e.g. via AppArmor). in such a way that it is forbidden to run external applications. This may interfere with some users' workflow or methods.
+user_pref("browser.download.forbid_open_with", true);
+// 禁止将下载文件添加至系统“最近使用的文档”列表disable adding downloads to the system's "recent documents" list
+user_pref("browser.download.manager.addToRecentDocs", false);
+// 从Content-Disposition头信息检索文件名的延时
+// 大多数下载的文件名与下载URL中的内容匹配。但某些网站使用Content-Disposition标头字段，指定与URL不同的文件名。若未在设定延时检索到Content-Disposition值，浏览器使用URL中指定的文件名。Some URLs use Content-Disposition headers to tell browsers what to use for a filename when saving a file. This filename may not match the URL. When choosing “Save Link As...” from a link’s context menu, Mozilla must request the URL to find out the filename from a Content-Disposition header. Since this is not as fast as merely using the URL itself to generate a filename, Mozilla will time out after a short time waiting for the headers. This preference determines that timeout. 
+// user_pref("browser.download.saveLinkAsFilenameTimeout", 0);
+
+
+/*==========常规>文件与应用程序>应用程序==========*/
+// 始终询问如何处理新类型文件，启用用户交互以确保安全性enable user interaction for security by always asking how to handle new mimetypes [FF101+]
+// [SETTING] General>Files and Applications>What should Firefox do with other files
+user_pref("browser.download.always_ask_before_handling_new_types", true);
+
+
+/*==========常规>文件与应用程序>数字版权管理（DRM）==========*/
+// 禁止播放采用DRM的内容disable all DRM content (EME: Encryption Media Extension)
+// [SETTING] General>DRM Content>Play DRM-controlled content
+user_pref("media.eme.enabled", false);
+// 隐藏“播放采用DRM的内容”的设置hide the setting which also disables the DRM prompt
+// user_pref("browser.eme.ui.enabled", false);
+// 禁用GMP（Gecko媒体插件）disable GMP (Gecko Media Plugins) 
+user_pref("media.gmp-provider.enabled", false);
+// 更新GMP（Gecko媒体插件）安装/更新的服务地址Update service URL for GMP install/updates
+// user_pref("media.gmp-manager.url", "");
+// 禁用Widevine内容解密模块disable widevine CDM (Content Decryption Module). This is covered by the EME master switch 'media.eme.enabled'. 
+user_pref("media.gmp-widevinecdm.enabled", false);
+// 去除播放DRM内容黄条提示when media.gmp-*.visible is true, provided we're running on a supported platform/OS version, the corresponding CDM appears in the plugins list, Firefox will download the GMP/CDM if enabled, and our UI to re-enable EME prompts the user to re-enable EME if it's disabled and script requests EME. If *.visible is false, we won't show the UI to enable the CDM if its disabled; it's as if the keysystem is completely unsupported.
+user_pref("media.gmp-widevinecdm.visible", false);
+// 禁用OpenH264视频编码器disable the OpenH264 Video Codec. Firefox will make use of the OpenH264 codec provided by Cisco in order to support the H.264 video codec in WebRTC, a technology allowing for peer-to-peer video communication on the web. The OpenH264 codec is not distributed with Firefox but gets downloaded at the first start of Firefox. In case you want to prohibit that, you will have to preconfigure the browser and set the media.gmp-gmpopenh264.enabled preference to false. This is the bundled codec used for video chat in WebRTC.
+user_pref("media.gmp-gmpopenh264.enabled", false);
+user_pref("media.gmp-gmpopenh264.visible", false);
+
+
+/*==========常规>更新==========*/
+// 禁用火狐自动安装更新[WIN系统无效]disable auto-INSTALLING Firefox updates [NON-WINDOWS FF65+]. In FF65+ on Windows this SETTING is now stored in a file and the pref was removed. If set to true, the Update Service will automatically download updates if the user can apply updates. This pref is no longer used on Windows, except as the default value to migrate to the new location that this data is now stored (which is in a file in the update directory). Because of this, this pref  should no longer be used directly. Instead, getAppUpdateAutoEnabled and getAppUpdateAutoEnabled from UpdateUtils.sys.mjs should be used.
+user_pref("app.update.auto", false);
+// 禁止火狐后台自动安装更新There are two main preferences specifically relevant to updates. Those are app.update.auto, which controls whether updates should be downloaded automatically at all, even if Firefox is running, and app.update.background.enabled, to specifically control whether to use the background update system. We store these preferences in the update root directory, which is located in a per-installation location outside of any profile. Any profile loaded in that installation can observe and control these settings. 
+user_pref("app.update.background.enabled", false);
+// 禁止更新服务
+// https://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
+user_pref("app.update.service.enabled", false);
+// 禁止火狐使用Win系统的服务Background Intelligent Transfer Service下载更新If set to true, the Update Service will attempt to use Windows BITS（Background Intelligent Transfer Service） to download updates and will fallback to downloading internally if that fails.
+user_pref("app.update.BITS.enabled", false);
+// 更新服务下载安装包后，询问是否应用更新If set to true, the Update Service will apply updates in the background when it finishes downloading them.
+// http://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
+user_pref("app.update.staging.enabled", false);
+// user_pref("app.update.background.previous.reasons", "[\"app.update.auto=false\",\"app.update.background.enabled=false\",\"not default profile\",\"app.update.langpack.enabled=true and at least one langpack is installed\"]");
+
+
+/*==========常规>性能==========*/
+// 不使用推荐的性能设置disable Use recommended performance settings
+user_pref("browser.preferences.defaultPerformanceSettings.enabled", false);
+// 内容进程限制为2
+user_pref("dom.ipc.processCount", 2);
+// 启用硬件加速enable hardware acceleration to reduce graphics fingerprinting
+// [SETTING] General>Performance>Use hardware acceleration when available ***/
+user_pref("layers.acceleration.disabled", false);
+// 开启direct2d，用于硬件加速Affects text rendering (fonts will look different), impacts video performance, and parts of Quantum that utilize the GPU will also be affected as they are rolled out.
+// user_pref("gfx.direct2d.disabled", true);
