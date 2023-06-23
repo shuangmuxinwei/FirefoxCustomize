@@ -44,19 +44,19 @@ user_pref("browser.link.open_newwindow", 3);
 // 通过JavaScript打开的新窗口是小弹出窗口，没有一般窗口的所有功能，如隐藏后退、前进、重新加载按钮和状态栏，故意缩小尺寸等。该窗口是专门设计成弹出窗口，在新标签页打开较少价值。browser.link.open_newwindow.restriction可以设置这些类型的链接在新窗口打开，而将所有其他类型的链接在新标签页打开。Oftentimes when a new window is opened from JavaScript, it’s a small popup without all of a usual browser window’s features—e.g., the back/forward/reload buttons are hidden, the status bar is hidden, the size is purposely smaller, etc. Usually in this situation, the window is designed specifically as a popup, and opening it in a tab actually makes it less useful. This preference can let these types of links open as new windows while opening all other types as new tabs.
 // 0=将browser.link.open_newwindow设置应用于所有新窗口（包括脚本窗口）。2=将browser.link.open_newwindow的设置应用于普通窗口，不应用于具有特征的脚本窗口。1=覆盖browser.link.open_newwindow设置，始终使用新窗口。0 = apply the setting browser.link.open_newwindow to ALL new windows (even script windows). 2 = apply the setting browser.link.open_newwindow to normal windows, but NOT to script windows with features (default). 1 = override the setting under browser.link.open_newwindow and always use new windows.
 user_pref("browser.link.open_newwindow.restriction", 0);
-// 全屏模式时，强制在新标签页打开链接（取决于browser.link.open_newwindow的参数）If true, this pref causes windows opened by window.open to be forced into new tabs (rather than potentially opening separate windows, depending on window.open arguments) when the browser is in fullscreen mode. We set this differently on Mac because the fullscreen implementation there is different.
+// 全屏模式时，强制在新标签页打开设定在新窗口打开的链接（取决于browser.link.open_newwindow的参数）If true, this pref causes windows opened by window.open to be forced into new tabs (rather than potentially opening separate windows, depending on window.open arguments) when the browser is in fullscreen mode. We set this differently on Mac because the fullscreen implementation there is different.
 user_pref("browser.link.open_newwindow.disabled_in_fullscreen", true);
 // -1，将browser.link.open_newwindow设置应用于外部链接；3，在最近活动的窗口中打开外部链接；2，在新窗口打开外部链接；1，在最近活动的标签页中打开外部链接。-1 = apply the setting browser.link.open_newwindow to external links (default) . 3 = open external links in a new tab in the last active window. 2 = open external links in a new window. 1 = open external links in the last active tab replacing the current page. 
 user_pref("browser.link.open_newwindow.override.external", -1);
 // 后台打开外部链接Determines behavior of pages normally meant to open in a new window (such as target="_blank" or from an external program), but that have instead been loaded in a new tab. Setting this preference to True will still bring the browser to the front when opening links from outside the browser. True: Load the new tab in the background, leaving focus on the current tab. False (default): Load the new tab in the foreground, taking the focus from the current tab.
 user_pref("browser.tabs.loadDivertedInBackground", true);
-// 新标签页打开书签open bookmarks in a new tab [FF57+]
+// 在新标签页打开书签open bookmarks in a new tab [FF57+]
 user_pref("browser.tabs.loadBookmarksInTabs", true);
 // 后台打开书签和历史记录Focus behavior of new tabs from bookmarks & history. True: When you open a bookmark in a new tab then that tab will load in the background without taking focus from the current tab. False (default): When you open a bookmark in a new tab then that tab will become the current tab.
 user_pref("browser.tabs.loadBookmarksInBackground", true);
 // 按住Ctrl键单击或中键单击书签不关闭菜单
 user_pref("browser.bookmarks.openInTabClosesMenu", false);
-// 新标签页打开地址栏网址
+// 在新标签页打开地址栏网址
 user_pref("browser.urlbar.openintab", true);
 // 后台打开新标签页
 user_pref("browser.tabs.loadInBackground", true);
@@ -64,7 +64,7 @@ user_pref("browser.tabs.loadInBackground", true);
 user_pref("browser.tabs.opentabfor.middleclick", true);
 // 禁用鼠标中键打开剪贴板中的链接disable middle mouse click opening links from clipboard
 user_pref("middlemouse.contentLoadURL", false);
-// 紧邻当前标签页打开当前标签页中的链接。Open related links to a tab, e.g., link in current tab, at next to the current tab if |insertRelatedAfterCurrent| is true. Otherwise, always append new tab to the end.
+// 紧邻当前标签页打开当前标签页中的链接Open related links to a tab, e.g., link in current tab, at next to the current tab if |insertRelatedAfterCurrent| is true. Otherwise, always append new tab to the end.
 user_pref("browser.tabs.insertRelatedAfterCurrent", true);
 // 紧邻当前标签页打开。browser.tabs.insertAfterCurrent值为true，覆盖browser.tabs.insertRelatedAfterCurrent设置。Open all links, e.g., bookmarks, history items at next to current tab if |insertAfterCurrent| is true. Otherwise, append new tab to the end for non-related links. Note that if this is set to true, it will trump the value of browser.tabs.insertRelatedAfterCurrent.
 user_pref("browser.tabs.insertAfterCurrent", true);
@@ -214,7 +214,7 @@ user_pref("accessibility.browsewithcaret", false);
 // 在文本框外输入，则在页面中查找文本
 // [SETTING] General>Browsing>Search for text when you start typing
 user_pref("accessibility.typeaheadfind", true);
-// 画中画Enable Picture in Picture mode
+// 启用画中画视频控件Enable Picture in Picture mode
 // [SETTING] General>Browsing>Enable picture-in-picture video controls
 user_pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
 // 取消“通过键盘、耳机或虚拟界面控制媒体”
@@ -266,3 +266,90 @@ user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", 
 // 禁用火狐主页（活动流）遥测disable Firefox Home (Activity Stream) telemetry
 user_pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
 user_pref("browser.newtabpage.activity-stream.telemetry", false);
+
+
+
+/*==========搜索>搜索栏==========*/
+// 地址栏和搜索栏合并Use the address bar for search and navigation.
+user_pref("browser.search.widget.inNavBar", false);
+// 设置默认搜索引擎Set Default Search Engine
+user_pref("browser.urlbar.placeholderName", "Bing");
+// 设置页面显示“为隐私窗口选择不同的默认搜索引擎”的隐藏选项Enables display of the options for the user using a separate default search engine in private browsing mode.
+// [SETTING] Search>Choose a different default search engine for Private Windows only
+user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
+// 为隐私窗口选择不同的默认搜索引擎
+// [SETTING] Search>Use this search engine in Private Windows
+user_pref("browser.search.separatePrivateDefault", true);
+// 设置隐私浏览模式的默认搜索引擎Set Default Search Engine
+user_pref("browser.urlbar.placeholderName.private", "Google");
+
+
+/*==========搜索>搜索建议==========*/
+// 禁用搜索建议disable live search suggestions. 'browser.search.suggest.enabled' and 'browser.urlbar.suggest.searches' must be true for the location bar to work.
+// [SETTING] Search>Provide search suggestions
+user_pref("browser.search.suggest.enabled", false);
+// 禁止在地址栏结果中显示搜索建议Disable "Show search suggestions in location bar results".
+// [SETTING] Search>Search Suggestions>Show search suggestions in address bar results
+user_pref("browser.urlbar.suggest.searches", false);
+// 在地址栏显示的结果中，不将搜索建议显示在浏览历史上方
+// [SETTING] Search>Search Suggestions>Show search suggestions ahead of browsing history in address bar results
+user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
+// 禁止在隐私窗口中显示搜索建议disable "Show search suggestions in Private Windows"
+// [SETTING] Search>Search Suggestions>Show search suggestions in Private Windows
+user_pref("browser.search.suggest.enabled.private", false);
+// 禁用地址栏上下文建议[FF92+]disable location bar contextual suggestions [FF92+]
+// 地址栏不显示赞助的快速建议结果Whether sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
+// [SETTING] Privacy & Security>Address Bar>Suggestions from...
+user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
+// 地址栏不显示非赞助的快速建议结果Whether non-sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
+user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false); // [FF95+]
+
+
+/*==========搜索>搜索引擎==========*/
+// 隐藏某些搜索引擎
+// user_pref("browser.search.hiddenOneOffs", "百度,亚马逊,Google");
+/*==========搜索>其他选项==========*/
+// 在新标签页打开搜索Whether or not items opened from the search bar are opened in a new tab.
+user_pref("browser.search.openintab", true);
+// 前台打开搜索Whether or not tabs opened from searching in the context menu are loaded in the foreground or background. this preference controls whether a search from the context menu with "Search <search engine> for <selected text>" opening a new tab will give focus to it and load it in the foreground or keep focus on the current tab and open it in the background. true, New tab with search results will be opened in the background, focus stays on the current tab. false (default) , New tab with search results will be opened in the foreground.
+user_pref("browser.search.context.loadInBackground", false);
+// 不自动升级搜索引擎disable search engine updates
+user_pref("browser.search.update", false);
+
+
+
+/*==========隐私>增强型跟踪保护==========*/
+// 启用增强跟踪保护自定义模式[FF86+]enable ENHANCED TRACKING PROTECTION custom Mode [FF86+]. ENHANCED TRACKING PROTECTION Strict Mode enables Total Cookie Protection. Adding site exceptions disables all ENHANCED TRACKING PROTECTION for that site and increases the risk of cross-site state tracking e.g. exceptions for SiteA and SiteB means PartyC on both sites is shared. value: standard / strict /  /custom
+// to add site exceptions: Urlbar>ENHANCED TRACKING PROTECTION Shield. to manage site exceptions: Options>Privacy & Security>Enhanced Tracking Protection>Manage Exceptions
+user_pref("browser.contentblocking.category", "custom");
+// 自定义增强跟踪保护设置，拦截跨站跟踪性Cookie，并隔离其余跨站Cookie. customize ENHANCED TRACKING PROTECTION settings[DEFAULT: 5 FF103+].
+// 0=接受所有cookie。1=阻止所有跨站Cookie（可能导致网站异常）。2=阻止所有Cookie（将会导致网站异常）。3=阻止未访问网站的Cookie。4=阻止跨站跟踪性Cookie。5=阻止跨站跟踪性Cookie，并隔离其余跨站Cookie。0 = Accepts all cookies. 1 = Blocks All cross-site cookies (may cause websites to break). 2 = Blocks All cookies (will cause websites to break). 3 = Blocks cookies from unvisited sites. 4 = Blocks Cross-site tracking cookies. 5 = Blocks Cross-site tracking cookies, and isolate other cross-site cookies.
+// [SETTING] Privacy & Security>Enhanced Tracking Protection>Custom>Cookies
+user_pref("network.cookie.cookieBehavior", 5);
+// 在所有窗口启用跟踪保护Enable Firefox Tracking Protection in all windows. to add site exceptions: Urlbar>ETP Shield, to manage site exceptions: Options>Privacy & Security>Enhanced Tracking Protection>Manage Exceptions
+// [SETTING] Privacy & Security>Enhanced Tracking Protection>Custom>Tracking content
+user_pref("privacy.trackingprotection.enabled", true);
+user_pref("privacy.trackingprotection.pbmode.enabled", true);
+// 启用各种增强跟踪保护列表enable various Enhanced Tracking Protection lists
+user_pref("privacy.trackingprotection.socialtracking.enabled", true);
+// 拦截加密货币挖矿程序Blocks Cryptominers
+// [SETTING] Privacy & Security>Enhanced Tracking Protection>Custom>Cryptominers
+user_pref("privacy.trackingprotection.cryptomining.enabled", true);
+// 拦截数字指纹跟踪程序Blocks Fingerprinters
+// [SETTING] Privacy & Security>Enhanced Tracking Protection>Custom>Fingerprinters
+user_pref("privacy.trackingprotection.fingerprinting.enabled", true);
+// 启用增强跟踪保护严格模式后开启的参数
+user_pref("network.http.referer.disallowCrossSiteRelaxingDefault", true);
+user_pref("network.http.referer.disallowCrossSiteRelaxingDefault.top_navigation", true); // [FF100+]
+user_pref("privacy.annotate_channels.strict_list.enabled", true);
+user_pref("privacy.partition.network_state.ocsp_cache", true);
+// 启用查询参数剥离功能enable Query Parameters Stripping feature in normal browsing. Enable URL query stripping
+// https://firefox-source-docs.mozilla.org/toolkit/components/antitracking/anti-tracking/query-stripping/index.html
+user_pref("privacy.query_stripping.enabled", true);
+// 在隐私浏览模式启用查询参数剥离功能enable Query Parameters Stripping feature in private browsing
+user_pref("privacy.query_stripping.enabled.pbmode", true);
+user_pref("privacy.trackingprotection.emailtracking.enabled", true);
+/*=====隐私>增强型跟踪保护>Do Not Track=====*/
+// 仅当火狐设置为拦截已知跟踪器时，向网站发送Do Not Track信号disable the Do Not Track HTTP header. Do Not Track is enforced with Tracking Protection which is used in ENHANCED TRACKING PROTECTION Strict. 
+// [SETTING] Privacy & Security>Enhanced Tracking Protection>Send websites a "Do Not Track" signal...
+user_pref("privacy.donottrackheader.enabled", false);
