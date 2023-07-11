@@ -74,7 +74,6 @@ user_pref("toolkit.tabbox.switchByScrolling", true);
 user_pref("browser.tabs.closeTabByDblclick", true);
 
 
-
 /*==========常规>语言与外观>网站外观==========*/
 // 网站深色配色方案：深色0 = Dark . 1 = Light. 2 = Automatic. Some websites adapt their color scheme based on your preferences.
 user_pref("layout.css.prefers-color-scheme.content-override", 0);
@@ -171,15 +170,19 @@ user_pref("media.gmp-gmpopenh264.visible", false);
 
 
 /*==========常规>更新==========*/
-// 禁用火狐自动安装更新[WIN系统无效]disable auto-INSTALLING Firefox updates [NON-WINDOWS FF65+]. In FF65+ on Windows this SETTING is now stored in a file and the pref was removed. If set to true, the Update Service will automatically download updates if the user can apply updates. This pref is no longer used on Windows, except as the default value to migrate to the new location that this data is now stored (which is in a file in the update directory). Because of this, this pref  should no longer be used directly. Instead, getAppUpdateAutoEnabled and getAppUpdateAutoEnabled from UpdateUtils.sys.mjs should be used.
-user_pref("app.update.auto", false);
-// 禁止火狐后台自动安装更新There are two main preferences specifically relevant to updates. Those are app.update.auto, which controls whether updates should be downloaded automatically at all, even if Firefox is running, and app.update.background.enabled, to specifically control whether to use the background update system. We store these preferences in the update root directory, which is located in a per-installation location outside of any profile. Any profile loaded in that installation can observe and control these settings. 
-user_pref("app.update.background.enabled", false);
-// 禁止更新服务
+// 禁止更新服务Whether or not to attempt using the service for updates.
 // https://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
 user_pref("app.update.service.enabled", false);
 // 禁止火狐使用Win系统服务Background Intelligent Transfer Service下载更新If set to true, the Update Service will attempt to use Windows BITS（Background Intelligent Transfer Service） to download updates and will fallback to downloading internally if that fails.
 user_pref("app.update.BITS.enabled", false);
+// 火狐检查更新的间隔（以秒为单位）By default, check for updates when the browser is not running every 7 hours.
+user_pref("app.update.background.interval", 86400);
+// 火狐下载更新时，提示用户If set to true, a message will be displayed in the hamburger menu while an update is being downloaded.
+user_pref("app.update.notifyDuringDownload", true);
+// 禁止火狐自动安装更新[WIN系统无效]disable auto-INSTALLING Firefox updates [NON-WINDOWS FF65+]. In FF65+ on Windows this SETTING is now stored in a file and the pref was removed. If set to true, the Update Service will automatically download updates if the user can apply updates. This pref is no longer used on Windows, except as the default value to migrate to the new location that this data is now stored (which is in a file in the update directory). Because of this, this pref  should no longer be used directly. Instead, getAppUpdateAutoEnabled and getAppUpdateAutoEnabled from UpdateUtils.sys.mjs should be used.
+user_pref("app.update.auto", false);
+// 禁止火狐后台自动安装更新There are two main preferences specifically relevant to updates. Those are app.update.auto, which controls whether updates should be downloaded automatically at all, even if Firefox is running, and app.update.background.enabled, to specifically control whether to use the background update system. We store these preferences in the update root directory, which is located in a per-installation location outside of any profile. Any profile loaded in that installation can observe and control these settings. 
+user_pref("app.update.background.enabled", false);
 // 更新服务下载安装包后，询问是否应用更新If set to true, the Update Service will apply updates in the background when it finishes downloading them.
 // http://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
 user_pref("app.update.staging.enabled", false);
@@ -353,3 +356,85 @@ user_pref("privacy.trackingprotection.emailtracking.enabled", true);
 // 仅当火狐设置为拦截已知跟踪器时，向网站发送Do Not Track信号disable the Do Not Track HTTP header. Do Not Track is enforced with Tracking Protection which is used in ENHANCED TRACKING PROTECTION Strict. 
 // [SETTING] Privacy & Security>Enhanced Tracking Protection>Send websites a "Do Not Track" signal...
 user_pref("privacy.donottrackheader.enabled", false);
+
+
+/*==========隐私>登录信息与密码==========*/
+// 不保存网站的帐户名和密码disable saving passwords. This does not clear any passwords already saved.
+// [SETTING] Privacy & Security>Logins and Passwords>Ask to save logins and passwords for websites
+user_pref("signon.rememberSignons", false);
+// 禁止自动填写用户名密码disable auto-filling username & password form fields. can leak in cross-site forms and be spoofed.
+// [SETTING] Privacy & Security>Logins and Passwords>Autofill logins and passwords
+user_pref("signon.autofillForms", false);
+// 取消“建议并生成高强度密码”disable Suggest and generate strong passwords
+user_pref("signon.generation.enabled", false);
+// 取消“网站密码外泄提醒”disable Show alerts about passwords for breached websites.
+user_pref("signon.management.page.breach-alerts.enabled", false);
+// 不允许面向Microsoft账户（个人/工作/学校）的Windows单点登录enforce no automatic authentication on Microsoft sites [FF91+] [WINDOWS 10+].
+//  [SETTING] Privacy & Security>Logins and Passwords>Allow Windows single sign-on for Microsoft, work, and school accounts
+user_pref("network.http.windows-sso.enabled", false);
+
+
+/*==========隐私>Cookie和网站数据、历史记录==========*/
+// 关闭火狐时删除Cookie与网站数据。勾选此选项，隐私>历史记录自动更改为“使用自定义设置”，并默认勾选关闭火狐时清除Cookie、缓存、脱机网站数据。参数已被privacy.sanitize.sanitizeOnShutdown替代delete cookies and site data on exit - replaced by "privacy.sanitize.sanitizeOnShutdown". 0=keep until they expire (default), 2=keep until you close Firefox
+// [SETTING] Privacy & Security>Cookies and Site Data>Delete cookies and site data when Firefox is closed
+// user_pref("network.cookie.lifetimePolicy", 2);
+/*==========隐私>历史记录==========*/
+// 历史记录使用自定义设置Use custom settings for history
+user_pref("privacy.history.custom", true);
+// 不一律使用隐私浏览模式don’t start Firefox in Private Browsing mode. [NOTE] In this mode all windows are "private windows" and the Private Browsing mode icon is not displayed. [NOTE] The P in Private Browsing mode can be misleading: it means no "persistent" disk state such as history, caches, searches, cookies, localStorage, IndexedDB etc (which you can achieve in normal mode).  In fact, Private Browsing mode limits or removes the ability to control some of these, and you need to quit Firefox to clear them. Private Browsing is best used as a one off window (Menu>New Private Window) to provide a temporary self-contained new session. Close all private windows to clear the Private Browsing session.
+// [SETTING] Privacy & Security>History>Custom Settings>Always use private browsing mode
+user_pref("browser.privatebrowsing.autostart", false);
+// 记住浏览和下载历史Remember browsing and download history
+// [SETTING] Privacy & Security>History>Custom Settings>Remember browsing and download history
+user_pref("places.history.enabled", true);
+// 禁用搜索和表单历史记录disable search and form history. Be aware that autocomplete form data can be read by third parties.
+// [SETTING] Privacy & Security>History>Custom Settings>Remember search and form history
+user_pref("browser.formfill.enable", false);
+// 火狐关闭时清除历史记录enable Firefox to clear items on shutdown
+// [SETTING] Privacy & Security>History>Custom Settings>Clear history when Firefox closes | Settings
+user_pref("privacy.sanitize.sanitizeOnShutdown", true);
+// 退出浏览器时清除浏览和下载历史Browsing & Download History. If 'privacy.clearOnShutdown.history' is true, downloads will also be cleared regardless of the value 'privacy.clearOnShutdown.downloads'. but if 'privacy.clearOnShutdown.history' is false, 'privacy.clearOnShutdown.downloads' can still be cleared independently.
+user_pref("privacy.clearOnShutdown.history", true);
+// 退出浏览器时清除下载历史
+user_pref("privacy.clearOnShutdown.downloads", true);
+// 退出浏览器时清除登录状态Active Logins
+user_pref("privacy.clearOnShutdown.sessions", true);
+// 退出浏览器时清除缓存Cache
+user_pref("privacy.clearOnShutdown.cache", true);
+// 退出浏览器时清除表单和搜索历史Form & Search History
+user_pref("privacy.clearOnShutdown.formdata", true);
+// 退出浏览器时清除脱机网站数据Offline Website Data.  Offline Website Data" includes appCache, localStorage, service worker cache, and QuotaManager (IndexedDB, asm-cache)
+user_pref("privacy.clearOnShutdown.offlineApps", true);
+// 退出浏览器时不清除Cookies don’t  Delete cookies  when Firefox is closed
+// [SETTING] to add site exceptions: Ctrl+I>Permissions>Cookies>Allow (when on the website in question). [SETTING] to manage site exceptions: Options>Privacy & Security>Permissions>Settings
+user_pref("privacy.clearOnShutdown.cookies", false);
+// 退出浏览器时不清除站点设置Site settings
+user_pref("privacy.clearOnShutdown.siteSettings", false);
+
+
+/*==========隐私>地址栏==========*/
+// 地址栏结果禁止显示建议：浏览历史、书签、打开的标签页、快捷方式、搜索引擎disable location bar suggestion types
+// [SETTING] Privacy & Security>Address Bar>When using the address bar, suggest
+// user_pref("browser.urlbar.suggest.history", false);
+// user_pref("browser.urlbar.suggest.bookmark", false);
+// user_pref("browser.urlbar.suggest.openpage", false);
+user_pref("browser.urlbar.suggest.topsites", false); 
+// 禁用地址栏结果显示建议：搜索引擎disable tab-to-search [FF85+]. Alternatively, you can exclude on a per-engine basis by unchecking them in Options>Search. 
+user_pref("browser.urlbar.suggest.engines", false);
+// 禁止地址栏自动填充disable location bar autofill. Disable inline autocomplete in URL bar
+user_pref("browser.urlbar.autoFill", false);
+// 地址栏下拉列表显示的条目数量controls the total number of entries to appear in the location bar dropdown
+user_pref("browser.urlbar.maxRichResults", 5);
+// 地址栏输入无效网址时，禁止调用搜索引擎搜索。防止向搜索引擎泄露无效网址，而是给出错误信息。不影响明确的操作，如使用下拉菜单的搜索按钮，或使用配置的关键词搜索快捷方式。disable location bar using search. Don't leak URL typos to a search engine, give an error message instead. Examples: "secretplace,com", "secretplace/com", "secretplace com", "secret place.com". This does not affect explicit user action such as using search buttons in the dropdown, or using keyword search shortcuts you configure in options (e.g. "d" for DuckDuckGo). Override this if you trust and use a privacy respecting search engine.
+// 当搜索字符串没有被识别为网址，默认用搜索引擎搜索。设置为false，任何字符串被视为网址，即使是无效网址。禁止向搜索引擎提交地址栏中输入的无效网址。By default, when the search string is not recognized as a potential url, search for it with the default search engine. If set to false any string will be handled as a potential URL, even if it’s invalid. Do not submit invalid URIs entered in the address bar to the default search engine.
+// browser.search.widget.inNavBar值为false时，keyword.enabled貌似无效？
+user_pref("keyword.enabled", false);
+// 输入无效域名时，禁止域名猜测。域名猜测功能拦截DNS“找不到主机名错误”，并重新发送请求（如添加www或.com）。这是不一致的使用，通过代理服务器不起作用，是对DNS有缺陷的使用，隐私问题，可能会泄露敏感数据（如查询字符串），是一个安全风险（如常见拼写错误和恶意站点）。Don't try to guess domain names when entering an invalid domain name in URL bar. disable location bar domain guessing. domain guessing intercepts DNS "hostname not found errors" and resends a request (e.g. by adding www or .com). This is inconsistent use (e.g. FQDNs), does not work via Proxy Servers (different error), is a flawed use of DNS (TLDs: why treat .com as the 411 for DNS errors?), privacy issues (why connect to sites you didn't intend to), can leak sensitive data (e.g. query strings: e.g. Princeton attack), and is a security risk (e.g. common typos & malicious sites set up to exploit this).
+user_pref("browser.fixup.alternate.enabled", false);
+// 禁止地址栏推测性连接disable location bar making speculative connections [FF56+]
+user_pref("browser.urlbar.speculativeConnect.enabled", false);
+// 复制网址时，禁止解码网址的非ASCII UTF-8符号Don't urlencode non-ASCII UTF-8 symbols in URLs while copying address into clipboard
+// copy the entire URL from the location bar, Don't put the human readable (percent-decoded) URL on the clipboard.
+user_pref("browser.urlbar.decodeURLsOnCopy", false);
+// 地址栏不截断显示网址display all parts of the url in the location bar
+user_pref("browser.urlbar.trimURLs", false);
