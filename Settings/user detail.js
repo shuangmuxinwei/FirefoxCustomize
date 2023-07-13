@@ -372,6 +372,12 @@ user_pref("signon.management.page.breach-alerts.enabled", false);
 // 不允许面向Microsoft账户（个人/工作/学校）的Windows单点登录enforce no automatic authentication on Microsoft sites [FF91+] [WINDOWS 10+].
 //  [SETTING] Privacy & Security>Logins and Passwords>Allow Windows single sign-on for Microsoft, work, and school accounts
 user_pref("network.http.windows-sso.enabled", false);
+// 禁用密码管理器的无形式登录捕获[FF51+]disable formless login capture for Password Manager [FF51+]
+user_pref("signon.formlessCapture.enabled", false);
+// 限制/禁用由子资源触发的HTTP认证凭证对话框[FF41+]，加强对潜在凭证钓鱼的防范。0=不允许子资源打开HTTP认证凭证对话框。1=不允许跨源的子资源打开HTTP认证凭证对话框。2=允许子资源打开HTTP认证凭证对话框。limit (or disable) HTTP authentication credentials dialogs triggered by sub-resources [FF41+].  hardens against potential credentials phishing. 0 = don't allow sub-resources to open HTTP authentication credentials dialogs. 1 = don't allow cross-origin sub-resources to open HTTP authentication credentials dialogs. 2 = allow sub-resources to open HTTP authentication credentials dialogs (default).
+user_pref("network.auth.subresource-http-auth-allow", 1);
+// 取消firefoxRelay. "available" = user can see feature offer. "offered" = we have offered feature to user and they have not yet made a decision. "enabled" = user opted in to the feature. "disabled" = user opted out of the feature.
+user_pref("signon.firefoxRelay.feature", "disable");
 
 
 /*==========隐私>Cookie和网站数据、历史记录==========*/
@@ -425,9 +431,8 @@ user_pref("browser.urlbar.suggest.engines", false);
 user_pref("browser.urlbar.autoFill", false);
 // 地址栏下拉列表显示的条目数量controls the total number of entries to appear in the location bar dropdown
 user_pref("browser.urlbar.maxRichResults", 5);
-// 地址栏输入无效网址时，禁止调用搜索引擎搜索。防止向搜索引擎泄露无效网址，而是给出错误信息。不影响明确的操作，如使用下拉菜单的搜索按钮，或使用配置的关键词搜索快捷方式。disable location bar using search. Don't leak URL typos to a search engine, give an error message instead. Examples: "secretplace,com", "secretplace/com", "secretplace com", "secret place.com". This does not affect explicit user action such as using search buttons in the dropdown, or using keyword search shortcuts you configure in options (e.g. "d" for DuckDuckGo). Override this if you trust and use a privacy respecting search engine.
+// 地址栏输入无效网址时，禁止调用搜索引擎搜索。给出错误信息，防止向搜索引擎泄露无效网址。不影响明确的操作，如使用下拉菜单的搜索按钮，或使用配置的关键词搜索快捷方式。disable location bar using search. Don't leak URL typos to a search engine, give an error message instead. Examples: "secretplace,com", "secretplace/com", "secretplace com", "secret place.com". This does not affect explicit user action such as using search buttons in the dropdown, or using keyword search shortcuts you configure in options (e.g. "d" for DuckDuckGo). Override this if you trust and use a privacy respecting search engine.
 // 当搜索字符串没有被识别为网址，默认用搜索引擎搜索。设置为false，任何字符串被视为网址，即使是无效网址。禁止向搜索引擎提交地址栏中输入的无效网址。By default, when the search string is not recognized as a potential url, search for it with the default search engine. If set to false any string will be handled as a potential URL, even if it’s invalid. Do not submit invalid URIs entered in the address bar to the default search engine.
-// browser.search.widget.inNavBar值为false时，keyword.enabled貌似无效？
 user_pref("keyword.enabled", false);
 // 输入无效域名时，禁止域名猜测。域名猜测功能拦截DNS“找不到主机名错误”，并重新发送请求（如添加www或.com）。这是不一致的使用，通过代理服务器不起作用，是对DNS有缺陷的使用，隐私问题，可能会泄露敏感数据（如查询字符串），是一个安全风险（如常见拼写错误和恶意站点）。Don't try to guess domain names when entering an invalid domain name in URL bar. disable location bar domain guessing. domain guessing intercepts DNS "hostname not found errors" and resends a request (e.g. by adding www or .com). This is inconsistent use (e.g. FQDNs), does not work via Proxy Servers (different error), is a flawed use of DNS (TLDs: why treat .com as the 411 for DNS errors?), privacy issues (why connect to sites you didn't intend to), can leak sensitive data (e.g. query strings: e.g. Princeton attack), and is a security risk (e.g. common typos & malicious sites set up to exploit this).
 user_pref("browser.fixup.alternate.enabled", false);
@@ -438,3 +443,96 @@ user_pref("browser.urlbar.speculativeConnect.enabled", false);
 user_pref("browser.urlbar.decodeURLsOnCopy", false);
 // 地址栏不截断显示网址display all parts of the url in the location bar
 user_pref("browser.urlbar.trimURLs", false);
+
+
+/*==========隐私>权限==========*/
+/*=====定位权限=====*/
+// 禁用定位权限set a default permission for Location. 0=always ask (default), 1=allow, 2=block. These are fingerprintable via Permissions API, except VR. Just add site exceptions as allow/block for frequently visited/annoying sites: i.e. not global
+// [SETTING] to add site exceptions: Ctrl+I>Permissions>. [SETTING] to manage site exceptions: Options>Privacy & Security>Permissions>Settings.
+user_pref("permissions.default.geo", 2);
+// 禁用位置感知浏览（地理定位）Disable Location-Aware Browsing (geolocation)
+user_pref("geo.enabled", false);
+// 允许定位权限时，使用Mozilla地理位置服务替代谷歌[FF74+]use Mozilla geolocation service instead of Google if permission is granted [FF74+]. Optionally enable logging to the console (defaults to false).
+user_pref("geo.provider.network.url", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
+// 启用控制台的日志记录Optionally enable logging to the console (defaults to false).
+// user_pref("geo.provider.network.logging.enabled", true); // [HIDDEN PREF]
+// 禁用系统的地理定位服务disable using the OS's geolocation service
+user_pref("geo.provider.ms-windows-location", false); // [WINDOWS]
+user_pref("geo.provider.use_corelocation", false); // [MAC]
+user_pref("geo.provider.use_gpsd", false); // [LINUX]
+user_pref("geo.provider.use_geoclue", false); // [FF102+] [LINUX]
+// 禁用Mozilla基于特定地理位置选择搜索引擎Disable region checks. Don't use Mozilla-provided location-specific search engines. disable geographically specific results/search engines e.g. "browser.search.*.US". i.e. ignore all of Mozilla's various search engines in multiple locales
+user_pref("browser.search.geoSpecificDefaults", false);
+/*=====摄像头、麦克风、通知、自动播放、虚拟现实权限=====*/
+// 禁用摄像头权限set a default permission for Camera [FF58+]. 0=always ask (default), 1=allow, 2=block
+// exceptions: Ctrl+I>Permissions>Use the Camera
+user_pref("permissions.default.camera", 2);
+// 禁用麦克风权限
+user_pref("permissions.default.microphone", 2);
+// 禁用通知set a default permission for Notifications [FF58+]
+user_pref("permissions.default.desktop-notification", 2);
+// 阻止音频、视频自动播放disable autoplay of HTML5 media [FF63+]. 0=Allow all, 1=Block non-muted media (default in FF67+), 2=Prompt (removed in FF66), 5=Block all (FF69+).
+// [SETTING] Privacy & Security>Permissions>Autoplay>Settings>Default for all websites
+user_pref("media.autoplay.default", 5);
+// 禁止虚拟现实权限set a default permission for Virtual Reality [FF73+]
+user_pref("permissions.default.xr", 2);
+// 禁用虚拟现实设备API Disable virtual reality devices APIs
+user_pref("dom.vr.enabled", false);
+// 拦截弹出式窗口block popup windows
+user_pref("dom.disable_open_during_load", true);
+// 当网站安装附加组件时提示警告Warn you when websites try to install add-ons
+user_pref("xpinstall.whitelist.required", true);
+
+
+/*==========隐私>数据收集与使用==========*/
+/*=====运行状况报告=====*/
+// 禁用运行状况报告，禁止发送技术信息及交互数据disable Health Reports. Disable collection/sending of the health report (healthreport.sqlite*)
+// [SETTING] Privacy & Security>Firefox Data Collection & Use>Allow Firefox to send technical and interaction data to Mozilla
+user_pref("datareporting.healthreport.uploadEnabled", false);
+user_pref("datareporting.healthreport.service.enabled", false);
+// 禁用数据提交disable new data submission, master kill switch [FF41+]. If disabled, no policy is shown or upload takes place, ever.
+user_pref("datareporting.policy.dataSubmissionEnabled", false);
+// 禁用个性化扩展推荐disable personalized Extension Recommendations in about:addons and AMO [FF65+].  This pref has no effect when Health Reports (0331) are disabled
+// [SETTING] Privacy & Security>Firefox Data Collection & Use>Allow Firefox to make personalized extension recommendations
+user_pref("browser.discovery.enabled", false);
+/*=====实验=====*/
+// 禁止火狐安装并运行实验项目disable Studies
+// [SETTING] Privacy & Security>Firefox Data Collection & Use>Allow Firefox to install and run studies
+user_pref("app.shield.optoutstudies.enabled", false);
+// 禁用Normandy/Shield遥测disable Normandy/Shield [FF60+]. Shield is an telemetry system (including Heartbeat) that can also push and test "recipes".
+user_pref("app.normandy.enabled", false);
+user_pref("app.normandy.api_url", "");
+/*=====崩溃报告=====*/
+// 禁用发送积压的崩溃报告enforce no submission of backlogged Crash Reports [FF58+]
+// [SETTING] Privacy & Security>Firefox Data Collection & Use>Allow Firefox to send backlogged crash reports
+user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", false); // [DEFAULT: false]
+// 禁用崩溃报告disable Crash Reports. Disable sending reports of tab crashes to Mozilla (about:tabcrashed), don't nag user about unsent crash reports
+user_pref("breakpad.reportURL", "");
+user_pref("browser.tabs.crashReporting.sendReport", false); // [FF44+]
+// 火狐每夜版NIGHTLY_BUILD默认开启，其余版本默认关闭
+user_pref("browser.crashReports.unsubmittedCheck.enabled", false); // [FF51+]
+
+
+/*==========安全>欺诈内容和危险软件防护==========*/
+// 开启安全浏览功能enable Safe Browsing. SAFE BROWSING has taken many steps to preserve privacy. If required, a full url is never sent to Google, only a part-hash of the prefix, hidden with noise of other real part-hashes. Firefox takes measures such as stripping out identifying parameters and since SBv4 (FF57+) doesn't even use cookies. (#Turn on browser.safebrowsing.debug to monitor this activity). 
+// [SETTING] Privacy & Security>Security>... Block dangerous and deceptive content
+user_pref("browser.safebrowsing.malware.enabled", true);
+user_pref("browser.safebrowsing.phishing.enabled", true);
+// 禁用安全浏览功能查杀下载文件。主开关，决定browser.safebrowsing.downloads.remote.enabled、remote.url、remote.block_potentially_unwanted、remote.block_uncommon参数。disable Safe Browsing checks for downloads (both local lookups + remote). This is the master switch for the safebrowsing.downloads* prefs.
+// [SETTING] Privacy & Security>Security>... "Block dangerous downloads"
+user_pref("browser.safebrowsing.downloads.enabled", false);
+// 禁用安全浏览功能查杀下载文件（远程）。为验证某些可执行文件的安全性，火狐可能会向谷歌提交有关文件的信息，包括名称、来源、大小和内容的加密哈希值。disable Safe Browsing checks for downloads (remote). To verify the safety of certain executable files, Firefox may submit some information about the file, including the name, origin, size and a cryptographic hash of the contents, to the Google. Safe Browsing service which helps Firefox determine whether or not the file should be blocked. If you do not understand this, or you want this protection, then override this.
+user_pref("browser.safebrowsing.downloads.remote.enabled", false);
+// user_pref("browser.safebrowsing.downloads.remote.url", ""); // Defense-in-depth
+// 禁用安全浏览功能检查流氓或不寻常的软件disable Safe Browsing checks for unwanted software
+// [SETTING] Privacy & Security>Security>... "Warn you about unwanted and uncommon software"
+user_pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted", false);
+user_pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
+// 禁用安全浏览警告页面的 "忽略此警告"[FF45+]disable "ignore this warning" on Safe Browsing warnings [FF45+]. If clicked, it bypasses the block for that session. This is a means for admins to enforce Safe Browsing.
+// user_pref("browser.safebrowsing.allowOverride", false);
+
+
+/*==========安全>证书==========*/
+// 不查询OCSP响应服务器确认证书当前是否有效。0=禁用，1=启用disable OCSP(Online Certificate Status Protocol) fetching to confirm current validity of certificates. 0=disabled, 1=enabled (default), 2=enabled for EV certificates only OCSP (non-stapled) leaks information about the sites you visit to the CA (cert authority). It's a trade-off between security (checking) and privacy (leaking info to the CA). [NOTE] This pref only controls OCSP fetching and does not affect OCSP stapling.
+// [SETTING] Privacy & Security>Security>Certificates>Query OCSP responder servers to confirm the current validity of certificates
+user_pref("security.OCSP.enabled", 0);
