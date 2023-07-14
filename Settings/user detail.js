@@ -186,7 +186,6 @@ user_pref("app.update.background.enabled", false);
 // 更新服务下载安装包后，询问是否应用更新If set to true, the Update Service will apply updates in the background when it finishes downloading them.
 // http://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2089238&pid=39889684
 user_pref("app.update.staging.enabled", false);
-// user_pref("app.update.background.previous.reasons", "[\"app.update.auto=false\",\"app.update.background.enabled=false\",\"not default profile\",\"app.update.langpack.enabled=true and at least one langpack is installed\"]");
 
 
 /*==========常规>性能==========*/
@@ -463,6 +462,11 @@ user_pref("geo.provider.use_gpsd", false); // [LINUX]
 user_pref("geo.provider.use_geoclue", false); // [FF102+] [LINUX]
 // 禁用Mozilla基于特定地理位置选择搜索引擎Disable region checks. Don't use Mozilla-provided location-specific search engines. disable geographically specific results/search engines e.g. "browser.search.*.US". i.e. ignore all of Mozilla's various search engines in multiple locales
 user_pref("browser.search.geoSpecificDefaults", false);
+// disable region updates
+user_pref("browser.region.network.url", ""); // [FF78+]
+user_pref("browser.region.update.enabled", false); // [[FF79+]
+// 禁止地理定位查找以设置搜索引擎默认区域Disable GeoIP lookup on your address to set default search engine region. set search region. [NOTE] May not be hidden if Firefox has changed your settings due to your region
+user_pref("browser.search.region", "US"); 
 /*=====摄像头、麦克风、通知、自动播放、虚拟现实权限=====*/
 // 禁用摄像头权限set a default permission for Camera [FF58+]. 0=always ask (default), 1=allow, 2=block
 // exceptions: Ctrl+I>Permissions>Use the Camera
@@ -536,3 +540,77 @@ user_pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
 // 不查询OCSP响应服务器确认证书当前是否有效。0=禁用，1=启用disable OCSP(Online Certificate Status Protocol) fetching to confirm current validity of certificates. 0=disabled, 1=enabled (default), 2=enabled for EV certificates only OCSP (non-stapled) leaks information about the sites you visit to the CA (cert authority). It's a trade-off between security (checking) and privacy (leaking info to the CA). [NOTE] This pref only controls OCSP fetching and does not affect OCSP stapling.
 // [SETTING] Privacy & Security>Security>Certificates>Query OCSP responder servers to confirm the current validity of certificates
 user_pref("security.OCSP.enabled", 0);
+// Enable OCSP Stapling support
+// user_pref("security.ssl.enable_ocsp_stapling", true);
+// 将OCSP获取失败（non-stapled）设置为硬失败set OCSP fetch failures (non-stapled) to hard-fail SEC_ERROR_OCSP_SERVER_ERROR. 
+// 当无法访问CA来验证网站证书时，火狐继续连接目标网站（软失败）。设置为true，火狐中断与目标网站的连接（硬失败）。当OCSP获取失败时，软失败没有意义：无法确认证书仍然有效（可能已被撤销）和/或可能受到攻击（如恶意阻止OCSP服务器）。When a CA cannot be reached to validate a cert, Firefox just continues the connection (=soft-fail). Setting this pref to true tells Firefox to instead terminate the connection (=hard-fail). It is pointless to soft-fail when an OCSP fetch fails: you cannot confirm a cert is still valid (it could have been revoked) and/or you could be under attack (e.g. malicious blocking of OCSP servers).
+// https://bbs.kafan.cn/thread-2179806-1-1.html
+// security.ocsp.require，决定soft-fail/hard-fail。目前OCSP服务器处理不了过大的并发量，加上国内的网络环境，所以经常出问题。打开security.ocsp.require使用hard-fail会破坏很多网站的访问。一般只要网站支持stapling，即网站服务器定期去OCSP服务器验证，然后在自己的服务器端建立有效的缓存，就足够，也是将来的趋势。这样OCSP服务器只要定期处理网站的查询就可以了，并发量小了很多。
+user_pref("security.OCSP.require", true);
+// 禁用Win8.1的微软家庭安全证书[FF50+] disable Windows 8.1's Microsoft Family Safety cert [FF50+] [WIN]
+// 0=禁止检测家庭安全模式和导入根证书。1=只尝试检测家庭安全模式（不导入根证书）。2=检测家庭安全模式并导入根证书0=disable detecting Family Safety mode and importing the root. 1=only attempt to detect Family Safety mode (don't import the root). 2=detect Family Safety mode and import the root.
+user_pref("security.family_safety.mode", 0);
+// enable strict PKP (Public Key Pinning)
+// 0=disabled, 1=allow user MiTM (default; such as your antivirus), 2=strict. MOZILLA_PKIX_ERROR_KEY_PINNING_FAILURE
+user_pref("security.cert_pinning.enforcement_level", 2);
+// enable CRLite [FF73+]
+// 0 = disabled. 1 = consult CRLite but only collect telemetry. 2 = consult CRLite and enforce both "Revoked" and "Not Revoked" results. 3 = consult CRLite and enforce "Not Revoked" results, but defer to OCSP for "Revoked" (FF99+, default FF100+)
+user_pref("security.remote_settings.crlite_filters.enabled", true);
+user_pref("security.pki.crlite_mode", 2);
+
+
+/*==========安全>HTTPS-Only模式==========*/
+// 所有窗口启用HTTPS-Only模式[FF76+]enable HTTPS-Only mode in all windows [FF76+]. When the top-level is HTTPS, insecure subresources are also upgraded (silent fail).
+// [SETTING] to add site exceptions: Padlock>HTTPS-Only mode>On (after "Continue to HTTP Site"). [SETTING] Privacy & Security>HTTPS-Only Mode (and manage exceptions).
+// user_pref("dom.security.https_only_mode", true);
+// 仅在隐私窗口启用HTTPS-Only模式[FF80+]
+// user_pref("dom.security.https_only_mode_pbm", true);
+// 为本地资源启用仅HTTPS模式[FF77+]enable HTTPS-Only mode for local resources [FF77+]
+// user_pref("dom.security.https_only_mode.upgrade_local", true);
+// 禁用HTTP后台请求[FF82+]。尝试升级时，如果服务器在3秒内没有响应，火狐发送没有路径的顶级HTTP请求，以检查服务器是否支持HTTPS。设置这一参数，避免等待90秒的超时。disable HTTP background requests [FF82+]. When attempting to upgrade, if the server doesn't respond within 3 seconds, Firefox sends a top-level HTTP request without path in order to check if the server supports HTTPS or not. This is done to avoid waiting for a timeout which takes 90 seconds.
+user_pref("dom.security.https_only_mode_send_http_background_request", false);
+// 禁用https页面不安全的活动内容enforce no insecure active content on https pages. Block insecure active content on https pages
+user_pref("security.mixed_content.block_active_content", true); // [DEFAULT: true]
+// 禁用HTTPS页面不安全的被动内容（如图像）disable insecure passive content (such as images) on https pages
+// user_pref("security.mixed_content.block_display_content", true);
+
+
+
+/*==========扩展==========*/
+// 禁用自动检查更新扩展和主题disable auto-CHECKING for extension and theme updates
+user_pref("extensions.update.enabled", false);
+// 禁用自动安装扩展和主题disable auto-INSTALLING extension and theme updates
+// about:addons>Extensions>[cog-wheel-icon]>Update Add-ons Automatically (toggle)
+user_pref("extensions.update.autoUpdateDefault", false);
+// 禁用扩展元数据更新opt out of add-on metadata updates. Since Firefox 4, the Add-ons Manager displays additional information about each add-on you have installed, including screenshots, description, ratings, downloads, Contributions, and other metadata. In order to keep this information updated, Firefox will ask the Mozilla Add-ons gallery for information about the add-ons you have installed once a day. This involves sending the identifiers of each add-on you have installed to Mozilla, as well as information on how long it last took Firefox to start up. The add-on identifiers are used to return updated information to you, as well as in aggregate to provide personalized recommendations in the Get Add-ons pane of the Add-ons Manager. Start-up time information is used to improve Firefox and identify add-ons that may be causing Firefox to be slow.
+user_pref("extensions.getAddons.cache.enabled", false);
+// 禁用附加管理器页面的推荐窗格disable recommendation pane in about:addons (uses Google Analytics) 
+user_pref("extensions.getAddons.showPane", false);
+// 禁用附加管理器页面的推荐扩展[FF68+]disable recommendations in about:addons' Extensions and Themes panes [FF68+]
+user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
+// 启用Mozilla的扩展和证书吊销名单Enable add-on and certificate blocklists (OneCRL) from Mozilla. Updated at interval defined in extensions.blocklist.interval (default: 86400). enforce Firefox blocklist. It includes updates for "revoked certificates".
+user_pref("extensions.blocklist.enabled", true);
+// 禁用某些Mozilla域名网站上的扩展限制 [FF60+]，让扩展在Mozilla域名网站上正常工作disable webextension restrictions on certain mozilla domains (you also need privacy.resistFingerprinting.block_mozAddonManager) [FF60+]. 
+user_pref("extensions.webextensions.restrictedDomains", "");
+// 让扩展在Mozilla域名网站上正常工作disable mozAddonManager Web API [FF57+]. To allow extensions to work on AMO, you also need extensions.webextensions.restrictedDomains. 
+user_pref("privacy.resistFingerprinting.block_mozAddonManager", true);
+/*=====火狐自带扩展=====*/
+// 禁用火狐自带扩展更新disable System Add-on updates. It can compromise security. System addons ship with prefs, use those.
+user_pref("extensions.systemAddon.update.enabled", false); // [FF62+]
+user_pref("extensions.systemAddon.update.url", ""); // [FF44+]
+// 禁用火狐自带的截图扩展disable Screenshots. Preference that allows individual users to disable Screenshots.
+user_pref("extensions.screenshots.disabled", true);
+// 禁用火狐帐户、密码表单自动填充disable Form Autofill
+// 如果extensions.formautofill.addresses.supportedCountries参数值包括browser.search.region指定的区域，并且extensions.formautofill.addresses.supported参数值是 detect，火狐设置界面显示UI。自动填充存储的数据不安全，使用JSON格式。extensions.formautofill.heuristics.enabled参数控制没有@autocomplete属性的表单自动填充。If .supportedCountries includes your region (browser.search.region) and .supported is "detect" (default), then the UI will show. Stored data is not secure, uses JSON. extensions.formautofill.heuristics.enabled controls Form Autofill on forms without @autocomplete attributes.
+user_pref("extensions.formautofill.addresses.enabled", false); // [FF55+]
+user_pref("extensions.formautofill.creditCards.enabled", false); // [FF56+]
+user_pref("extensions.formautofill.heuristics.enabled", false); // [FF55+]
+// extensions.formautofill.addresses.available参数值on/detect，其他值表示自动填充不可用。detect表示如果满足扩展定义的条件，则启用。extensions.formautofill.available未在表单自动填充中使用，但需要存在以用于迁移目的。Preferences for the form autofill toolkit component. The truthy values of "extensions.formautofill.addresses.available" is "on" and "detect", any other value means autofill isn't available. "detect" means it's enabled if conditions defined in the extension are met. Note: "extensions.formautofill.available" is not being used in form autofill, but need to exist for migration purposes.
+user_pref("extensions.formautofill.available", "");
+// user_pref("extensions.formautofill.addresses.available", "");
+user_pref("extensions.formautofill.addresses.supported", "");
+//  迁移extensions.formautofill.available、extensions.formautofill.creditCards.available到新参数Migrate "extensions.formautofill.available" and "extensions.formautofill.creditCards.available" from old to new prefs ""extensions.formautofill.addresses.supported" and "extensions.formautofill.creditCards.supported"
+// user_pref("extensions.formautofill.creditCards.available", "");
+user_pref("extensions.formautofill.creditCards.supported", "");
+// 禁用网络兼容性报告 [FF56+]enforce disabling of Web Compatibility Reporter [FF56+]. Web Compatibility Reporter adds a "Report Site Issue" button to send data to Mozilla.
+user_pref("extensions.webcompat-reporter.enabled", false);
