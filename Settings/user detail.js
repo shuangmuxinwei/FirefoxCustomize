@@ -515,6 +515,32 @@ user_pref("breakpad.reportURL", "");
 user_pref("browser.tabs.crashReporting.sendReport", false); // [FF44+]
 // 火狐每夜版NIGHTLY_BUILD默认开启，其余版本默认关闭
 user_pref("browser.crashReports.unsubmittedCheck.enabled", false); // [FF51+]
+/*=====遥测=====*/
+// https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/internals/preferences.html
+// 禁止遥测disable telemetry
+// toolkit.telemetry.unified值为true，遥测始终启用，并记录基础数据。遥测发送额外的主ping。toolkit.telemetry.unified controls whether unified behavior is enabled. If true: Telemetry is always enabled and recording base data. Telemetry will send additional main pings. It defaults to true, but is false on Android (Fennec) builds.
+// toolkit.telemetry.unified影响toolkit.telemetry.enabled。unified值为false，enabled决定是否启用遥测模块。unified值为true，enabled决定是否记录扩展数据。unified参数值在火狐预发布版本锁定为true，在正式版本锁定为false。The "toolkit.telemetry.unified" pref affects the behavior of the "toolkit.telemetry.enabled" pref. If "toolkit.telemetry.unified" is false then "toolkit.telemetry.enabled" controls the telemetry module. If "toolkit.telemetry.unified" is true then "toolkit.telemetry.enabled" only controls whether to record extended data. [NOTE] "toolkit.telemetry.enabled" is now LOCKED to reflect prerelease (true) or release builds (false).
+user_pref("toolkit.telemetry.unified", false);
+user_pref("toolkit.telemetry.enabled", false); 
+// 用以接收遥测ping数据的服务器The server Telemetry pings are sent to. Change requires restart.
+user_pref("toolkit.telemetry.server", "data:,");
+// toolkit.telemetry.archive.enabled定义是否启用遥测ping的本地归档，只在toolkit.telemetry.unified值为true时起作用。The preference toolkit.telemetry.archive.enabled defines whether local archiving of telemetry pings is enabled or not. The preference depends on toolkit.telemetry.unified and works only if unified is turned on.
+user_pref("toolkit.telemetry.archive.enabled", false);
+user_pref("toolkit.telemetry.newProfilePing.enabled", false); // [FF55+]
+user_pref("toolkit.telemetry.shutdownPingSender.enabled", false); // [FF55+]
+user_pref("toolkit.telemetry.updatePing.enabled", false); // [FF56+]
+// 禁用后台挂起报告程序disable Background Hang Reporter
+user_pref("toolkit.telemetry.bhrPing.enabled", false); // [FF57+] 
+user_pref("toolkit.telemetry.firstShutdownPing.enabled", false); // [FF57+]
+// disable Telemetry Coverage
+user_pref("toolkit.telemetry.coverage.opt-out", true); // [HIDDEN PREF]
+user_pref("toolkit.coverage.opt-out", true); // [FF64+] [HIDDEN PREF]
+user_pref("toolkit.coverage.endpoint.base", "");
+// 禁用PingCentre遥测（用于几个系统插件）[FF57+]。目前参数被datareporting.healthreport.uploadEnabled覆盖。disable PingCentre telemetry (used in several System Add-ons) [FF57+]. Defense-in-depth: currently covered by datareporting.healthreport.uploadEnabled.
+user_pref("browser.ping-centre.telemetry", false);
+/*=====WebGL=====*/
+// 禁用WebGL（网络图形库）disable WebGL (Web Graphics Library). If you need it then override it. RFP (RESIST FINGERPRINTING) still randomizes canvas for naive scripts.
+user_pref("webgl.disabled", true);
 
 
 /*==========安全>欺诈内容和危险软件防护==========*/
@@ -576,6 +602,17 @@ user_pref("security.mixed_content.block_active_content", true); // [DEFAULT: tru
 
 
 
+/*==========设置==========*/
+// 禁用about:preferences的Mozilla产品More from Mozilla
+user_pref("browser.preferences.moreFromMozilla", false);
+// 在设置页面关闭搜索栏Toggling Search bar on and off in about:preferences
+user_pref("browser.preferences.search", false);
+// 关闭火狐的实验项目。每夜版默认开启，其余版本默认关闭
+user_pref("browser.preferences.experimental", false);
+user_pref("browser.preferences.experimental.hidden", false);
+
+
+
 /*==========扩展==========*/
 // 禁用自动检查更新扩展和主题disable auto-CHECKING for extension and theme updates
 user_pref("extensions.update.enabled", false);
@@ -594,7 +631,14 @@ user_pref("extensions.blocklist.enabled", true);
 user_pref("extensions.webextensions.restrictedDomains", "");
 // 让扩展在Mozilla域名网站上正常工作disable mozAddonManager Web API [FF57+]. To allow extensions to work on AMO, you also need extensions.webextensions.restrictedDomains. 
 user_pref("privacy.resistFingerprinting.block_mozAddonManager", true);
+// 禁止绕过第三方扩展安装提示 [FF82+]disable bypassing 3rd party extension install prompts [FF82+]
+user_pref("extensions.postDownloadThirdPartyPrompt", false);
+// 强制启用SmartBlock shims[FF81+]enforce SmartBlock shims [FF81+]. In FF96+ these are listed in about:compat
+user_pref("extensions.webcompat.enable_shims", true); // [DEFAULT: true]
+// 取消统一管理扩展按钮（已废弃）
+// user_pref("extensions.unifiedExtensions.enabled", false);
 /*=====火狐自带扩展=====*/
+// about:support，查看系统附加组件，自带扩展被存放在Features目录下。To view your System Add-ons go to about:support, they are listed under "Firefox Features". Windows: "...\Program Files\Mozilla\browser\features" (or "Program Files (X86)\etc" for 32bit). Mac: "...\Applications\Firefox\Contents\Resources\browser\features\". On Mac you can right-click on the application and select "Show Package Contents". Linux: "/usr/lib/firefox/browser/features" (or similar)
 // 禁用火狐自带扩展更新disable System Add-on updates. It can compromise security. System addons ship with prefs, use those.
 user_pref("extensions.systemAddon.update.enabled", false); // [FF62+]
 user_pref("extensions.systemAddon.update.url", ""); // [FF44+]
@@ -612,5 +656,39 @@ user_pref("extensions.formautofill.addresses.supported", "");
 //  迁移extensions.formautofill.available、extensions.formautofill.creditCards.available到新参数Migrate "extensions.formautofill.available" and "extensions.formautofill.creditCards.available" from old to new prefs ""extensions.formautofill.addresses.supported" and "extensions.formautofill.creditCards.supported"
 // user_pref("extensions.formautofill.creditCards.available", "");
 user_pref("extensions.formautofill.creditCards.supported", "");
-// 禁用网络兼容性报告 [FF56+]enforce disabling of Web Compatibility Reporter [FF56+]. Web Compatibility Reporter adds a "Report Site Issue" button to send data to Mozilla.
+// 禁用网络兼容性报告[FF56+]enforce disabling of Web Compatibility Reporter [FF56+]. Web Compatibility Reporter adds a "Report Site Issue" button to send data to Mozilla.
 user_pref("extensions.webcompat-reporter.enabled", false);
+// Disable Pocket
+user_pref("extensions.pocket.enabled", false);
+
+
+
+/*==========主题==========*/
+// 0，启用深邃主题dark (0), light (1), system (2), or toolbar (3).
+user_pref("browser.theme.content-theme", 0);
+// 设定工具栏颜色。深色0，浅色1，系统色2。mac/Win下默认light，其他平台默认系统色Communicates the toolbar color to platform (for e.g., prefers-color-scheme). Returns whether the toolbar is dark (0), light (1), or system (2). Default to "light" on macOS / Windows, and "system" elsewhere. The theming code sets it appropriately.
+user_pref("browser.theme.toolbar-theme", 0);
+// default-theme@mozilla.org，默认主题；firefox-compact-light@mozilla.org，明亮主题；firefox-compact-dark@mozilla.org，深邃主题；firefox-alpenglow@mozilla.org，染山霞主题
+user_pref("extensions.activeThemeID", "firefox-compact-dark@mozilla.org");
+
+
+
+/*==========插件==========*/
+// 禁用Flash Player插件。ESR52.x是最后一个完全支持NPAPI插件的分支，FF52+稳定版只支持Flash。Disable Flash Player NPAPI plugin.  0=deactivated, 1=ask, 2=enabled. ESR52.x is the last branch to fully support NPAPI, FF52+ stable only supports Flash. You can still override individual sites via site permissions.
+user_pref("plugin.state.flash", 0);
+// 禁用Java插件Disable Java NPAPI plugin
+// user_pref("plugin.state.java", 0);
+// 禁止发送插件崩溃报告至网站disable sending the URL of the website where a plugin crashed [underlying NPAPI code removed]
+user_pref("dom.ipc.plugins.reportCrashURL", false);
+// 禁止发送Flash Player插件崩溃报告（已废弃）disable sending Flash crash reports
+// user_pref("dom.ipc.plugins.flash.subprocess.crashreporter.enabled", false);
+/*=====WebRTC=====*/
+// 禁用WebRTC，防止泄露私人IP
+// disable WebRTC (Web Real-Time Communication).  Firefox desktop uses mDNS hostname obfuscation and the private IP is never exposed until required in TRUSTED scenarios; i.e. after you grant device (microphone or camera) access. Disable WebRTC entirely to prevent leaking internal IP addresses (Firefox < 42). NOTICE: Disabling WebRTC breaks peer-to-peer file sharing tools (reep.io ...)
+user_pref("media.peerconnection.enabled", false);
+// 在代理内部强制WebRTC[FF70+]force WebRTC inside the proxy [FF70+]
+user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
+// 强制使用单一网络接口生成ICE候选[FF42+]force a single network interface for ICE candidates generation [FF42+]. When using a system-wide proxy, it uses the proxy interface. Don't reveal your internal IP when WebRTC is enabled [FF42+].
+user_pref("media.peerconnection.ice.default_address_only", true);
+// 强制将私有IP排除在ICE候选者之外 [FF51+]。这在授予设备访问权限后保护私有IP，即使在受信任的场景下也是如此，但在视频会议平台上通常会导致中断。force exclusion of private IPs from ICE candidates [FF51+]. [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you grant device access, but often results in breakage on video-conferencing platforms.
+// user_pref("media.peerconnection.ice.no_host", true);
