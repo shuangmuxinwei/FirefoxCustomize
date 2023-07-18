@@ -232,6 +232,8 @@ user_pref("browser.startup.homepage", "chrome://browser/content/places/places.xh
 // 设置新标签页页面set NEWTAB page. true=Firefox Home (default), false=blank page
 // [SETTING] Home>New Windows and Tabs>New tabs
 user_pref("browser.newtabpage.enabled", false);
+// 禁用新标签页网址预加载disable preloading of the new tab url
+user_pref("browser.newtab.preload", false); 
 
 
 /*==========主页>Firefox主页内容==========*/
@@ -486,6 +488,38 @@ user_pref("dom.vr.enabled", false);
 user_pref("dom.disable_open_during_load", true);
 // 当网站安装附加组件时提示警告Warn you when websites try to install add-ons
 user_pref("xpinstall.whitelist.required", true);
+/*=====视频全屏=====*/
+// 禁用视频全屏，防止屏幕分辨率泄漏disable Fullscreen API (requires user interaction) to prevent screen-resolution leaks 
+// user_pref("full-screen-api.enabled", false);
+// 过渡至全屏状态的黑屏超时（毫秒）timeout for black screen in fullscreen transition, unit: ms
+user_pref("full-screen-api.transition.timeout", 0);
+// 进入全屏状态时，黑屏淡入的超时（毫秒）transition duration of fade-to-black and fade-from-black, unit: ms
+user_pref("full-screen-api.transition-duration.enter", "0 0");
+// 离开全屏状态时，从黑屏淡出的超时（毫秒）transition duration of fade-to-black and fade-from-black, unit: ms
+user_pref("full-screen-api.transition-duration.leave", "0 0");
+// 鼠标指针停留在顶部时，全屏提醒的警告框显示的延迟（毫秒）delay for the warning box to show when pointer stays on the top, unit: ms
+user_pref("full-screen-api.warning.delay", 0);
+// 全屏提醒的警告框在滑出之前停留在屏幕上的时间（毫秒）time for the warning box stays on the screen before sliding out, unit: ms
+user_pref("full-screen-api.warning.timeout", 0);
+/*=====窗口=====*/
+// 防止脚本移动窗口、调整窗口大小prevent scripts from moving and resizing open windows
+user_pref("dom.disable_window_move_resize", true);
+// 禁止晃动屏幕Disable vibrator API. disable shaking the screen
+user_pref("dom.vibrator.enabled", false);
+// 限制可能导致弹出窗口的事件limit events that can cause a pop-up
+// user_pref("dom.popup_allowed_events", "click dblclick mousedown pointerdown");
+// 禁止关闭页面时弹出“确认离开”对话框。不能阻止页面关闭事件的JS泄漏disable "Confirm you want to leave" dialog on page close. Does not prevent JS leaks of the page close event. 
+user_pref("dom.disable_beforeunload", true);
+// 禁止网站设置浏览器右键菜单。Shift+右键单击显示浏览器右键单击菜单disable website control over browser right-click context menu. Shift-Right-Click will always bring up the browser right-click context menu.
+// user_pref("dom.event.contextmenu.enabled", false);
+// 禁用剪贴板API。参数值为真，允许触发“剪切”“复制”和“粘贴”事件。inputType为“insertFromPaste”或其他内容时，“input”事件可能会泄露剪贴板内容。disable Clipboard API. [WHY] Fingerprintable. Breakage. Cut/copy/paste require user interaction, and paste is limited to focused editable fields. If this is true, it's allowed to fire "cut", "copy" and "paste" events. Additionally, "input" events may expose clipboard content when inputType is "insertFromPaste" or something.
+// user_pref("dom.event.clipboardevents.enabled", false);
+// 禁用Javascript脚本设置的“剪切/复制到剪贴板”功能[FF41+]。会破坏合法的基于JS的“复制到剪贴板”功能。disable clipboard commands (cut/copy) from "non-privileged" content [FF41+]. this disables document.execCommand("cut"/"copy") to protect your clipboard. Disable "copy to clipboard" functionality via Javascript (Firefox >= 41). NOTICE: Disabling clipboard operations will break legitimate JS-based "copy to clipboard" functionality.
+// user_pref("dom.allow_cut_copy", false);
+// 禁止Linux上自动将所选内容发送到剪贴板。除ANDROID、XP_MACOSX、XP_UNIX系统外，参数值默认true。Do not automatically send selection to clipboard on some Linux platforms
+// user_pref("clipboard.autocopy", false); 
+// 禁用onions。火狐不支持隐藏服务disable onions. Firefox doesn't support hidden services. Use Tor Browser
+// user_pref("dom.securecontext.allowlist_onions", true); // [FF97+] 
 
 
 /*==========隐私>数据收集与使用==========*/
@@ -520,6 +554,8 @@ user_pref("browser.crashReports.unsubmittedCheck.enabled", false); // [FF51+]
 // 禁止遥测disable telemetry
 // toolkit.telemetry.unified值为true，遥测始终启用，并记录基础数据。遥测发送额外的主ping。toolkit.telemetry.unified controls whether unified behavior is enabled. If true: Telemetry is always enabled and recording base data. Telemetry will send additional main pings. It defaults to true, but is false on Android (Fennec) builds.
 // toolkit.telemetry.unified影响toolkit.telemetry.enabled。unified值为false，enabled决定是否启用遥测模块。unified值为true，enabled决定是否记录扩展数据。unified参数值在火狐预发布版本锁定为true，在正式版本锁定为false。The "toolkit.telemetry.unified" pref affects the behavior of the "toolkit.telemetry.enabled" pref. If "toolkit.telemetry.unified" is false then "toolkit.telemetry.enabled" controls the telemetry module. If "toolkit.telemetry.unified" is true then "toolkit.telemetry.enabled" only controls whether to record extended data. [NOTE] "toolkit.telemetry.enabled" is now LOCKED to reflect prerelease (true) or release builds (false).
+// https://www.ghacks.net/2015/11/09/how-to-disable-the-firefox-saved-telemetry-pings-and-archive-folder/
+// saved-telemetry-pings和datareporting/archive文件夹。火狐开发版的用户可能找到数月前的遥测数据，而稳定版用户只能查找到近期数据。Firefox设置不收集遥测数据，仍会创建数据。Telemetry pings遥测是Firefox发送到Mozilla服务器的数据包，数据以JSON格式存储，可通过在纯文本编辑器或有序方式显示JSON数据的专用软件查看。收集的数据包括浏览器的构建，各种基准值，已安装的扩展以及计算机系统的信息。saved-telemetry-pings和datareporting/archive文件夹包含遥测。核心区别似乎是后者以压缩格式（.jsonlz4）存储，而前者不是。Saved Telemetry Pings and datareporting/archived are two local folders in the Firefox profile that the browser started to populate with data recently. Users on development versions may find months worth of telemetry data in those folder while stable users only recent data. What makes this puzzling is that the data is created even if Firefox is configured to not collect telemetry data. Telemetry pings are data packages that Firefox sends to Mozilla servers. The data is stored in JSON format which means that you can take a look at it by loading it in a plain text editor or specialized application that displays JSON data in an orderly fashion.The collected data includes information about the build of the browser, various benchmark values, the installed extensions, and information about the computer system. The Saved Telemetry Pings folder and the Datareporting/archive folder contain both telemetry pings. The core difference appears to be that the latter stores them in compressed format (.jsonlz4) while the former does not.
 user_pref("toolkit.telemetry.unified", false);
 user_pref("toolkit.telemetry.enabled", false); 
 // 用以接收遥测ping数据的服务器The server Telemetry pings are sent to. Change requires restart.
@@ -538,6 +574,13 @@ user_pref("toolkit.coverage.opt-out", true); // [FF64+] [HIDDEN PREF]
 user_pref("toolkit.coverage.endpoint.base", "");
 // 禁用PingCentre遥测（用于几个系统插件）[FF57+]。目前参数被datareporting.healthreport.uploadEnabled覆盖。disable PingCentre telemetry (used in several System Add-ons) [FF57+]. Defense-in-depth: currently covered by datareporting.healthreport.uploadEnabled.
 user_pref("browser.ping-centre.telemetry", false);
+// 禁用默认浏览器代理（似只在XP上生效）disable the default browser agent. The agent still runs as scheduled if this pref is disabled, but it exits immediately before taking any action.
+user_pref("default-browser-agent.enabled", false);
+// 禁止强制网络门户检测disable Captive Portal detection
+user_pref("captivedetect.canonicalURL", "");
+user_pref("network.captive-portal-service.enabled", false); // [FF52+]
+// disable Network Connectivity checks [FF65+]
+user_pref("network.connectivity-service.enabled", false);
 /*=====WebGL=====*/
 // 禁用WebGL（网络图形库）disable WebGL (Web Graphics Library). If you need it then override it. RFP (RESIST FINGERPRINTING) still randomizes canvas for naive scripts.
 user_pref("webgl.disabled", true);
@@ -599,6 +642,14 @@ user_pref("dom.security.https_only_mode_send_http_background_request", false);
 user_pref("security.mixed_content.block_active_content", true); // [DEFAULT: true]
 // 禁用HTTPS页面不安全的被动内容（如图像）disable insecure passive content (such as images) on https pages
 // user_pref("security.mixed_content.block_display_content", true);
+// 在加密页面上阻止来自Flash的未加密请求，缓解中间人攻击[FF59+]block unencrypted requests from Flash on encrypted pages to mitigate MitM(Man-in-the-MiddleAttack) attacks [FF59+] [underlying NPAPI code removed]. Pref to block sub requests that happen within an object.
+user_pref("security.mixed_content.block_object_subrequest", true);
+
+
+
+/*==========同步==========*/
+// 禁止火狐帐户和同步disable Firefox Accounts & Sync [FF60+] [RESTART]. If set to false, FxAccounts and Sync will be unavailable. A restart is mandatory after flipping that preference.
+user_pref("identity.fxaccounts.enabled", false); 
 
 
 
@@ -635,6 +686,9 @@ user_pref("privacy.resistFingerprinting.block_mozAddonManager", true);
 user_pref("extensions.postDownloadThirdPartyPrompt", false);
 // 强制启用SmartBlock shims[FF81+]enforce SmartBlock shims [FF81+]. In FF96+ these are listed in about:compat
 user_pref("extensions.webcompat.enable_shims", true); // [DEFAULT: true]
+// 强制扩展、语言包签名enforced extension signing
+user_pref("xpinstall.signatures.required", true); 
+user_pref("extensions.langpacks.signatures.required", true);
 // 取消统一管理扩展按钮（已废弃）
 // user_pref("extensions.unifiedExtensions.enabled", false);
 /*=====火狐自带扩展=====*/
@@ -692,3 +746,62 @@ user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
 user_pref("media.peerconnection.ice.default_address_only", true);
 // 强制将私有IP排除在ICE候选者之外 [FF51+]。这在授予设备访问权限后保护私有IP，即使在受信任的场景下也是如此，但在视频会议平台上通常会导致中断。force exclusion of private IPs from ICE candidates [FF51+]. [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you grant device access, but often results in breakage on video-conferencing platforms.
 // user_pref("media.peerconnection.ice.no_host", true);
+
+
+
+/*==========工具栏==========*/
+// 移除Firefox View按钮
+// In Firefox 106, developers have added two new buttons to the toolbar of the browser. One of them, Firefox View, opens a built-in page with the list of recently opened tabs, tabs from your other devices, and also allows switching the theme. Another one is List all tabs that appears at the end of the tab row and opens a menu with open tabs similar to what you could see in Chrome. 
+// https://winaero.com/how-to-remove-firefox-view-and-list-all-tabs-from-firefox-toolbar/
+// user_pref("browser.tabs.firefox-view", false);
+// 移除“list all tabs”按钮
+user_pref("browser.tabs.tabmanager.enabled", false);
+// 移除“新功能”工具栏图标disable What's New toolbar icon [FF69+]
+user_pref("browser.messaging-system.whatsNewPanel.enabled", false); 
+// 取消38.0.5集成的阅读模式，移除工具栏阅读模式图标disable Reader View. Whether or not to perform reader mode article parsing on page load. If this pref is disabled, we will never show a reader mode icon in the toolbar.
+user_pref("reader.parse-on-load.enabled", false); 
+
+
+
+/*==========书签==========*/
+// 书签备份文件的数量。0，禁用备份；-1，备份数量不受限制
+user_pref("browser.bookmarks.max_backups", 1);
+
+
+
+/*==========杂项==========*/
+// 取消AboutConfig警告disable about:config warning. FF71-72: chrome://global/content/config.xul. FF73-86: chrome://global/content/config.xhtml( jar:file:///C:/Program Files/Mozilla Firefox/omni.ja!/chrome/toolkit/content/global/config.xhtml)
+// FF新版本:chrome://global/content/aboutconfig/aboutconfig.html(jar:file:///C:/Program Files/Mozilla Firefox/omni.ja!/chrome/toolkit/content/global/aboutconfig/aboutconfig.html)
+// http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/XUL_Tutorial/The_Chrome_URL.html
+// user_pref("general.warnOnAboutConfig", false); // XHTML version
+user_pref("browser.aboutConfig.showWarning", false); // HTML version [FF71+]
+
+
+// 启用userChrome/userContent，自定义界面Support for legacy customizations that rely on checking the user profile directory for these stylesheets: userContent.css, userChrome.css.
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true); 
+
+
+// 定义退格键的功能Backspace and Shift+Backspace behavior. 0 goes Back/Forward. 1 act like PgUp/PgDown. 2 and other values, nothing.
+user_pref("browser.backspace_action", 2); 
+// 禁止Alt键搭配其他键位激活菜单栏的菜单项（如Alt+F，激活菜单栏“文件”菜单项）。参数值默认18，指定Alt键；17，指定Ctrl+Shift。disable alt key toggling the menu bar
+user_pref("ui.key.menuAccessKey", 0);
+// 禁止Alt键激活菜单栏Make sure Alt key doesn't show the menubar
+user_pref("ui.key.menuAccessKeyFocuses", false);
+// 1，单击滚动条滚动到与点击点对应的视图。
+user_pref("ui.scrollToClick", 1);
+// 禁止Ctrl+Q按键退出浏览器[LINUX] [MAC]disable Ctrl-Q quit shortcut [LINUX] [MAC] [FF87+]. Don't quit the browser when Ctrl + Q is pressed.
+// user_pref("browser.quitShortcut.disabled", true); 
+
+// 在新标签页查看“页面/选中内容”的源代码。若启用外部编辑器查看页面源代码，此参数无效
+user_pref("view_source.tab", true); 
+// 启用外部编辑器查看页面源代码Check if external view source is enabled.  If so, try it.  If it fails, fallback to internal view source.
+user_pref("view_source.editor.external", true);
+// 指定查看页面源代码的外部编辑器路径
+user_pref("view_source.editor.path", "d:\\Program Files\\EmEditor\\EmEditor.exe");
+
+
+// 禁止监视操作系统联机/脱机连接状态Don't monitor OS online/offline connection state. If true, network link events will change the value of navigator.onLine
+user_pref("network.manage-offline-status", false);
+// 使用JavaScript时，强制使用en-US区域设置，防止泄漏程序区域/日期格式use en-US locale regardless of the system or region locale. [SETUP-WEB] May break some input methods e.g xim/ibus for CJK languages. Prevent leaking application locale/date format using JavaScript.
+user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
+
