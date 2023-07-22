@@ -1,3 +1,22 @@
+/******
+*    name: shuangmuxinwei user.js
+*    date: 22 July 2023
+*    version: 113
+*    url: https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main/Settings
+
+* 免责声明：
+  1、本user.js文件，参考了arkenfox user.js、pyllyukko user.js、BETTERFOX user.js、RunningCheese user.js、CopyCat user.js及其他的网络资源，在此表示感谢。
+  具体参考链接见https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main
+  2、本user.js文件，仅限于个人的使用分享，不一定完全适合所有人的使用环境。所以，使用前，请自行参考注释取舍。
+  3、本参数汇总，提供详细注释版、简易注释版两个user.js文件。详细注释版，提供中英注释；简易注释版，一般保留简要的中文注释。
+  4、部分参数值涉及路径，如“d:\\Program Files\\EmEditor\\EmEditor.exe”等，需要修改为用户自己本电脑的路径。否则，参数失效。
+  5、本user.js文件参数的顺序，依照设置页面about:preferences的选项顺序依次排列，如“常规>启动”“常规>标签页”等。其余相关的参数，则尽量归类于设置页面选项之后或者文件最末。
+  6、部分参数设置和注释说明，由于本人的知识和经验所限，不一定正确。欢迎指正。
+
+******/
+
+
+
 /*==========常规>启动==========*/
 // 设置启动的开始页面。3=打开先前的窗口和标签页。set startup page. 0=blank, 1=home, 2=last visited page, 3=resume previous session.
 // [SETTING] General>Startup>Restore previous session 
@@ -18,16 +37,15 @@ user_pref("browser.shell.checkDefaultBrowser", false);
 
 
 /*==========常规>标签页==========*/
-// 取消“按下Ctrl+Tab时，依照最近使用顺序循环切换标签页”disable 'Ctrl+Tab cycles through tabs in recently used order'
+// 取消“按下Ctrl+Tab时，依照最近使用顺序循环切换标签页火狐旧版本参数browser.ctrlTab.recentlyUsedOrder.”disable 'Ctrl+Tab cycles through tabs in recently used order'
 user_pref("browser.ctrlTab.sortByRecentlyUsed", false);
-// user_pref("browser.ctrlTab.recentlyUsedOrder", false);
 // 同时打开多个标签页时不提醒。阈值由browser.tabs.maxOpenBeforeWarn指定
 user_pref("browser.tabs.warnOnOpen", false);
-// 关闭所有标签页时不提醒Mozilla Firefox 94 won't prompt users anymore when they are about to close a browser window with multiple tabs.
+// 关闭所有标签页时不提醒Do not warn when closing all open tabs. Mozilla Firefox 94 won't prompt users anymore when they are about to close a browser window with multiple tabs.
 user_pref("browser.tabs.warnOnClose", false);
-// 关闭多个标签页时不提醒
+// 关闭多个标签页时不提醒Do not warn when closing all other open tabs
 user_pref("browser.tabs.warnOnCloseOtherTabs", false);
-// 关闭最后一个标签时不关闭浏览器
+// 关闭最后一个标签时不关闭浏览器Do not close the window when the last tab gets closed
 user_pref("browser.tabs.closeWindowWithLastTab", false);
 // 禁止任务栏显示标签页预览图disable Windows taskbar preview [WINDOWS]
 user_pref("browser.taskbar.previews.enable", false);
@@ -37,6 +55,14 @@ user_pref("browser.taskbar.lists.frequent.enabled", false);
 user_pref("browser.taskbar.lists.recent.enabled", false);
 user_pref("browser.taskbar.lists.tasks.enabled", false);
 // 禁止任务栏火狐图标右键显示最近条目：设置——>个性化——>开始——>在开始屏幕或任务栏的跳转列表中显示最近打开的项。Windows 10 does not provide a way to exempt a specific application from having opened files saved in Recent Items; that feature has only an all-or-nothing switch.  HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackDocs = 0 disables tracking, 1 enables. 
+/*=====身份标签页CONTAINERS=====*/
+// enable Container Tabs and its UI setting [FF50+]
+// [SETTING] General>Tabs>Enable Container Tabs
+user_pref("privacy.userContext.enabled", true);
+user_pref("privacy.userContext.ui.enabled", true);
+// 左键单击+按钮时，显示容器菜单[FF74+]set behavior on "+ Tab" button to display container menu on left click [FF74+]. [NOTE] The menu is always shown on long press and right click
+// [SETTING] General>Tabs>Enable Container Tabs>Settings>Select a container for each new tab
+user_pref("privacy.userContext.newTabContainerOnLeftClick.enabled", true);
 /*=====标签页打开方式=====*/
 // 3，在新标签页打开链接；2，在新窗口打开链接；1，强制在当前标签打开链接。enforce links targeting new windows to open in a new tab instead. 3 = divert new window to a new tab (default) . 2 = allow link to open a new window. 1 = force new window into same tab. Stops malicious window sizes and some screen resolution leaks.
 // browser.link.open_newwindow，决定新标签页或新窗口打开链接。browser.link.open_newwindow.restriction精细调整哪些链接受到影响。Some web sites choose to open certain links in new windows. This preference lets you control where to open these links, that would normally open new windows. You can use browser.link.open_newwindow.restriction to fine tune which links will be affected by this preference.
@@ -127,6 +153,8 @@ user_pref("browser.download.folderList", 2);
 // 总是询问保存文件的位置
 // [SETTING] General>Downloads>Always ask you where to save files
 user_pref("browser.download.useDownloadDir", false);
+// 自定义浏览器用户界面，将下载按钮隐藏至折叠菜单CustomizableUI state of the browser's user interface
+// user_pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[\"downloads-button\"],\"unified-extensions-area\":[],\"nav-bar\":[\"back-button\",\"forward-button\",\"stop-reload-button\",\"home-button\",\"customizableui-special-spring1\",\"urlbar-container\",\"customizableui-special-spring2\",\"save-to-pocket-button\",\"fxa-toolbar-menu-button\",\"unified-extensions-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[\"firefox-view-button\",\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"PersonalToolbar\":[\"import-button\",\"personal-bookmarks\"]},\"seen\":[\"developer-button\",\"save-to-pocket-button\"],\"dirtyAreaCache\":[\"nav-bar\",\"PersonalToolbar\",\"toolbar-menubar\",\"TabsToolbar\",\"widget-overflow-fixed-list\"],\"currentVersion\":19,\"newElementCount\":5}");
 // 取消下载按钮自动隐藏[FF57+]
 user_pref("browser.download.autohideButton", false);
 // 使用FF98+新式下载流程，跳过下载确认对话框In newer versions of Mozilla Firefox (version 98.0 and later), if a user tries to download a file from a website, Firefox starts downloading the file automatically without displaying the classic notification window prompting the user to select open with or save file options. As soon as you click on a download link present on a website, Firefox starts the download and displays the download progress in the new Download panel or flyout icon present on its toolbar.  In previous versions of Firefox, the browser used to show a confirmation dialog box asking the user to select whether Firefox should open the file using an application or save the file on his computer system or cancel the downloading.
@@ -139,8 +167,7 @@ user_pref("browser.download.alwaysOpenPanel", false);
 user_pref("browser.download.forbid_open_with", true);
 // 禁止将下载文件添加至系统“最近使用的文档”列表disable adding downloads to the system's "recent documents" list
 user_pref("browser.download.manager.addToRecentDocs", false);
-// 从Content-Disposition头信息检索文件名的延时
-// 大多数下载的文件名与下载URL中的内容匹配。但某些网站使用Content-Disposition标头字段，指定与URL不同的文件名。若未在设定延时检索到Content-Disposition值，浏览器使用URL中指定的文件名。Some URLs use Content-Disposition headers to tell browsers what to use for a filename when saving a file. This filename may not match the URL. When choosing “Save Link As...” from a link’s context menu, Mozilla must request the URL to find out the filename from a Content-Disposition header. Since this is not as fast as merely using the URL itself to generate a filename, Mozilla will time out after a short time waiting for the headers. This preference determines that timeout. 
+// 从Content-Disposition头信息检索文件名的延时。大多数下载的文件名与下载URL中的内容匹配。但某些网站使用Content-Disposition标头字段，指定与URL不同的文件名。若未在设定延时检索到Content-Disposition值，浏览器使用URL中指定的文件名。Some URLs use Content-Disposition headers to tell browsers what to use for a filename when saving a file. This filename may not match the URL. When choosing “Save Link As...” from a link’s context menu, Mozilla must request the URL to find out the filename from a Content-Disposition header. Since this is not as fast as merely using the URL itself to generate a filename, Mozilla will time out after a short time waiting for the headers. This preference determines that timeout. 
 // user_pref("browser.download.saveLinkAsFilenameTimeout", 0);
 
 
@@ -417,6 +444,9 @@ user_pref("privacy.clearOnShutdown.offlineApps", true);
 user_pref("privacy.clearOnShutdown.cookies", false);
 // 退出浏览器时不清除站点设置Site settings
 user_pref("privacy.clearOnShutdown.siteSettings", false);
+// 退出浏览器时清除会话还原设置（需要设置privacy.sanitize.sanitizeOnShutdown值为true）[FF34+]。若不使用会话恢复功能或已经清除历史记录，那么无需设置这一参数。参数值为true，阻止会话从崩溃中恢复set Session Restore to clear on shutdown (if 'privacy.sanitize.sanitizeOnShutdown' is true) [FF34+]. [NOTE] Not needed if Session Restore is not used ('browser.startup.page') or it is already cleared with history ('privacy.clearOnShutdown.*'). [NOTE] If true, this prevents resuming from crashes (also see 'browser.sessionstore.resume_from_crash')
+// user_pref("privacy.clearOnShutdown.openWindows", true);
+
 
 
 /*==========隐私>地址栏==========*/
@@ -437,6 +467,8 @@ user_pref("browser.urlbar.maxRichResults", 5);
 user_pref("keyword.enabled", false);
 // 输入无效域名时，禁止域名猜测。域名猜测功能拦截DNS“找不到主机名错误”，并重新发送请求（如添加www或.com）。这是不一致的使用，通过代理服务器不起作用，是对DNS有缺陷的使用，隐私问题，可能会泄露敏感数据（如查询字符串），是一个安全风险（如常见拼写错误和恶意站点）。Don't try to guess domain names when entering an invalid domain name in URL bar. disable location bar domain guessing. domain guessing intercepts DNS "hostname not found errors" and resends a request (e.g. by adding www or .com). This is inconsistent use (e.g. FQDNs), does not work via Proxy Servers (different error), is a flawed use of DNS (TLDs: why treat .com as the 411 for DNS errors?), privacy issues (why connect to sites you didn't intend to), can leak sensitive data (e.g. query strings: e.g. Princeton attack), and is a security risk (e.g. common typos & malicious sites set up to exploit this).
 user_pref("browser.fixup.alternate.enabled", false);
+// 地址栏搜索单词字符串时，禁止DNS解析。字符串解析为有效主机，默认显示“是否前往主机”提示。0=从不解析；1=使用启发式（默认）；2=始终解析Controls when to DNS resolve single word search strings, after they were searched for. If the string is resolved as a valid host, show a "Did you mean to go to 'host'" prompt. 0 - never resolve; 1 - use heuristics (default); 2 - always resolve. disable location bar leaking single words to a DNS provider after searching [FF78+]. 0=never resolve, 1=use heuristics, 2=always resolve. 
+user_pref("browser.urlbar.dnsResolveSingleWordsAfterSearch", 0); // [DEFAULT: 0 FF104+]
 // 禁止地址栏推测性连接disable location bar making speculative connections [FF56+]
 user_pref("browser.urlbar.speculativeConnect.enabled", false);
 // 复制网址时，禁止解码网址的非ASCII UTF-8符号Don't urlencode non-ASCII UTF-8 symbols in URLs while copying address into clipboard
@@ -480,6 +512,8 @@ user_pref("permissions.default.desktop-notification", 2);
 // 阻止音频、视频自动播放disable autoplay of HTML5 media [FF63+]. 0=Allow all, 1=Block non-muted media (default in FF67+), 2=Prompt (removed in FF66), 5=Block all (FF69+).
 // [SETTING] Privacy & Security>Permissions>Autoplay>Settings>Default for all websites
 user_pref("media.autoplay.default", 5);
+// 设置阻止自动播放的策略。0，粘性激活。1，瞬时激活（瞬时激活持续时间通过参数dom.user_activation.transient.timeout调整）。2，用户输入深度（当用户输入触发播放，允许自动播放，输入由用户输入深度决定）This pref defines what the blocking policy would be used in blocking autoplay. 0 : use sticky activation (default). 1 : use transient activation (the transient activation duration can be adjusted by the pref `dom.user_activation.transient.timeout`). 2 : user input depth (allow autoplay when the play is trigged by user input which is determined by the user input depth). disable autoplay of HTML5 media if you interacted with the site [FF78+]
+// user_pref("media.autoplay.blocking_policy", 2);
 // 禁止虚拟现实权限set a default permission for Virtual Reality [FF73+]
 user_pref("permissions.default.xr", 2);
 // 禁用虚拟现实设备API Disable virtual reality devices APIs
@@ -518,8 +552,6 @@ user_pref("dom.disable_beforeunload", true);
 // user_pref("dom.allow_cut_copy", false);
 // 禁止Linux上自动将所选内容发送到剪贴板。除ANDROID、XP_MACOSX、XP_UNIX系统外，参数值默认true。Do not automatically send selection to clipboard on some Linux platforms
 // user_pref("clipboard.autocopy", false); 
-// 禁用onions。火狐不支持隐藏服务disable onions. Firefox doesn't support hidden services. Use Tor Browser
-// user_pref("dom.securecontext.allowlist_onions", true); // [FF97+] 
 
 
 /*==========隐私>数据收集与使用==========*/
@@ -606,26 +638,25 @@ user_pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
 
 
 /*==========安全>证书==========*/
-// 不查询OCSP响应服务器确认证书当前是否有效。0=禁用，1=启用disable OCSP(Online Certificate Status Protocol) fetching to confirm current validity of certificates. 0=disabled, 1=enabled (default), 2=enabled for EV certificates only OCSP (non-stapled) leaks information about the sites you visit to the CA (cert authority). It's a trade-off between security (checking) and privacy (leaking info to the CA). [NOTE] This pref only controls OCSP fetching and does not affect OCSP stapling.
+// 不查询OCSP响应服务器确认证书当前是否有效。0=禁用；1=启用；2=仅对EV证书启用OCSP（non-stapled），将有关访问的站点信息泄漏到CA（证书颁发机构）。这是安全性和隐私（向CA泄露信息）之间的权衡。此参数仅控制OCSP获取，不会影响OCSP stapling。disable OCSP(Online Certificate Status Protocol) fetching to confirm current validity of certificates. 0=disabled, 1=enabled (default), 2=enabled for EV certificates only OCSP (non-stapled). leaks information about the sites you visit to the CA (cert authority). It's a trade-off between security (checking) and privacy (leaking info to the CA). [NOTE] This pref only controls OCSP fetching and does not affect OCSP stapling.
 // [SETTING] Privacy & Security>Security>Certificates>Query OCSP responder servers to confirm the current validity of certificates
 user_pref("security.OCSP.enabled", 0);
 // Enable OCSP Stapling support
 // user_pref("security.ssl.enable_ocsp_stapling", true);
 // 将OCSP获取失败（non-stapled）设置为硬失败set OCSP fetch failures (non-stapled) to hard-fail SEC_ERROR_OCSP_SERVER_ERROR. 
-// 当无法访问CA来验证网站证书时，火狐继续连接目标网站（软失败）。设置为true，火狐中断与目标网站的连接（硬失败）。当OCSP获取失败时，软失败没有意义：无法确认证书仍然有效（可能已被撤销）和/或可能受到攻击（如恶意阻止OCSP服务器）。When a CA cannot be reached to validate a cert, Firefox just continues the connection (=soft-fail). Setting this pref to true tells Firefox to instead terminate the connection (=hard-fail). It is pointless to soft-fail when an OCSP fetch fails: you cannot confirm a cert is still valid (it could have been revoked) and/or you could be under attack (e.g. malicious blocking of OCSP servers).
+// 当无法访问CA来验证网站证书时，火狐继续连接目标网站（软失败）。设置为true，火狐中断与目标网站的连接（硬失败）。当OCSP获取失败时，软失败没有意义：无法确认证书仍然有效（可能已被撤销）和/或可能受到攻击（如恶意阻断OCSP服务器）。When a CA cannot be reached to validate a cert, Firefox just continues the connection (=soft-fail). Setting this pref to true tells Firefox to instead terminate the connection (=hard-fail). It is pointless to soft-fail when an OCSP fetch fails: you cannot confirm a cert is still valid (it could have been revoked) and/or you could be under attack (e.g. malicious blocking of OCSP servers).
 // https://bbs.kafan.cn/thread-2179806-1-1.html
 // security.ocsp.require，决定soft-fail/hard-fail。目前OCSP服务器处理不了过大的并发量，加上国内的网络环境，所以经常出问题。打开security.ocsp.require使用hard-fail会破坏很多网站的访问。一般只要网站支持stapling，即网站服务器定期去OCSP服务器验证，然后在自己的服务器端建立有效的缓存，就足够，也是将来的趋势。这样OCSP服务器只要定期处理网站的查询就可以了，并发量小了很多。
 user_pref("security.OCSP.require", true);
-// 禁用Win8.1的微软家庭安全证书[FF50+] disable Windows 8.1's Microsoft Family Safety cert [FF50+] [WIN]
-// 0=禁止检测家庭安全模式和导入根证书。1=只尝试检测家庭安全模式（不导入根证书）。2=检测家庭安全模式并导入根证书0=disable detecting Family Safety mode and importing the root. 1=only attempt to detect Family Safety mode (don't import the root). 2=detect Family Safety mode and import the root.
+// 禁用Win8.1的微软家庭安全证书[FF50+]。0=禁止检测家庭安全模式和导入根证书。1=只尝试检测家庭安全模式（不导入根证书）。2=检测家庭安全模式并导入根证书disable Windows 8.1's Microsoft Family Safety cert [FF50+] [WIN]. 0=disable detecting Family Safety mode and importing the root. 1=only attempt to detect Family Safety mode (don't import the root). 2=detect Family Safety mode and import the root.
 user_pref("security.family_safety.mode", 0);
-// enable strict PKP (Public Key Pinning)
-// 0=disabled, 1=allow user MiTM (default; such as your antivirus), 2=strict. MOZILLA_PKIX_ERROR_KEY_PINNING_FAILURE
+// 启用严格的PKP（公钥锁定）。0=禁用，1=允许用户中间人设备（如杀毒软件），2=严格。如果依靠杀毒软件通过检查所有网络流量来保护网络浏览，保持默认值=1。enable strict PKP (Public Key Pinning). 0=disabled, 1=allow user MiTM (default; such as your antivirus), 2=strict. If you rely on an AV (antivirus) to protect your web browsing by inspecting ALL your web traffic, then leave at current default=1. [SETUP-WEB] MOZILLA_PKIX_ERROR_KEY_PINNING_FAILURE
 user_pref("security.cert_pinning.enforcement_level", 2);
-// enable CRLite [FF73+]
-// 0 = disabled. 1 = consult CRLite but only collect telemetry. 2 = consult CRLite and enforce both "Revoked" and "Not Revoked" results. 3 = consult CRLite and enforce "Not Revoked" results, but defer to OCSP for "Revoked" (FF99+, default FF100+)
+// 启用CRLite[FF73+]。0=禁用。1=查询CRLite，但只收集遥测数据。2=查询CRLite并同时执行 "已撤销 "和 "未撤销 "结果。3=查询CRLite并执行 "未撤销 "结果，但将 "已撤销 "结果交由OCSP处理enable CRLite [FF73+]. 0 = disabled. 1 = consult CRLite but only collect telemetry. 2 = consult CRLite and enforce both "Revoked" and "Not Revoked" results. 3 = consult CRLite and enforce "Not Revoked" results, but defer to OCSP for "Revoked" (FF99+, default FF100+)
 user_pref("security.remote_settings.crlite_filters.enabled", true);
 user_pref("security.pki.crlite_mode", 2);
+// 禁用中间证书缓存[FF41+]。会影响登录/证书/密钥数据库。效果是所有证书只能在会话中使用。保存的登录名和密码不可用。disable intermediate certificate caching [FF41+] [RESTART]. [NOTE] This affects login/cert/key dbs. The effect is all credentials are session-only. Saved logins and passwords are not available. Reset the pref and restart to return them.
+// user_pref("security.nocertdb", true);
 
 
 /*==========安全>HTTPS-Only模式==========*/
@@ -686,6 +717,9 @@ user_pref("privacy.resistFingerprinting.block_mozAddonManager", true);
 user_pref("extensions.postDownloadThirdPartyPrompt", false);
 // 强制启用SmartBlock shims[FF81+]enforce SmartBlock shims [FF81+]. In FF96+ these are listed in about:compat
 user_pref("extensions.webcompat.enable_shims", true); // [DEFAULT: true]
+// 锁定允许的扩展目录。将破坏扩展，语言包，主题和任何其他安装在配置文件和应用程序目录之外的XPI文件lock down allowed extension directories. [SETUP-CHROME] This will break extensions, language packs, themes and any other XPI files which are installed outside of profile and application directories
+user_pref("extensions.enabledScopes", 5); // [HIDDEN PREF]
+user_pref("extensions.autoDisableScopes", 15); // [DEFAULT: 15]
 // 强制扩展、语言包签名enforced extension signing
 user_pref("xpinstall.signatures.required", true); 
 user_pref("extensions.langpacks.signatures.required", true);
@@ -737,24 +771,22 @@ user_pref("dom.ipc.plugins.reportCrashURL", false);
 // 禁止发送Flash Player插件崩溃报告（已废弃）disable sending Flash crash reports
 // user_pref("dom.ipc.plugins.flash.subprocess.crashreporter.enabled", false);
 /*=====WebRTC=====*/
-// 禁用WebRTC，防止泄露私人IP
-// disable WebRTC (Web Real-Time Communication).  Firefox desktop uses mDNS hostname obfuscation and the private IP is never exposed until required in TRUSTED scenarios; i.e. after you grant device (microphone or camera) access. Disable WebRTC entirely to prevent leaking internal IP addresses (Firefox < 42). NOTICE: Disabling WebRTC breaks peer-to-peer file sharing tools (reep.io ...)
+// 禁用WebRTC，防止泄露私人IP。disable WebRTC (Web Real-Time Communication).  Firefox desktop uses mDNS hostname obfuscation and the private IP is never exposed until required in TRUSTED scenarios; i.e. after you grant device (microphone or camera) access. Disable WebRTC entirely to prevent leaking internal IP addresses (Firefox < 42). NOTICE: Disabling WebRTC breaks peer-to-peer file sharing tools (reep.io ...)
 user_pref("media.peerconnection.enabled", false);
 // 在代理内部强制WebRTC[FF70+]force WebRTC inside the proxy [FF70+]
 user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
 // 强制使用单一网络接口生成ICE候选[FF42+]force a single network interface for ICE candidates generation [FF42+]. When using a system-wide proxy, it uses the proxy interface. Don't reveal your internal IP when WebRTC is enabled [FF42+].
 user_pref("media.peerconnection.ice.default_address_only", true);
-// 强制将私有IP排除在ICE候选者之外 [FF51+]。这在授予设备访问权限后保护私有IP，即使在受信任的场景下也是如此，但在视频会议平台上通常会导致中断。force exclusion of private IPs from ICE candidates [FF51+]. [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you grant device access, but often results in breakage on video-conferencing platforms.
+// 强制将私有IP排除在ICE候选者之外[FF51+]。这在授予设备访问权限后保护私有IP，即使在受信任的场景下也是如此，但在视频会议平台上通常会导致中断。force exclusion of private IPs from ICE candidates [FF51+]. [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you grant device access, but often results in breakage on video-conferencing platforms.
 // user_pref("media.peerconnection.ice.no_host", true);
 
 
 
 /*==========工具栏==========*/
-// 移除Firefox View按钮
-// In Firefox 106, developers have added two new buttons to the toolbar of the browser. One of them, Firefox View, opens a built-in page with the list of recently opened tabs, tabs from your other devices, and also allows switching the theme. Another one is List all tabs that appears at the end of the tab row and opens a menu with open tabs similar to what you could see in Chrome. 
+// 移除Firefox View按钮In Firefox 106, developers have added two new buttons to the toolbar of the browser. One of them, Firefox View, opens a built-in page with the list of recently opened tabs, tabs from your other devices, and also allows switching the theme. Another one is List all tabs that appears at the end of the tab row and opens a menu with open tabs similar to what you could see in Chrome. 
 // https://winaero.com/how-to-remove-firefox-view-and-list-all-tabs-from-firefox-toolbar/
 // user_pref("browser.tabs.firefox-view", false);
-// 移除“list all tabs”按钮
+// 移除“list all tabs”按钮Control the visibility of Tab Manager Menu.
 user_pref("browser.tabs.tabmanager.enabled", false);
 // 移除“新功能”工具栏图标disable What's New toolbar icon [FF69+]
 user_pref("browser.messaging-system.whatsNewPanel.enabled", false); 
@@ -763,9 +795,73 @@ user_pref("reader.parse-on-load.enabled", false);
 
 
 
+/*==========历史记录==========*/
+// 最近关闭的标签页最大数量。这一参数决定会话恢复服务跟踪多少个最近关闭的标签页（默认25）。会话恢复服务必须处于活动状态。"Undo Closed Tabs" in Session Restore. This preference controls how many closed tabs are kept track of via the Session Restore service. A positive integer indicating how many tab closures to remember for later possible restoration. The Session Restore service must be active for tab data to be remembered. This preference does not exist by default.
+user_pref("browser.sessionstore.max_tabs_undo", 3);
+// 最近关闭的窗口最大数量（默认 10）。会话恢复服务必须处于活动状态。This preference controlled how many closed windows are kept track of via the Session Restore service. A positive integer indicating how many window closures to remember for later possible restoration. The Session Restore service must be active for window data to be remembered. how many windows can be reopened (per session) - on non-OS X platforms. this pref may be ignored when dealing with pop-up windows to ensure proper startup
+user_pref("browser.sessionstore.max_windows_undo", 1);
+// 定义Ctrl-Shift-Del清除历史记录的项目。无论privacy.cpd.downloads参数值是什么，只要打开“清除最近的历史记录”对话框，将同步为privacy.cpd.history的值reset default items to clear with Ctrl-Shift-Del [SETUP-CHROME]. This dialog can also be accessed from the menu History>Clear Recent History. Firefox remembers your last choices. This will reset them when you start Firefox. [NOTE] Regardless of what you set "downloads" to, as soon as the dialog for "Clear Recent History" is opened, it is synced to the same as "history" 
+user_pref("privacy.cpd.cache", true);    // [DEFAULT: true]
+// 表单和搜索历史
+user_pref("privacy.cpd.formdata", true); // [DEFAULT: true]
+user_pref("privacy.cpd.history", true);  // [DEFAULT: true]
+// 登录状态
+user_pref("privacy.cpd.sessions", true); // [DEFAULT: true]
+// 脱机网站数据
+user_pref("privacy.cpd.offlineApps", false); // [DEFAULT: false]
+user_pref("privacy.cpd.cookies", false);
+user_pref("privacy.cpd.downloads", true); 
+// 会话还原Session Restore
+user_pref("privacy.cpd.openWindows", false); 
+user_pref("privacy.cpd.passwords", false);
+// 网站设置
+user_pref("privacy.cpd.siteSettings", false);
+// 定义“清除最近的历史记录”的时间范围。0=一切，1=过去一小时，2=过去两个小时，3=过去四个小时，4=今天reset default "Time range to clear" for "Clear Recent History". Firefox remembers your last choice. This will reset the value when you start Firefox. 0=everything, 1=last hour, 2=last two hours, 3=last four hours, 4=today. [NOTE] Values 5 (last 5 minutes) and 6 (last 24 hours) are not listed in the dropdown, which will display a blank value, and are not guaranteed to work
+user_pref("privacy.sanitize.timeSpan", 0);
+// 在内存中存储的最大页面数量。参数值为负数，根据可用内存量计算要缓存的内容查看器数量。最近访问的页面被存储在内存，避免重新解析（与内存缓存不同），以提高后退和前进的性能。这一参数限制在内存中存储的最大页面数量。默认-1，根据RAM总量自动确定存储内存的最大页面数量。0，禁止在内存中存储任何页面。任何正整数，存储在内存中的最大页面数量。Max number of total cached content viewers. Fastback caching - if this pref is negative, then we calculate the number of content viewers to cache based on the amount of available memory. the maximum number of pages stored in memory. Pages that were recently visited are stored in memory in such a way that they don't have to be re-parsed (this is different from the memory cache). This improves performance when pressing Back and Forward.This preference limits the maximum number of pages stored in memory. -1, Automatically determine the maximum amount of pages to store in memory based on the total amount of RAM (Default). 0, Do not store any pages in memory. Any positive integer, Maximum number of pages to store in memory.
+user_pref("browser.sessionhistory.max_total_viewers", 3);
+// 浏览器会话历史记录的最大页数（后退/前进按钮的历史记录缓存最大数量）The maximum number of pages in the browser's session history, i.e. the maximum number of URLs you can traverse purely through the Back/Forward buttons. Default value is 50.
+user_pref("browser.sessionhistory.max_entries", 3);
+// 禁止从崩溃中恢复会话disable resuming session from crash. 
+// user_pref("browser.sessionstore.resume_from_crash", false);
+// 设置会话保存操作之间的最小间隔（默认15000，15秒）。browser.sessionstore.enabled参数值为true才能生效。set the minimum interval between session save operations. This preference controls how often information about the current session is saved to the profile. A positive integer indicating the number of milliseconds between session saving operations. (Default is 15000, or 15 seconds; in Firefox 3.x: 10 seconds).browser.sessionstore.enabled must be true for this preference to have an effect.
+user_pref("browser.sessionstore.interval", 3600000);
+
+
+
 /*==========书签==========*/
+// 始终显示书签工具栏。The visibility of the bookmarks toolbar. "newtab": Show on the New Tab Page. "always": Always show. "never": Never show
+user_pref("browser.toolbars.bookmarks.visibility", "always");
 // 书签备份文件的数量。0，禁用备份；-1，备份数量不受限制
 user_pref("browser.bookmarks.max_backups", 1);
+// 创建快捷方式时，禁止获取网站图标。快捷方式的图标使用profile/shortcutCache目录中的随机命名的.ico文件。删除快捷方式后，.ico依旧保留。参数值为false，快捷方式使用通用的火狐图标disable favicons in shortcuts. URL shortcuts use a cached randomly named .ico file which is stored in your profile/shortcutCache directory. The .ico remains after the shortcut is deleted. If set to false then the shortcuts use a generic Firefox icon. Don't fetch and permanently store favicons for Windows .URL shortcuts created by drag and drop. NOTICE: .URL shortcut files will be created with a generic icon. Favicons are stored as .ico files in $profile_dir\shortcutCache.
+user_pref("browser.shell.shortcutFavicons", false);
+// 禁止下载历史记录和书签中的网站图标。图标以数据blob形式存储在favicons.sqlite中，火狐关闭时清理favicons.sqlite。disable favicons in history and bookmarks. [NOTE] Stored as data blobs in favicons.sqlite, these don't reveal anything that your actual history (and bookmarks) already do. Your history is more detailed, so control that instead; e.g. disable history, clear history on exit, use Private Browsing mode. [NOTE] favicons.sqlite is sanitized on Firefox close.
+user_pref("browser.chrome.site_icons", false);
+// 禁用Web通知的网站图标disable favicons in web notifications
+user_pref("alerts.showFavicons", false);
+
+
+
+/*==========火狐界面==========*/
+// 禁止显示标题栏。0，显示；2，不显示。Whether we should draw the tabs on top of the titlebar. 
+user_pref("browser.tabs.inTitlebar", 2);
+// 浏览器界面密度。主要影响工具栏按钮和地址栏的间距。0=正常，1=紧凑，2=触摸。UI density of the browser chrome. This mostly affects toolbarbutton and urlbar spacing. The possible values are 0=normal, 1=compact, 2=touch.
+user_pref("browser.uidensity", 0);
+// 在平板模式下使用为触控优化的界面Whether Firefox will automatically override the uidensity to "touch" while the user is in a touch environment (such as Windows tablet mode).
+user_pref("browser.touchmode.auto", true);
+
+
+
+/*==========磁盘缓存==========*/
+// 禁止隐私浏览模式下媒体缓存写入磁盘disable media cache from writing to disk in Private Browsing. [NOTE] MSE (Media Source Extensions) are already stored in-memory in Private Browsing
+user_pref("browser.privatebrowsing.forceMediaMemoryCache", true); // [FF75+]
+// 如果资源小于设定的大小（单位KB），那么使用内存支持的媒体缓存；否则（单个共享全局）使用文件支持的媒体缓存If a resource is known to be smaller than this size (in kilobytes), a memory-backed MediaCache may be used; otherwise the (single shared global) file-backed MediaCache is used.
+user_pref("media.memory_cache_max_size", 1048576);
+// 禁用存储额外的会话数据disable storing extra session data [SETUP-CHROME]. define on which sites to save extra session data such as form content, cookies and POST data. 0=everywhere, 1=unencrypted sites, 2=nowhere
+user_pref("browser.sessionstore.privacy_level", 2);
+// 在系统下次启动后，禁止自动启动火狐并恢复会话[XP]disable automatic Firefox start and session restore after reboot [FF62+] [WINDOWS]. Whether to use RegisterApplicationRestart to restart the browser and resume the session on next Windows startup
+user_pref("toolkit.winRegisterApplicationRestart", false);
 
 
 
@@ -800,8 +896,79 @@ user_pref("view_source.editor.external", true);
 user_pref("view_source.editor.path", "d:\\Program Files\\EmEditor\\EmEditor.exe");
 
 
+
+/*==========网络==========*/
+/*=====DNS/DoH/PROXY/SOCKS/IPv6=====*/
+// 禁用IPv6。IPv6可能会被滥用，尤其是MAC地址，并且可能会在VPN中泄漏。这是程序级别的禁用。禁用IPv6最好在操作系统/网络级别完成和在VPN设置中正确配置。disable IPv6. IPv6 can be abused, especially with MAC addresses, and can leak with VPNs: assuming your ISP and/or router and/or website is IPv6 capable. Most sites will fall back to IPv4. [SETUP-WEB] PR_CONNECT_RESET_ERROR: this pref might be the cause. [STATS] Firefox telemetry (Feb 2023) shows ~9% of successful connections are IPv6. [NOTE] This is an application level fallback. Disabling IPv6 is best done at an OS/network level, and/or configured properly in VPN setups. If you are not masking your IP, then this won't make much difference. If you are masking your IP, then it can only help. [NOTE] PHP defaults to IPv6 with "localhost". Use "php -S 127.0.0.1:PORT"
+user_pref("network.dns.disableIPv6", true);
+// 在使用SOCKS时，设置代理服务器进行DNS查询。如在Tor中，这会阻止本地DNS服务器知道Tor目的地，因为远程Tor节点将处理DNS请求set the proxy server to do any DNS lookups when using SOCKS. e.g. in Tor, this stops your local DNS server from knowing your Tor destination as a remote Tor node will handle the DNS request
+user_pref("network.proxy.socks_remote_dns", true);
+// 禁止使用UNC（统一命名规范）路径[FF61+]disable using UNC (Uniform Naming Convention) paths [FF61+]. [SETUP-CHROME] Can break extensions for profiles on network shares
+user_pref("network.file.disable_unc_paths", true); // [HIDDEN PREF]
+// 禁止GIO作为潜在的代理旁路媒介disable GIO as a potential proxy bypass vector. Gvfs/GIO has a set of supported protocols like obex, network, archive, computer, dav, cdda, gphoto2, trash, etc. By default only sftp is accepted (FF87+)
+user_pref("network.gio.supported-protocols", ""); // [HIDDEN PREF]
+/*=====SSL (Secure Sockets Layer) / TLS (Transport Layer Security)=====*/
+// 需要安全协商。阻止与不支持RFC 5746的服务器连接，因为这些服务器可能会遭受中间人攻击。不支持RFC 5746的服务器如果禁用重新协商，就不会受到攻击，但浏览器无法确认这一点。将此参数设置为true是确保浏览器和服务器之间的通道不会出现不安全的重新协商的唯一方法require safe negotiation. Blocks connections to servers that don't support RFC 5746 as they're potentially vulnerable to a MiTM attack. A server without RFC 5746 can be safe from the attack if it disables renegotiations, but the problem is that the browser can't know that. Setting this pref to true is the only way for the browser to ensure there will be no unsafe renegotiations on the channel between the browser and the server. 
+user_pref("security.ssl.require_safe_negotiation", true);
+// 禁用TLS1.3 0-RTT（往返时间）[FF51+]disable TLS1.3 0-RTT (round-trip time) [FF51+]. This data is not forward secret, as it is encrypted solely under keys derived using the offered PSK. There are no guarantees of non-replay between connections
+user_pref("security.tls.enable_0rtt_data", false);
+// 控制TLS版本。1=TLS 1.0；2=TLS 1.1；3=TLS 1.2；4=TLS 1.3。control TLS versions. [WHY] Passive fingerprinting and security. 
+// user_pref("security.tls.version.min", 3); // [DEFAULT: 3]
+// user_pref("security.tls.version.max", 4);
+// 禁用SSL会话ID[FF36+]disable SSL session IDs [FF36+] [WHY] Passive fingerprinting and perf costs. These are session-only and isolated with network partitioning (FF85+) and/or containers
+// user_pref("security.ssl.disable_session_identifiers", true);
+/*=====UI (User Interface)=====*/
+// 挂锁显示 "安全受损 "警告 ，但页面子资源未显示挂锁警告display warning on the padlock for "broken security" (if security.ssl.require_safe_negotiation is false) Bug: warning padlock not indicated for subresources on a secure page! 
+user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
+// 在 "不安全连接 "警告页面显示高级信息display advanced information on Insecure Connection warning pages only works when it's possible to add an exception. i.e. it doesn't work for HSTS discrepancies.
+user_pref("browser.xul.error_pages.expert_bad_cert", true);
+// 在HTTP网站显示“不安全”的图标和提示文本display "insecure" icon and "Not Secure" text on HTTP sites
+user_pref("security.insecure_connection_icon.enabled", true);
+user_pref("security.insecure_connection_icon.pbmode.enabled", true);
+user_pref("security.insecure_connection_text.enabled", true);
+user_pref("security.insecure_connection_text.pbmode.enabled", true);
+/*=====HEADERS / REFERERS=====*/
+// 控制何时发送跨站referer。0=始终（默认），1=仅当基本域名匹配时，2=仅当主机匹配时。如果太严格，那么改为“0”并使用Smart Referer扩展（严格模式+添加例外）control when to send a cross-origin referer. 0=always (default), 1=only if base domains match, 2=only if hosts match. [SETUP-WEB] Breakage: older modems/routers and some sites e.g banks, vimeo, icloud, instagram. If "2" is too strict, then override to "0" and use Smart Referer extension (Strict mode + add exceptions).
+user_pref("network.http.referer.XOriginPolicy", 2);
+// 控制发送的跨站信息量[FF52+]。0=发送完整URI（默认），1=协议+主机+端口+路径，2=协议+主机+端口control the amount of cross-origin information to send [FF52+]. 0=send full URI (default), 1=scheme+host+port+path, 2=scheme+host+port
+user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
+// 强制不启用referer欺骗，referer spoof影响跨站点请求伪造保护enforce no referer spoofing [WHY] Spoofing can affect CSRF (Cross-Site Request Forgery) protections. false=real referer, true=spoof referer (use target URI as referer).
+user_pref("network.http.referer.spoofSource", false); // [DEFAULT: false]
+// 设置默认Referrer策略[FF59+]。0=无引用，1=同源，2=跨来源时限制来源，3=降级时无Referrer。网站Referrer策略可以覆盖参数值set the default Referrer Policy [FF59+]. 0=no-referer, 1=same-origin, 2=strict-origin-when-cross-origin, 3=no-referrer-when-downgrade. [WHY] Defaults are fine. They can be overridden by a site-controlled Referrer Policy
+// user_pref("network.http.referer.defaultPolicy", 2); // [DEFAULT: 2]
+// user_pref("network.http.referer.defaultPolicy.pbmode", 2); // [DEFAULT: 2]
+// 精细设置referer。0=不发送任何内容，1=仅在点击时发送，2=在图像请求时发送。referers. [WHY] Only cross-origin referers need control. Prefs allowing granular control of referers. 0=don't send any, 1=send only on clicks, 2=send on image requests as well
+// user_pref("network.http.sendRefererHeader", 2);
+// 控制要发送的信息量。0=发送完整URI（默认），1=协议+主机+端口+路径，2=协议+主机+端口control the amount of information to send. 0=send full URI (default), 1=scheme+host+port+path, 2=scheme+host+port
+// user_pref("network.http.referer.trimmingPolicy", 0);
+// 禁用onions。disable onions. Firefox doesn't support hidden services. Use Tor Browser
+// user_pref("dom.securecontext.allowlist_onions", true);
+// 离开.onion域名时是否需要隐藏referrer。false=允许onion引用，true=隐藏onion引用（使用空引用）。Check whether we need to hide referrer when leaving a .onion domain. false=allow onion referer, true=hide onion referer (use empty referer).
+// user_pref("network.http.referer.hideOnionSource", true);
+/*=====预读取=====*/
+// 禁止链接预读取disable link prefetching
+// https://developer.mozilla.org/docs/Web/HTTP/Link_prefetching_FAQ
+// https://www.ghacks.net/2013/04/27/firefox-prefetching-what-you-need-to-know/
+user_pref("network.prefetch-next", false);
+// 禁止DNS预读取disable DNS prefetching
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
+user_pref("network.dns.disablePrefetch", true);
+user_pref("network.dns.disablePrefetchFromHTTPS", true); // [DEFAULT: true]
+// 禁用预读取disable predictor / prefetching
+user_pref("network.predictor.enabled", false);
+user_pref("network.predictor.enable-prefetch", false); // [FF48+] [DEFAULT: false]
+// 鼠标悬停在链接时，禁止打开与链接服务器的连接disable link-mouseover opening connection to linked server
+// https://www.ghacks.net/2015/08/16/block-firefox-from-connecting-to-sites-when-you-hover-over-links/
+user_pref("network.http.speculative-parallel-limit", 0);
+// 禁止按下鼠标点击书签和历史记录的推测连接[FF98+]disable mousedown speculative connections on bookmarks and history [FF98+]
+user_pref("browser.places.speculativeConnect.enabled", false);
+// 强制不执行“超链接审核”（点击跟踪）enforce no "Hyperlink Auditing" (click tracking)
+user_pref("browser.send_pings", false); // [DEFAULT: false]
+
 // 禁止监视操作系统联机/脱机连接状态Don't monitor OS online/offline connection state. If true, network link events will change the value of navigator.onLine
 user_pref("network.manage-offline-status", false);
 // 使用JavaScript时，强制使用en-US区域设置，防止泄漏程序区域/日期格式use en-US locale regardless of the system or region locale. [SETUP-WEB] May break some input methods e.g xim/ibus for CJK languages. Prevent leaking application locale/date format using JavaScript.
 user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
-
+// 禁用HTTP替代服务[FF37+]disable HTTP Alternative Services [FF37+]. [WHY] Already isolated with network partitioning (FF85+). alt-svc allows separation of transport routing from the origin host without using a proxy.
+user_pref("network.http.altsvc.enabled", false);
+user_pref("network.http.altsvc.oe", false);
