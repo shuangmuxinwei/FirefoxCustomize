@@ -465,10 +465,18 @@ user_pref("browser.urlbar.maxRichResults", 5);
 // 地址栏输入无效网址时，禁止调用搜索引擎搜索。给出错误信息，防止向搜索引擎泄露无效网址。不影响明确的操作，如使用下拉菜单的搜索按钮，或使用配置的关键词搜索快捷方式。disable location bar using search. Don't leak URL typos to a search engine, give an error message instead. Examples: "secretplace,com", "secretplace/com", "secretplace com", "secret place.com". This does not affect explicit user action such as using search buttons in the dropdown, or using keyword search shortcuts you configure in options (e.g. "d" for DuckDuckGo). Override this if you trust and use a privacy respecting search engine.
 // 当搜索字符串没有被识别为网址，默认用搜索引擎搜索。设置为false，任何字符串被视为网址，即使是无效网址。禁止向搜索引擎提交地址栏中输入的无效网址。By default, when the search string is not recognized as a potential url, search for it with the default search engine. If set to false any string will be handled as a potential URL, even if it’s invalid. Do not submit invalid URIs entered in the address bar to the default search engine.
 user_pref("keyword.enabled", false);
-// 输入无效域名时，禁止域名猜测。域名猜测功能拦截DNS“找不到主机名错误”，并重新发送请求（如添加www或.com）。这是不一致的使用，通过代理服务器不起作用，是对DNS有缺陷的使用，隐私问题，可能会泄露敏感数据（如查询字符串），是一个安全风险（如常见拼写错误和恶意站点）。Don't try to guess domain names when entering an invalid domain name in URL bar. disable location bar domain guessing. domain guessing intercepts DNS "hostname not found errors" and resends a request (e.g. by adding www or .com). This is inconsistent use (e.g. FQDNs), does not work via Proxy Servers (different error), is a flawed use of DNS (TLDs: why treat .com as the 411 for DNS errors?), privacy issues (why connect to sites you didn't intend to), can leak sensitive data (e.g. query strings: e.g. Princeton attack), and is a security risk (e.g. common typos & malicious sites set up to exploit this).
+// 输入无效域名时，禁止域名猜测。域名猜测功能拦截DNS“找不到主机名错误”，并重新发送请求（如添加www或.com）。这是不一致的使用，通过代理服务器不起作用，是对DNS有缺陷的使用，隐私问题，可能会泄露敏感数据（如查询字符串），引发安全风险（如常见拼写错误和恶意站点）。Don't try to guess domain names when entering an invalid domain name in URL bar. disable location bar domain guessing. domain guessing intercepts DNS "hostname not found errors" and resends a request (e.g. by adding www or .com). This is inconsistent use (e.g. FQDNs), does not work via Proxy Servers (different error), is a flawed use of DNS (TLDs: why treat .com as the 411 for DNS errors?), privacy issues (why connect to sites you didn't intend to), can leak sensitive data (e.g. query strings: e.g. Princeton attack), and is a security risk (e.g. common typos & malicious sites set up to exploit this).
 user_pref("browser.fixup.alternate.enabled", false);
-// 地址栏搜索单词字符串时，禁止DNS解析。字符串解析为有效主机，默认显示“是否前往主机”提示。0=从不解析；1=使用启发式（默认）；2=始终解析Controls when to DNS resolve single word search strings, after they were searched for. If the string is resolved as a valid host, show a "Did you mean to go to 'host'" prompt. 0 - never resolve; 1 - use heuristics (default); 2 - always resolve. disable location bar leaking single words to a DNS provider after searching [FF78+]. 0=never resolve, 1=use heuristics, 2=always resolve. 
+// 地址栏搜索单个字符串时，禁止DNS解析。字符串解析为有效主机，显示“是否前往主机”提示。0=从不解析；1=使用启发提示；2=始终解析Controls when to DNS resolve single word search strings, after they were searched for. If the string is resolved as a valid host, show a "Did you mean to go to 'host'" prompt. 0 - never resolve; 1 - use heuristics (default); 2 - always resolve. disable location bar leaking single words to a DNS provider after searching [FF78+]. 0=never resolve, 1=use heuristics, 2=always resolve. 
 user_pref("browser.urlbar.dnsResolveSingleWordsAfterSearch", 0); // [DEFAULT: 0 FF104+]
+// 地址栏输入特定的关键词，将其视为有效的TLD，而非搜索。Fixup whitelists, the urlbar won't try to search for these words, but will instead consider them valid TLDs. Don't check these directly, use Services.uriFixup.isDomainKnown() instead. 
+// user_pref("browser.fixup.domainwhitelist.localhost", true);
+// 关键词自动跳转域名。地址栏输入webchat或pushbt，自动转换成域名http://webchat/和http://pushbt/
+// Mozilla最近改变火狐地址栏单个字符串搜索的方式。在地址栏中输入类似867-5309的内容，旧版火狐尝试加载本地主机，新版火狐将输入条目重定向到搜索引擎，显著加快对单个字符串查询的搜索速度。没有在本地内联网中使用主机名的火狐用户从中受益，因为不必在前面加上前缀，搜索输入的字符串。缺点是使用本地主机名的用户在尝试在浏览器中加载主机名时可能会遇到问题，因为被重定向到搜索。Mozilla在浏览器中实现白名单选项。工作原理是在成功查找主机名时在屏幕上显示提示，允许用户将其列入白名单，以便将其打开而不是进行搜索。此外，还可以使用参数browser.fixup.domainwhitelist.name添加白名单条目，name是本地主机名的名称。对要列入白名单的每个主机名，重复同样操作。如果在具有大量主机名的环境中工作，单个白名单方法非常耗时，那么可以在查询前面添加http://，提示浏览器访问域名而不是运行搜索。第二个选择，将keyword.enabled设置为false。Mozilla changed the way the Firefox browser handles single word queries that are typed in the browser's address bar recently.  Firefox attempted to load a local host when you entered something like 867-5309 in the address bar of the browser previously. The change redirects most entries that you type to the default search engine while doing a look-up in the background. The reason for this change is that it speeds up searches for single-word queries significantly. Firefox users who don't work in a local Intranet with hostnames benefit from this as they don't have to prepend ? to the queries anymore to run a search for the term they have entered. The disadvantage is that users who work with local hostnames may run into issues when trying to load those in the browser as they are redirected to searches. Mozilla implemented a whitelist option in the browser. It works by displaying prompts on the screen when a lookup was successful for a hostname allowing the user to whitelist it so that it is opened instead of the search from then on out. It is furthermore possible to add whitelist entries directly in about:config using the preference browser.fixup.domainwhitelist.name with name being the name of the local hostname. This needs to be repeated for every hostname that you want to whitelist. There are other things that you can do to make this more comfortable. If you work in an environment with a lot of hostnames then you may find the single whitelist approach time consuming as you cannot whitelist a bunch of names directly. One option that you have is to add http:// in front of the query. This indicates to the browser that you want to access a domain and not run a search. The second option that is currently available is to set keyword.enabled to false.
+// https://www.ghacks.net/2014/11/27/fix-firefox-searching-for-local-hostnames-immediately/
+// https://www.ghacks.net/2014/08/02/mozilla-improves-single-word-searches-local-queries-firefox-33/
+// user_pref("browser.fixup.domainwhitelist.pushbt", true);
+// user_pref("browser.fixup.domainwhitelist.webchat", true);
 // 禁止地址栏推测性连接disable location bar making speculative connections [FF56+]
 user_pref("browser.urlbar.speculativeConnect.enabled", false);
 // 复制网址时，禁止解码网址的非ASCII UTF-8符号Don't urlencode non-ASCII UTF-8 symbols in URLs while copying address into clipboard
@@ -885,6 +893,10 @@ user_pref("ui.key.menuAccessKey", 0);
 user_pref("ui.key.menuAccessKeyFocuses", false);
 // 1，单击滚动条滚动到与点击点对应的视图。
 user_pref("ui.scrollToClick", 1);
+// 禁用中键粘贴、中键加载剪贴板的链接地址、中键定位滚动条位置的功能
+user_pref("middlemouse.paste", false);
+user_pref("middlemouse.contentLoadURL", false);
+user_pref("middlemouse.scrollbarPosition", false);
 // 禁止Ctrl+Q按键退出浏览器[LINUX] [MAC]disable Ctrl-Q quit shortcut [LINUX] [MAC] [FF87+]. Don't quit the browser when Ctrl + Q is pressed.
 // user_pref("browser.quitShortcut.disabled", true); 
 
@@ -964,8 +976,30 @@ user_pref("network.http.speculative-parallel-limit", 0);
 user_pref("browser.places.speculativeConnect.enabled", false);
 // 强制不执行“超链接审核”（点击跟踪）enforce no "Hyperlink Auditing" (click tracking)
 user_pref("browser.send_pings", false); // [DEFAULT: false]
+/*=====WEB WORKERS=====*/
+// 禁止service workers。service workers本质上是位于Web应用程序、浏览器和网络之间的代理服务器，由事件驱动，能控制与其关联的网页/站点、拦截和修改导航和资源请求，并缓存资源。Service worker API在火狐中被隐藏，在隐私浏览模式下无法使用。service workers只能通过HTTPS运行。service workers没有DOM访问权限。禁用service workers破坏某些站点。对于service workers通知、推送通知和service workers缓存，此参数值需为true。disable service workers [WHY] Already isolated with TCP (browser.contentblocking.category) behind a pref (privacy.partition.serviceWorkers) . Service workers essentially act as proxy servers that sit between web apps, and the browser and network, are event driven, and can control the web page/site it is associated with, intercepting and modifying navigation and resource requests, and caching resources. Service worker APIs are hidden (in Firefox) and cannot be used when in private browse mode. Service workers only run over HTTPS. Service workers have no DOM access. Disabling service workers will break some sites. This pref is required true for service worker notifications, push notifications and service worker cache. If you enable this pref, then check those settings as well.
+user_pref("dom.serviceWorkers.enabled", false);
+// disable Web Notifications 
+user_pref("dom.webnotifications.enabled", false); // [FF22+]
+user_pref("dom.webnotifications.serviceworker.enabled", false); // [FF44+]
+// 禁用推送通知[FF44+]Push API允许网站通过Mozilla推送服务器将消息推送到用户userAgentID，即使网站未加载，也可以向用户发送（订阅）消息。Push需要service workers订阅和显示，并且位于提示后面。仅禁用service workers并不能阻止 火狐轮询Mozilla Push Server。要删除所有订阅，需重置userAgentID，用户将在几秒钟内获得一个新订阅。disable Push Notifications [FF44+] [WHY] Push requires subscription. [NOTE] To remove all subscriptions, reset "dom.push.userAgentID". Push is an API that allows websites to send you (subscribed) messages even when the site  isn't loaded, by pushing messages to your userAgentID through Mozilla's Push Server. Push requires service workers to subscribe to and display, and is behind a prompt. Disabling service workers alone doesn't stop Firefox polling the  Mozilla Push Server. To remove all subscriptions, reset your userAgentID (in about:config  or on start), and you will get a new one within a few seconds.
+user_pref("dom.push.enabled", false);
+user_pref("dom.push.userAgentID", "");
+/*=====JAVASCRIPT=====*/
+// 禁用asm.jsdisable asm.js [FF22+]
+// user_pref("javascript.options.asmjs", false);
+// 禁用Ion和基线 JIT以防范JS漏洞disable Ion and baseline JIT to harden against JS exploits [NOTE] When both Ion and JIT are disabled, and trustedprincipals is enabled, then Ion can still be used by extensions
+// user_pref("javascript.options.ion", false);
+// user_pref("javascript.options.baselinejit", false);
+// user_pref("javascript.options.jit_trustedprincipals", true); // [FF75+] [HIDDEN PREF]
+// 禁用WebAssembly[FF52+]。越来越多的漏洞被发现，包括多年前在本地程序中已知并已修复的漏洞。WASM拥有强大的底层访问能力，更有可能会引发某些攻击（暴力破解）和漏洞disable WebAssembly [FF52+]. Vulnerabilities have increasingly been found, including those known and fixed in native programs years ago. WASM has powerful low-level access, making certain attacks (brute-force) and vulnerabilities more possible. [STATS] ~0.2% of websites, about half of which are for crytopmining / malvertising
+// user_pref("javascript.options.wasm", false);
+// 启用（有限但充分的）window.opener保护 [FF65+]enable (limited but sufficient) window.opener protection [FF65+]. Makes rel=noopener implicit for target=_blank in anchor and area elements when no rel attribute is set
+user_pref("dom.targetBlankNoOpener.enabled", true); // [DEFAULT: true FF79+]
 
-// 禁止监视操作系统联机/脱机连接状态Don't monitor OS online/offline connection state. If true, network link events will change the value of navigator.onLine
+
+
+// 禁止监视系统联机/脱机连接状态Don't monitor OS online/offline connection state. If true, network link events will change the value of navigator.onLine
 user_pref("network.manage-offline-status", false);
 // 使用JavaScript时，强制使用en-US区域设置，防止泄漏程序区域/日期格式use en-US locale regardless of the system or region locale. [SETUP-WEB] May break some input methods e.g xim/ibus for CJK languages. Prevent leaking application locale/date format using JavaScript.
 user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
