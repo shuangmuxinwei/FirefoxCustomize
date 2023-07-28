@@ -1,6 +1,6 @@
 /******
 *    name: shuangmuxinwei user.js
-*    date: 22 July 2023
+*    date: 28 July 2023
 *    version: 113
 *    url: https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main/Settings
 
@@ -37,7 +37,7 @@ user_pref("browser.shell.checkDefaultBrowser", false);
 
 
 /*==========常规>标签页==========*/
-// 取消“按下Ctrl+Tab时，依照最近使用顺序循环切换标签页火狐旧版本参数browser.ctrlTab.recentlyUsedOrder.”disable 'Ctrl+Tab cycles through tabs in recently used order'
+// 取消“按下Ctrl+Tab时，依照最近使用顺序循环切换标签页”。旧版本参数browser.ctrlTab.recentlyUsedOrder. disable 'Ctrl+Tab cycles through tabs in recently used order'
 user_pref("browser.ctrlTab.sortByRecentlyUsed", false);
 // 同时打开多个标签页时不提醒。阈值由browser.tabs.maxOpenBeforeWarn指定
 user_pref("browser.tabs.warnOnOpen", false);
@@ -56,11 +56,11 @@ user_pref("browser.taskbar.lists.recent.enabled", false);
 user_pref("browser.taskbar.lists.tasks.enabled", false);
 // 禁止任务栏火狐图标右键显示最近条目：设置——>个性化——>开始——>在开始屏幕或任务栏的跳转列表中显示最近打开的项。Windows 10 does not provide a way to exempt a specific application from having opened files saved in Recent Items; that feature has only an all-or-nothing switch.  HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackDocs = 0 disables tracking, 1 enables. 
 /*=====身份标签页CONTAINERS=====*/
-// enable Container Tabs and its UI setting [FF50+]
+// 启用身份标签页及其用户界面enable Container Tabs and its UI setting [FF50+]
 // [SETTING] General>Tabs>Enable Container Tabs
 user_pref("privacy.userContext.enabled", true);
 user_pref("privacy.userContext.ui.enabled", true);
-// 左键单击+按钮时，显示容器菜单[FF74+]set behavior on "+ Tab" button to display container menu on left click [FF74+]. [NOTE] The menu is always shown on long press and right click
+// 左键单击+按钮时，显示身份标签页菜单[FF74+]set behavior on "+ Tab" button to display container menu on left click [FF74+]. [NOTE] The menu is always shown on long press and right click
 // [SETTING] General>Tabs>Enable Container Tabs>Settings>Select a container for each new tab
 user_pref("privacy.userContext.newTabContainerOnLeftClick.enabled", true);
 /*=====标签页打开方式=====*/
@@ -90,6 +90,9 @@ user_pref("browser.tabs.loadInBackground", true);
 user_pref("browser.tabs.opentabfor.middleclick", true);
 // 禁用鼠标中键打开剪贴板中的链接disable middle mouse click opening links from clipboard
 user_pref("middlemouse.contentLoadURL", false);
+// 禁用中键粘贴、中键定位滚动条位置
+user_pref("middlemouse.paste", false);
+user_pref("middlemouse.scrollbarPosition", false);
 // 紧邻当前标签页打开当前标签页中的链接Open related links to a tab, e.g., link in current tab, at next to the current tab if |insertRelatedAfterCurrent| is true. Otherwise, always append new tab to the end.
 user_pref("browser.tabs.insertRelatedAfterCurrent", true);
 // 紧邻当前标签页打开。browser.tabs.insertAfterCurrent值为true，覆盖browser.tabs.insertRelatedAfterCurrent设置。Open all links, e.g., bookmarks, history items at next to current tab if |insertAfterCurrent| is true. Otherwise, append new tab to the end for non-related links. Note that if this is set to true, it will trump the value of browser.tabs.insertRelatedAfterCurrent.
@@ -121,7 +124,7 @@ user_pref("browser.display.document_color_use", 2);
 /*==========常规>语言与外观>字体==========*/
 // 禁止网站选择字体disable websites choosing fonts (0=block, 1=allow)
 // 禁止网站使用自定义设置的字体，防止网站枚举本机安装的字体（指纹泄露）。Don’t use document specified fonts to prevent installed font enumeration (fingerprinting)
-// General>Language and Appearance>Fonts & Colors>Advanced>Allow pages to choose...
+// General>Language and Appearance>Fonts & Colors>Advanced>Allow pages to choose their own fonts, instead of your selections above
 // user_pref("browser.display.use_document_fonts", 0);
 // 禁用SVG OpenType字体的渲染disable rendering of SVG OpenType fonts
 user_pref("gfx.font_rendering.opentype_svg.enabled", false);
@@ -136,7 +139,7 @@ user_pref("browser.zoom.full", true);
 
 /*==========常规>语言与外观>语言==========*/
 // 设置浏览器语言[FF59+]，v59前general.useragent.locale
-user_pref("intl.locale.requested", "zh-CN,en-US");
+user_pref("intl.locale.requested", "en-US,zh-CN");
 // 设置网页显示的首选语言set preferred language for displaying web pages
 // [SETTING] General>Language and Appearance>Language>Choose your preferred language for displaying pages
 user_pref("intl.accept_languages", "zh-cn,zh,en-us,en,zh-tw,zh-hk");
@@ -172,6 +175,10 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 
 
 /*==========常规>文件与应用程序>应用程序==========*/
+// 禁用PDFJS和PDFJS脚本。该设置决定在浏览器内处理或外部处理PDF（“询问”或“用Firefox打开”）。pdfjs是轻量、开源和安全的：最近一次被利用是在2015年6月。不会破坏浏览器内容的“状态分离”（不与系统、独立程序共享）；保持磁盘避免和程序数据隔离。JS可通过捆绑自己的代码，强制在浏览器中打开pdf。disable PDFJS, disable PDFJS scripting. This setting controls if the option "Display in Firefox" is available in the setting below and by effect controls whether PDFs are handled in-browser or externally ("Ask" or "Open With"). [WHY] pdfjs is lightweight, open source, and secure: the last exploit was June 2015. It doesn't break "state separation" of browser content (by not sharing with OS, independent apps). It maintains disk avoidance and application data isolation. It's convenient. You can still save to disk. [NOTE] JS can still force a pdf to open in-browser by bundling its own code. [SETUP-CHROME] You may prefer a different pdf reader for security/workflow reasons.
+// [SETTING] General>Applications>Portable Document Format (PDF)
+user_pref("pdfjs.disabled", true); // [DEFAULT: false]
+user_pref("pdfjs.enableScripting", false); // [FF86+]
 // 始终询问如何处理新类型文件，启用用户交互以确保安全性enable user interaction for security by always asking how to handle new mimetypes [FF101+]
 // [SETTING] General>Files and Applications>What should Firefox do with other files
 user_pref("browser.download.always_ask_before_handling_new_types", true);
@@ -194,6 +201,15 @@ user_pref("media.gmp-widevinecdm.visible", false);
 // 禁用OpenH264视频编码器disable the OpenH264 Video Codec. Firefox will make use of the OpenH264 codec provided by Cisco in order to support the H.264 video codec in WebRTC, a technology allowing for peer-to-peer video communication on the web. The OpenH264 codec is not distributed with Firefox but gets downloaded at the first start of Firefox. In case you want to prohibit that, you will have to preconfigure the browser and set the media.gmp-gmpopenh264.enabled preference to false. This is the bundled codec used for video chat in WebRTC.
 user_pref("media.gmp-gmpopenh264.enabled", false);
 user_pref("media.gmp-gmpopenh264.visible", false);
+/*=====WebRTC=====*/
+// 禁用WebRTC，防止泄露私人IP。disable WebRTC (Web Real-Time Communication).  Firefox desktop uses mDNS hostname obfuscation and the private IP is never exposed until required in TRUSTED scenarios; i.e. after you grant device (microphone or camera) access. Disable WebRTC entirely to prevent leaking internal IP addresses (Firefox < 42). NOTICE: Disabling WebRTC breaks peer-to-peer file sharing tools (reep.io ...)
+user_pref("media.peerconnection.enabled", false);
+// 在代理内部强制WebRTC[FF70+]force WebRTC inside the proxy [FF70+]
+user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
+// 强制使用单一网络接口生成ICE候选[FF42+]force a single network interface for ICE candidates generation [FF42+]. When using a system-wide proxy, it uses the proxy interface. Don't reveal your internal IP when WebRTC is enabled [FF42+].
+user_pref("media.peerconnection.ice.default_address_only", true);
+// 强制将私有IP排除在ICE候选者之外[FF51+]。这在授予设备访问权限后保护私有IP，即使在受信任的场景下也是如此，但在视频会议平台上通常会导致中断。force exclusion of private IPs from ICE candidates [FF51+]. [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you grant device access, but often results in breakage on video-conferencing platforms.
+// user_pref("media.peerconnection.ice.no_host", true);
 
 
 /*==========常规>更新==========*/
@@ -256,7 +272,7 @@ user_pref("media.hardwaremediakeys.enabled", false);
 // 设置主页和新窗口的页面set HOME+NEWWINDOW page. about:home=Firefox Home , custom URL, about:blank
 // [SETTING] Home>New Windows and Tabs>Homepage and new windows
 user_pref("browser.startup.homepage", "chrome://browser/content/places/places.xhtml");
-// 设置新标签页页面set NEWTAB page. true=Firefox Home (default), false=blank page
+// 设置新标签页页面：空白页set NEWTAB page. true=Firefox Home (default), false=blank page
 // [SETTING] Home>New Windows and Tabs>New tabs
 user_pref("browser.newtabpage.enabled", false);
 // 禁用新标签页网址预加载disable preloading of the new tab url
@@ -269,24 +285,24 @@ user_pref("browser.newtab.preload", false);
 user_pref("browser.newtabpage.activity-stream.showSearch", false); 
 user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false); // [FF83+]
-// Firefox主页快捷方式1行显示Shortcuts row number
-user_pref("browser.newtabpage.activity-stream.topSitesRows", 1);
-// [FF58+] Pocket > Sponsored Stories
+// 禁用火狐主页（活动流）的赞助商内容disable sponsored content on Firefox Home (Activity Stream)[FF58+] Pocket > Sponsored Stories
 user_pref("browser.newtabpage.activity-stream.showSponsored", false); 
+// 火狐主页快捷方式1行显示Shortcuts row number
+user_pref("browser.newtabpage.activity-stream.topSitesRows", 1);
 // 禁止主页显示近期访问的网站与内容精选（包括访问过的页面、书签、最近下载）disable show Recent activity (A selection of recent sites and content)
 // [SETTING] Home>Firefox Home Content>Recent activity
 user_pref("browser.newtabpage.activity-stream.feeds.section.highlights", false);
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeVisited", false);
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks", false);
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads", false);
-// Firefox主页近期动态1行显示Recent activity row number
+// 火狐主页近期动态1行显示Recent activity row number
 user_pref("browser.newtabpage.activity-stream.section.highlights.rows", 1);
 // 禁止主页显示Mozilla和Firefox的使用窍门与快讯disable show Tips and news from Mozilla and Firefox
 // [SETTING] Home>Firefox Home Content>Snippets
 user_pref("browser.newtabpage.activity-stream.feeds.snippets", false);
 // 清除默认快捷方式网站clear default topsites. [NOTE] This does not block you from adding your own.
 user_pref("browser.newtabpage.activity-stream.default.sites", "");
-// 在Firefox Quantum中禁用“Pocket 推荐”Disable "Recommended by Pocket" in Firefox Quantum
+// 在火狐Quantum中禁用“Pocket 推荐”Disable "Recommended by Pocket" in Firefox Quantum
 user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 // 取消保存在Pocket的页面
 user_pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false); 
@@ -297,6 +313,12 @@ user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", 
 // 禁用火狐主页（活动流）遥测disable Firefox Home (Activity Stream) telemetry
 user_pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
 user_pref("browser.newtabpage.activity-stream.telemetry", false);
+// 禁止已访问页面的截图，删除配置文件夹的thumbnails文件disable page thumbnail collection. Do not create screenshots of visited pages (relates to the "new tab page" feature)
+user_pref("browser.pagethumbnails.capturing_disabled", true); // [HIDDEN PREF]
+// 禁用除browser.newtabpage.activity-stream.asrouter.provider.message-groups以外的消息系统Disable all other Messaging System providers save for `browser.newtabpage.activity-stream.asrouter.providers.message-groups`, which is required for the system to function.
+// user_pref("browser.newtabpage.activity-stream.asrouter.providers.cfr", "");
+// user_pref("browser.newtabpage.activity-stream.asrouter.providers.snippets", "");
+// user_pref("browser.newtabpage.activity-stream.asrouter.providers.whats-new-panel", "");
 
 
 
@@ -312,7 +334,7 @@ user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
 // [SETTING] Search>Use this search engine in Private Windows
 user_pref("browser.search.separatePrivateDefault", true);
 // 设置隐私浏览模式的默认搜索引擎Set Default Search Engine
-user_pref("browser.urlbar.placeholderName.private", "Google");
+user_pref("browser.urlbar.placeholderName.private", "Bing");
 
 
 /*==========搜索>搜索建议==========*/
@@ -328,8 +350,7 @@ user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
 // 禁止在隐私窗口中显示搜索建议disable "Show search suggestions in Private Windows"
 // [SETTING] Search>Search Suggestions>Show search suggestions in Private Windows
 user_pref("browser.search.suggest.enabled.private", false);
-// 禁用地址栏上下文建议[FF92+]disable location bar contextual suggestions [FF92+]
-// 地址栏不显示赞助的快速建议结果Whether sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
+// 禁用地址栏上下文建议[FF92+]，地址栏不显示赞助的快速建议结果。disable location bar contextual suggestions [FF92+]. Whether sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
 // [SETTING] Privacy & Security>Address Bar>Suggestions from...
 user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
 // 地址栏不显示非赞助的快速建议结果Whether non-sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
@@ -404,7 +425,7 @@ user_pref("network.http.windows-sso.enabled", false);
 user_pref("signon.formlessCapture.enabled", false);
 // 限制/禁用由子资源触发的HTTP认证凭证对话框[FF41+]，加强对潜在凭证钓鱼的防范。0=不允许子资源打开HTTP认证凭证对话框。1=不允许跨源的子资源打开HTTP认证凭证对话框。2=允许子资源打开HTTP认证凭证对话框。limit (or disable) HTTP authentication credentials dialogs triggered by sub-resources [FF41+].  hardens against potential credentials phishing. 0 = don't allow sub-resources to open HTTP authentication credentials dialogs. 1 = don't allow cross-origin sub-resources to open HTTP authentication credentials dialogs. 2 = allow sub-resources to open HTTP authentication credentials dialogs (default).
 user_pref("network.auth.subresource-http-auth-allow", 1);
-// 取消firefoxRelay. "available" = user can see feature offer. "offered" = we have offered feature to user and they have not yet made a decision. "enabled" = user opted in to the feature. "disabled" = user opted out of the feature.
+// 取消firefoxRelay。"available" = user can see feature offer. "offered" = we have offered feature to user and they have not yet made a decision. "enabled" = user opted in to the feature. "disabled" = user opted out of the feature.
 user_pref("signon.firefoxRelay.feature", "disable");
 
 
@@ -504,7 +525,7 @@ user_pref("geo.provider.use_gpsd", false); // [LINUX]
 user_pref("geo.provider.use_geoclue", false); // [FF102+] [LINUX]
 // 禁用Mozilla基于特定地理位置选择搜索引擎Disable region checks. Don't use Mozilla-provided location-specific search engines. disable geographically specific results/search engines e.g. "browser.search.*.US". i.e. ignore all of Mozilla's various search engines in multiple locales
 user_pref("browser.search.geoSpecificDefaults", false);
-// disable region updates
+// 禁用区域更新disable region updates
 user_pref("browser.region.network.url", ""); // [FF78+]
 user_pref("browser.region.update.enabled", false); // [[FF79+]
 // 禁止地理定位查找以设置搜索引擎默认区域Disable GeoIP lookup on your address to set default search engine region. set search region. [NOTE] May not be hidden if Firefox has changed your settings due to your region
@@ -530,6 +551,14 @@ user_pref("dom.vr.enabled", false);
 user_pref("dom.disable_open_during_load", true);
 // 当网站安装附加组件时提示警告Warn you when websites try to install add-ons
 user_pref("xpinstall.whitelist.required", true);
+// 禁用网站覆盖Firefox键盘快捷键[FF58+]disable websites overriding Firefox's keyboard shortcuts [FF58+]. 0 (default) or 1=allow, 2=block. [SETTING] to add site exceptions: Ctrl+I>Permissions>Override Keyboard Shortcuts
+// user_pref("permissions.default.shortcuts", 2);
+// 删除某些Mozilla域名的特殊权限[FF35+]remove special permissions for certain mozilla domains [FF35+][1] resource://app/defaults/permissions
+user_pref("permissions.manager.defaultsUrl", "");
+// 删除网络频道白名单remove webchannel whitelist
+user_pref("webchannel.allowObject.urlWhitelist", "");
+// 禁用权限委托[FF73+]。目前适用于跨来源地理位置、摄像头、麦克风和屏幕共享权限以及全屏请求。禁用权限委托意味着这些权限的任何提示都将显示/使用正确的第三方来源disable permissions delegation [FF73+]. Currently applies to cross-origin geolocation, camera, mic and screen-sharing permissions, and fullscreen requests. Disabling delegation means any prompts for these will show/use their correct 3rd party origin
+user_pref("permissions.delegation.enabled", false);
 /*=====视频全屏=====*/
 // 禁用视频全屏，防止屏幕分辨率泄漏disable Fullscreen API (requires user interaction) to prevent screen-resolution leaks 
 // user_pref("full-screen-api.enabled", false);
@@ -560,6 +589,16 @@ user_pref("dom.disable_beforeunload", true);
 // user_pref("dom.allow_cut_copy", false);
 // 禁止Linux上自动将所选内容发送到剪贴板。除ANDROID、XP_MACOSX、XP_UNIX系统外，参数值默认true。Do not automatically send selection to clipboard on some Linux platforms
 // user_pref("clipboard.autocopy", false); 
+// 禁用DOM（文档对象模型）存储disable DOM (Document Object Model) Storage
+// user_pref("dom.storage.enabled", false);
+// 禁用service worker缓存和缓存存储disable service worker cache and cache storage
+// user_pref("dom.caches.enabled", false);
+// 禁用存储API[FF51+]disable Storage API [FF51+]
+// user_pref("dom.storageManager.enabled", false);
+// 禁用存储访问API[FF65+]disable Storage Access API [FF65+]
+// user_pref("dom.storage_access.enabled", false);
+// 启用下一代本地存储[FF65+]enable Local Storage Next Generation (LSNG) [FF65+]
+// user_pref("dom.storage.next_gen", true);
 
 
 /*==========隐私>数据收集与使用==========*/
@@ -616,18 +655,10 @@ user_pref("toolkit.coverage.endpoint.base", "");
 user_pref("browser.ping-centre.telemetry", false);
 // 禁用默认浏览器代理（似只在XP上生效）disable the default browser agent. The agent still runs as scheduled if this pref is disabled, but it exits immediately before taking any action.
 user_pref("default-browser-agent.enabled", false);
-// 禁止强制网络门户检测disable Captive Portal detection
-user_pref("captivedetect.canonicalURL", "");
-user_pref("network.captive-portal-service.enabled", false); // [FF52+]
-// disable Network Connectivity checks [FF65+]
-user_pref("network.connectivity-service.enabled", false);
-/*=====WebGL=====*/
-// 禁用WebGL（网络图形库）disable WebGL (Web Graphics Library). If you need it then override it. RFP (RESIST FINGERPRINTING) still randomizes canvas for naive scripts.
-user_pref("webgl.disabled", true);
 
 
 /*==========安全>欺诈内容和危险软件防护==========*/
-// 开启安全浏览功能enable Safe Browsing. SAFE BROWSING has taken many steps to preserve privacy. If required, a full url is never sent to Google, only a part-hash of the prefix, hidden with noise of other real part-hashes. Firefox takes measures such as stripping out identifying parameters and since SBv4 (FF57+) doesn't even use cookies. (#Turn on browser.safebrowsing.debug to monitor this activity). 
+// 开启安全浏览功能。安全浏览功能采取许多措施保护隐私，不会向谷歌发送完整网址，只会发送前缀的部分哈希值，与其他真实的部分哈希值一起隐藏起来。火狐采取的措施包括去掉识别参数，自FF57+起甚至不使用cookie(打开 browser.safebrowsing.debug监控这一活动）。enable Safe Browsing. SAFE BROWSING has taken many steps to preserve privacy. If required, a full url is never sent to Google, only a part-hash of the prefix, hidden with noise of other real part-hashes. Firefox takes measures such as stripping out identifying parameters and since SBv4 (FF57+) doesn't even use cookies. (#Turn on browser.safebrowsing.debug to monitor this activity). 
 // [SETTING] Privacy & Security>Security>... Block dangerous and deceptive content
 user_pref("browser.safebrowsing.malware.enabled", true);
 user_pref("browser.safebrowsing.phishing.enabled", true);
@@ -641,7 +672,7 @@ user_pref("browser.safebrowsing.downloads.remote.enabled", false);
 // [SETTING] Privacy & Security>Security>... "Warn you about unwanted and uncommon software"
 user_pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted", false);
 user_pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
-// 禁用安全浏览警告页面的 "忽略此警告"[FF45+]disable "ignore this warning" on Safe Browsing warnings [FF45+]. If clicked, it bypasses the block for that session. This is a means for admins to enforce Safe Browsing.
+// 禁用安全浏览警告页面的“忽略此警告”[FF45+]disable "ignore this warning" on Safe Browsing warnings [FF45+]. If clicked, it bypasses the block for that session. This is a means for admins to enforce Safe Browsing.
 // user_pref("browser.safebrowsing.allowOverride", false);
 
 
@@ -682,7 +713,7 @@ user_pref("security.mixed_content.block_active_content", true); // [DEFAULT: tru
 // 禁用HTTPS页面不安全的被动内容（如图像）disable insecure passive content (such as images) on https pages
 // user_pref("security.mixed_content.block_display_content", true);
 // 在加密页面上阻止来自Flash的未加密请求，缓解中间人攻击[FF59+]block unencrypted requests from Flash on encrypted pages to mitigate MitM(Man-in-the-MiddleAttack) attacks [FF59+] [underlying NPAPI code removed]. Pref to block sub requests that happen within an object.
-user_pref("security.mixed_content.block_object_subrequest", true);
+// user_pref("security.mixed_content.block_object_subrequest", true);
 
 
 
@@ -717,11 +748,11 @@ user_pref("extensions.getAddons.showPane", false);
 user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 // 启用Mozilla的扩展和证书吊销名单Enable add-on and certificate blocklists (OneCRL) from Mozilla. Updated at interval defined in extensions.blocklist.interval (default: 86400). enforce Firefox blocklist. It includes updates for "revoked certificates".
 user_pref("extensions.blocklist.enabled", true);
-// 禁用某些Mozilla域名网站上的扩展限制 [FF60+]，让扩展在Mozilla域名网站上正常工作disable webextension restrictions on certain mozilla domains (you also need privacy.resistFingerprinting.block_mozAddonManager) [FF60+]. 
+// 禁用某些Mozilla域名网站上的扩展限制[FF60+]，让扩展在Mozilla域名网站上正常工作disable webextension restrictions on certain mozilla domains (you also need privacy.resistFingerprinting.block_mozAddonManager) [FF60+]. 
 user_pref("extensions.webextensions.restrictedDomains", "");
 // 让扩展在Mozilla域名网站上正常工作disable mozAddonManager Web API [FF57+]. To allow extensions to work on AMO, you also need extensions.webextensions.restrictedDomains. 
 user_pref("privacy.resistFingerprinting.block_mozAddonManager", true);
-// 禁止绕过第三方扩展安装提示 [FF82+]disable bypassing 3rd party extension install prompts [FF82+]
+// 禁止绕过第三方扩展安装提示[FF82+]disable bypassing 3rd party extension install prompts [FF82+]
 user_pref("extensions.postDownloadThirdPartyPrompt", false);
 // 强制启用SmartBlock shims[FF81+]enforce SmartBlock shims [FF81+]. In FF96+ these are listed in about:compat
 user_pref("extensions.webcompat.enable_shims", true); // [DEFAULT: true]
@@ -740,8 +771,7 @@ user_pref("extensions.systemAddon.update.enabled", false); // [FF62+]
 user_pref("extensions.systemAddon.update.url", ""); // [FF44+]
 // 禁用火狐自带的截图扩展disable Screenshots. Preference that allows individual users to disable Screenshots.
 user_pref("extensions.screenshots.disabled", true);
-// 禁用火狐帐户、密码表单自动填充disable Form Autofill
-// 如果extensions.formautofill.addresses.supportedCountries参数值包括browser.search.region指定的区域，并且extensions.formautofill.addresses.supported参数值是 detect，火狐设置界面显示UI。自动填充存储的数据不安全，使用JSON格式。extensions.formautofill.heuristics.enabled参数控制没有@autocomplete属性的表单自动填充。If .supportedCountries includes your region (browser.search.region) and .supported is "detect" (default), then the UI will show. Stored data is not secure, uses JSON. extensions.formautofill.heuristics.enabled controls Form Autofill on forms without @autocomplete attributes.
+// 禁用火狐帐户、密码表单自动填充。如果extensions.formautofill.addresses.supportedCountries参数值包括browser.search.region指定的区域，并且extensions.formautofill.addresses.supported参数值是 detect，火狐设置界面显示UI。自动填充存储的数据不安全，使用JSON格式。extensions.formautofill.heuristics.enabled参数控制没有@autocomplete属性的表单自动填充。disable Form Autofill. If .supportedCountries includes your region (browser.search.region) and .supported is "detect" (default), then the UI will show. Stored data is not secure, uses JSON. extensions.formautofill.heuristics.enabled controls Form Autofill on forms without @autocomplete attributes.
 user_pref("extensions.formautofill.addresses.enabled", false); // [FF55+]
 user_pref("extensions.formautofill.creditCards.enabled", false); // [FF56+]
 user_pref("extensions.formautofill.heuristics.enabled", false); // [FF55+]
@@ -778,15 +808,6 @@ user_pref("plugin.state.flash", 0);
 user_pref("dom.ipc.plugins.reportCrashURL", false);
 // 禁止发送Flash Player插件崩溃报告（已废弃）disable sending Flash crash reports
 // user_pref("dom.ipc.plugins.flash.subprocess.crashreporter.enabled", false);
-/*=====WebRTC=====*/
-// 禁用WebRTC，防止泄露私人IP。disable WebRTC (Web Real-Time Communication).  Firefox desktop uses mDNS hostname obfuscation and the private IP is never exposed until required in TRUSTED scenarios; i.e. after you grant device (microphone or camera) access. Disable WebRTC entirely to prevent leaking internal IP addresses (Firefox < 42). NOTICE: Disabling WebRTC breaks peer-to-peer file sharing tools (reep.io ...)
-user_pref("media.peerconnection.enabled", false);
-// 在代理内部强制WebRTC[FF70+]force WebRTC inside the proxy [FF70+]
-user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
-// 强制使用单一网络接口生成ICE候选[FF42+]force a single network interface for ICE candidates generation [FF42+]. When using a system-wide proxy, it uses the proxy interface. Don't reveal your internal IP when WebRTC is enabled [FF42+].
-user_pref("media.peerconnection.ice.default_address_only", true);
-// 强制将私有IP排除在ICE候选者之外[FF51+]。这在授予设备访问权限后保护私有IP，即使在受信任的场景下也是如此，但在视频会议平台上通常会导致中断。force exclusion of private IPs from ICE candidates [FF51+]. [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you grant device access, but often results in breakage on video-conferencing platforms.
-// user_pref("media.peerconnection.ice.no_host", true);
 
 
 
@@ -851,6 +872,36 @@ user_pref("alerts.showFavicons", false);
 
 
 
+/*==========开发者工具==========*/
+// 开发者工具独立窗口显示。参数值right、left、bottom、window
+user_pref("devtools.toolbox.host", "window");
+// 开发者工具显示分离式控制台Show Split Console
+user_pref("devtools.toolbox.splitconsoleEnabled", true);
+// 启用开发者工具网络、样式编辑器、性能、内存、存储、无障碍环境、应用程序、DOM
+user_pref("devtools.netmonitor.enabled", true);
+user_pref("devtools.styleeditor.enabled", true);
+user_pref("devtools.performance.enabled", true);
+user_pref("devtools.memory.enabled", true);
+user_pref("devtools.storage.enabled", true);
+user_pref("devtools.accessibility.enabled", true);
+user_pref("devtools.application.enabled", true);
+user_pref("devtools.dom.enabled", true);
+// 开发者工具深色主题。参数值dark、light、auto
+user_pref("devtools.theme", "dark");
+// 通过prefers-reduced-motion使用更简明的高亮显示Use simpler highlighters with prefers-reduced-motion
+user_pref("devtools.inspector.simple-highlighters-reduced-motion", true);
+// 启用浏览器界面及附加组件的调试工具箱Enable browser chrome and add-on debugging toolboxes
+// Devtools>Advanced Settings>Enable browser chrome and add-on debugging toolboxes
+user_pref("devtools.chrome.enabled", true);
+// 启用远程调试Enable remote debugging
+user_pref("devtools.debugger.remote-enabled", true);
+// 关闭浏览器工具箱“传入连接”提示In `about:config`, set `devtools.debugger.prompt-connection` to `false`. This will get rid of the prompt displayed every time you open the browser toolbox.
+user_pref("devtools.debugger.prompt-connection", false);
+// 浏览器工具箱禁止弹窗自动隐藏
+// user_pref("ui.popup.disable_autohide", true);
+
+
+
 /*==========火狐界面==========*/
 // 禁止显示标题栏。0，显示；2，不显示。Whether we should draw the tabs on top of the titlebar. 
 user_pref("browser.tabs.inTitlebar", 2);
@@ -858,6 +909,11 @@ user_pref("browser.tabs.inTitlebar", 2);
 user_pref("browser.uidensity", 0);
 // 在平板模式下使用为触控优化的界面Whether Firefox will automatically override the uidensity to "touch" while the user is in a touch environment (such as Windows tablet mode).
 user_pref("browser.touchmode.auto", true);
+// 禁用动画（标签页、全屏、滑动提示）Disable browser animations (tabs, fullscreen, sliding alerts)
+user_pref("toolkit.cosmeticAnimations.enabled", false);
+// 禁用一些动画Disable some animations that can cause false positives, such as the reload/stop button spinning animation.
+// https://bbs.kafan.cn/forum.php?mod=redirect&goto=findpost&ptid=2186994&pid=46857566
+user_pref("ui.prefersReducedMotion", 1); // [HIDDEN PREF]
 
 
 
@@ -870,42 +926,8 @@ user_pref("media.memory_cache_max_size", 1048576);
 user_pref("browser.sessionstore.privacy_level", 2);
 // 在系统下次启动后，禁止自动启动火狐并恢复会话[XP]disable automatic Firefox start and session restore after reboot [FF62+] [WINDOWS]. Whether to use RegisterApplicationRestart to restart the browser and resume the session on next Windows startup
 user_pref("toolkit.winRegisterApplicationRestart", false);
-
-
-
-/*==========杂项==========*/
-// 取消AboutConfig警告disable about:config warning. FF71-72: chrome://global/content/config.xul. FF73-86: chrome://global/content/config.xhtml( jar:file:///C:/Program Files/Mozilla Firefox/omni.ja!/chrome/toolkit/content/global/config.xhtml)
-// FF新版本:chrome://global/content/aboutconfig/aboutconfig.html(jar:file:///C:/Program Files/Mozilla Firefox/omni.ja!/chrome/toolkit/content/global/aboutconfig/aboutconfig.html)
-// http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/XUL_Tutorial/The_Chrome_URL.html
-// user_pref("general.warnOnAboutConfig", false); // XHTML version
-user_pref("browser.aboutConfig.showWarning", false); // HTML version [FF71+]
-
-
-// 启用userChrome/userContent，自定义界面Support for legacy customizations that rely on checking the user profile directory for these stylesheets: userContent.css, userChrome.css.
-user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true); 
-
-
-// 定义退格键的功能Backspace and Shift+Backspace behavior. 0 goes Back/Forward. 1 act like PgUp/PgDown. 2 and other values, nothing.
-user_pref("browser.backspace_action", 2); 
-// 禁止Alt键搭配其他键位激活菜单栏的菜单项（如Alt+F，激活菜单栏“文件”菜单项）。参数值默认18，指定Alt键；17，指定Ctrl+Shift。disable alt key toggling the menu bar
-user_pref("ui.key.menuAccessKey", 0);
-// 禁止Alt键激活菜单栏Make sure Alt key doesn't show the menubar
-user_pref("ui.key.menuAccessKeyFocuses", false);
-// 1，单击滚动条滚动到与点击点对应的视图。
-user_pref("ui.scrollToClick", 1);
-// 禁用中键粘贴、中键加载剪贴板的链接地址、中键定位滚动条位置的功能
-user_pref("middlemouse.paste", false);
-user_pref("middlemouse.contentLoadURL", false);
-user_pref("middlemouse.scrollbarPosition", false);
-// 禁止Ctrl+Q按键退出浏览器[LINUX] [MAC]disable Ctrl-Q quit shortcut [LINUX] [MAC] [FF87+]. Don't quit the browser when Ctrl + Q is pressed.
-// user_pref("browser.quitShortcut.disabled", true); 
-
-// 在新标签页查看“页面/选中内容”的源代码。若启用外部编辑器查看页面源代码，此参数无效
-user_pref("view_source.tab", true); 
-// 启用外部编辑器查看页面源代码Check if external view source is enabled.  If so, try it.  If it fails, fallback to internal view source.
-user_pref("view_source.editor.external", true);
-// 指定查看页面源代码的外部编辑器路径
-user_pref("view_source.editor.path", "d:\\Program Files\\EmEditor\\EmEditor.exe");
+// 禁用脱机缓存disable offline cache (appCache). appCache storage capability was removed in FF90.
+// user_pref("browser.cache.offline.enable", false);
 
 
 
@@ -919,7 +941,7 @@ user_pref("network.proxy.socks_remote_dns", true);
 user_pref("network.file.disable_unc_paths", true); // [HIDDEN PREF]
 // 禁止GIO作为潜在的代理旁路媒介disable GIO as a potential proxy bypass vector. Gvfs/GIO has a set of supported protocols like obex, network, archive, computer, dav, cdda, gphoto2, trash, etc. By default only sftp is accepted (FF87+)
 user_pref("network.gio.supported-protocols", ""); // [HIDDEN PREF]
-/*=====SSL (Secure Sockets Layer) / TLS (Transport Layer Security)=====*/
+/*=====SSL(Secure Sockets Layer)/TLS(Transport Layer Security)=====*/
 // 需要安全协商。阻止与不支持RFC 5746的服务器连接，因为这些服务器可能会遭受中间人攻击。不支持RFC 5746的服务器如果禁用重新协商，就不会受到攻击，但浏览器无法确认这一点。将此参数设置为true是确保浏览器和服务器之间的通道不会出现不安全的重新协商的唯一方法require safe negotiation. Blocks connections to servers that don't support RFC 5746 as they're potentially vulnerable to a MiTM attack. A server without RFC 5746 can be safe from the attack if it disables renegotiations, but the problem is that the browser can't know that. Setting this pref to true is the only way for the browser to ensure there will be no unsafe renegotiations on the channel between the browser and the server. 
 user_pref("security.ssl.require_safe_negotiation", true);
 // 禁用TLS1.3 0-RTT（往返时间）[FF51+]disable TLS1.3 0-RTT (round-trip time) [FF51+]. This data is not forward secret, as it is encrypted solely under keys derived using the offered PSK. There are no guarantees of non-replay between connections
@@ -929,6 +951,8 @@ user_pref("security.tls.enable_0rtt_data", false);
 // user_pref("security.tls.version.max", 4);
 // 禁用SSL会话ID[FF36+]disable SSL session IDs [FF36+] [WHY] Passive fingerprinting and perf costs. These are session-only and isolated with network partitioning (FF85+) and/or containers
 // user_pref("security.ssl.disable_session_identifiers", true);
+// 强制不执行TLS 1.0/1.1降级enforce no TLS 1.0/1.1 downgrades. [TEST] https://tls-v1-1.badssl.com:1010/
+user_pref("security.tls.version.enable-deprecated", false); // [DEFAULT: false]
 /*=====UI (User Interface)=====*/
 // 挂锁显示 "安全受损 "警告 ，但页面子资源未显示挂锁警告display warning on the padlock for "broken security" (if security.ssl.require_safe_negotiation is false) Bug: warning padlock not indicated for subresources on a secure page! 
 user_pref("security.ssl.treat_unsafe_negotiation_as_broken", true);
@@ -957,6 +981,24 @@ user_pref("network.http.referer.spoofSource", false); // [DEFAULT: false]
 // user_pref("dom.securecontext.allowlist_onions", true);
 // 离开.onion域名时是否需要隐藏referrer。false=允许onion引用，true=隐藏onion引用（使用空引用）。Check whether we need to hide referrer when leaving a .onion domain. false=allow onion referer, true=hide onion referer (use empty referer).
 // user_pref("network.http.referer.hideOnionSource", true);
+/*=====反指纹识别RESIST FINGERPRINTING=====*/
+// 启用反指纹识别[FF41+]。可能会导致一些网站崩溃：主要是画布，请通过地址栏添加例外网站。有一些副作用：时区为UTC0，以及网站更喜欢浅色主题。enable privacy.resistFingerprinting [FF41+][SETUP-WEB] RESIST FINGERPRINTING can cause some website breakage: mainly canvas, use a site exception via the urlbar. RESIST FINGERPRINTING also has a few side effects: mainly timezone is UTC0, and websites will prefer light theme
+// user_pref("privacy.resistFingerprinting", true);
+// 设置新窗口大小最大值[FF55+]宽度为200的倍数，高度为100的倍数set new window size rounding max values [FF55+][SETUP-CHROME] sizes round down in hundreds: width to 200s and height to 100s, to fit your screen
+user_pref("privacy.window.maxInnerWidth", 1600);
+user_pref("privacy.window.maxInnerHeight", 900);
+// 启用反指纹识别信箱[FF67+]。通过应用阶梯范围的边距，动态调整内部窗口大小。如果使用privacy.resistFingerprinting.letterboxing.dimensions参数，那么只会应用这些分辨率。格式为 "width1xheight1, width2xheight2, ..."(如 "800x600、1000x1000"）。这与反指纹识别无关。如果不使用反指纹识别，或使用但不喜欢边距，那么改变此参数值。它是能够被指纹别的。privacy.resistFingerprinting.letterboxing.dimensions仅用于测试enable RESIST FINGERPRINTING letterboxing [FF67+]. Dynamically resizes the inner window by applying margins in stepped ranges. If you use the dimension pref, then it will only apply those resolutions. The format is "width1xheight1, width2xheight2, ..." (e.g. "800x600, 1000x1000"). [SETUP-WEB] This is independent of RESIST FINGERPRINTING. If you're not using RESIST FINGERPRINTING, or you are but dislike the margins, then flip this pref, keeping in mind that it is effectively fingerprintable. [WARNING] DO NOT USE: the dimension pref is only meant for testing
+user_pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
+// user_pref("privacy.resistFingerprinting.letterboxing.dimensions", ""); // [HIDDEN PREF]
+// 实验性反指纹识别experimental RESIST FINGERPRINTING [FF91+][WARNING] DO NOT USE unless testing
+// user_pref("privacy.resistFingerprinting.exemptedDomains", "*.example.invalid");
+// user_pref("privacy.resistFingerprinting.testGranularityMask", 0);
+// 设置反指纺识别的字体可见度级别[FF94]set RESIST FINGERPRINTING's font visibility level (layout.css.font-visibility.private、layout.css.font-visibility.standard、layout.css.font-visibility.trackingprotection) [FF94+]
+// user_pref("layout.css.font-visibility.resistFingerprinting", 1); // [DEFAULT: 1]
+// 强制使用非本机小部件主题。删除/减少系统API调用，如win32k API。跨平台提供统一的外观和感觉enforce non-native widget theme. Security: removes/reduces system API calls, e.g. win32k API. Fingerprinting: provides a uniform look and feel across platforms
+user_pref("widget.non-native-theme.enabled", true); // [DEFAULT: true]
+// 禁用WebGL（网络图形库）disable WebGL (Web Graphics Library). If you need it then override it. RFP (RESIST FINGERPRINTING) still randomizes canvas for naive scripts.
+user_pref("webgl.disabled", true);
 /*=====预读取=====*/
 // 禁止链接预读取disable link prefetching
 // https://developer.mozilla.org/docs/Web/HTTP/Link_prefetching_FAQ
@@ -976,19 +1018,45 @@ user_pref("network.http.speculative-parallel-limit", 0);
 user_pref("browser.places.speculativeConnect.enabled", false);
 // 强制不执行“超链接审核”（点击跟踪）enforce no "Hyperlink Auditing" (click tracking)
 user_pref("browser.send_pings", false); // [DEFAULT: false]
+/*=====网络杂项=====*/
+// 禁用自动页面刷新disable META refresh
+user_pref("accessibility.blockautorefresh", true);
+// 禁止强制网络门户检测disable Captive Portal detection
+user_pref("captivedetect.canonicalURL", "");
+user_pref("network.captive-portal-service.enabled", false); // [FF52+]
+// 禁用网络连接检查disable Network Connectivity checks [FF65+]
+user_pref("network.connectivity-service.enabled", false);
+// 禁止监视系统联机/脱机连接状态Don't monitor OS online/offline connection state. If true, network link events will change the value of navigator.onLine
+user_pref("network.manage-offline-status", false);
+// 使用JavaScript时，强制使用en-US区域设置，防止泄漏程序区域/日期格式use en-US locale regardless of the system or region locale. [SETUP-WEB] May break some input methods e.g xim/ibus for CJK languages. Prevent leaking application locale/date format using JavaScript.
+user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
+// 在国际化域名中使用Punycode消除可能的欺骗use Punycode in Internationalized Domain Names to eliminate possible spoofing. [SETUP-WEB] Might be undesirable for non-latin alphabet users since legitimate IDN's are also punycoded. [TEST] https://www.xn--80ak6aa92e.com/ (www.apple.com)
+user_pref("network.IDN_show_punycode", true);
+// 禁用HTTP替代服务[FF37+]disable HTTP Alternative Services [FF37+]. [WHY] Already isolated with network partitioning (FF85+). alt-svc allows separation of transport routing from the origin host without using a proxy.
+// user_pref("network.http.altsvc.enabled", false);
+// user_pref("network.http.altsvc.oe", false);
+// 中止前连续重定向的最大次数。限制HTTP重定向（不控制HTML元标记或JS的重定向）。设置为5或以下，可能会破坏某些网站（如gmail登录）。控制HTML元标记和JS重定向，使用扩展Maximum number of consecutive redirects before aborting. limit HTTP redirects (this does not control redirects with HTML meta tags or JS). [NOTE] A low setting of 5 or under will probably break some sites (e.g. gmail logins). To control HTML Meta tag and JS redirects, use an extension. Default is 20
+// user_pref("network.http.redirection-limit", 10);
+// 将第三方Cookie（如果已启用）设置为仅会话。.sessionOnly覆盖.nonsecureSessionOnly的设置。.sessionOnly=false和.nonsecureSessionOnly=true，保留HTTPS cookie，不保留HTTP cookie。set third-party cookies (if enabled) to session-only. .sessionOnly overrides .nonsecureSessionOnly except when .sessionOnly=false and .nonsecureSessionOnly=true. This allows you to keep HTTPS cookies, but session-only HTTP ones
+// user_pref("network.cookie.thirdparty.sessionOnly", true);
+// user_pref("network.cookie.thirdparty.nonsecureSessionOnly", true); // [FF58+]
+// 禁用电池状态API。disable Battery Status API. Is support for Navigator.getBattery enabled?
+// user_pref("dom.battery.enabled", false);
+// 禁用媒体功能API[FF63+]disable Media Capabilities API [FF63+]. This may affect media performance if disabled, no one is sure
+// user_pref("media.media-capabilities.enabled", false);
 /*=====WEB WORKERS=====*/
 // 禁止service workers。service workers本质上是位于Web应用程序、浏览器和网络之间的代理服务器，由事件驱动，能控制与其关联的网页/站点、拦截和修改导航和资源请求，并缓存资源。Service worker API在火狐中被隐藏，在隐私浏览模式下无法使用。service workers只能通过HTTPS运行。service workers没有DOM访问权限。禁用service workers破坏某些站点。对于service workers通知、推送通知和service workers缓存，此参数值需为true。disable service workers [WHY] Already isolated with TCP (browser.contentblocking.category) behind a pref (privacy.partition.serviceWorkers) . Service workers essentially act as proxy servers that sit between web apps, and the browser and network, are event driven, and can control the web page/site it is associated with, intercepting and modifying navigation and resource requests, and caching resources. Service worker APIs are hidden (in Firefox) and cannot be used when in private browse mode. Service workers only run over HTTPS. Service workers have no DOM access. Disabling service workers will break some sites. This pref is required true for service worker notifications, push notifications and service worker cache. If you enable this pref, then check those settings as well.
 user_pref("dom.serviceWorkers.enabled", false);
-// disable Web Notifications 
+// 禁用网站通知disable Web Notifications 
 user_pref("dom.webnotifications.enabled", false); // [FF22+]
 user_pref("dom.webnotifications.serviceworker.enabled", false); // [FF44+]
-// 禁用推送通知[FF44+]Push API允许网站通过Mozilla推送服务器将消息推送到用户userAgentID，即使网站未加载，也可以向用户发送（订阅）消息。Push需要service workers订阅和显示，并且位于提示后面。仅禁用service workers并不能阻止 火狐轮询Mozilla Push Server。要删除所有订阅，需重置userAgentID，用户将在几秒钟内获得一个新订阅。disable Push Notifications [FF44+] [WHY] Push requires subscription. [NOTE] To remove all subscriptions, reset "dom.push.userAgentID". Push is an API that allows websites to send you (subscribed) messages even when the site  isn't loaded, by pushing messages to your userAgentID through Mozilla's Push Server. Push requires service workers to subscribe to and display, and is behind a prompt. Disabling service workers alone doesn't stop Firefox polling the  Mozilla Push Server. To remove all subscriptions, reset your userAgentID (in about:config  or on start), and you will get a new one within a few seconds.
+// 禁用推送通知[FF44+]Push API允许网站通过Mozilla推送服务器将消息推送到用户userAgentID，即使网站未加载，也可以向用户发送（订阅）消息。Push需要service workers订阅和显示，并且位于提示后面。仅禁用service workers并不能阻止火狐轮询Mozilla Push Server。要删除所有订阅，需重置userAgentID，用户将在几秒钟内获得一个新订阅。disable Push Notifications [FF44+] [WHY] Push requires subscription. [NOTE] To remove all subscriptions, reset "dom.push.userAgentID". Push is an API that allows websites to send you (subscribed) messages even when the site  isn't loaded, by pushing messages to your userAgentID through Mozilla's Push Server. Push requires service workers to subscribe to and display, and is behind a prompt. Disabling service workers alone doesn't stop Firefox polling the  Mozilla Push Server. To remove all subscriptions, reset your userAgentID (in about:config  or on start), and you will get a new one within a few seconds.
 user_pref("dom.push.enabled", false);
 user_pref("dom.push.userAgentID", "");
 /*=====JAVASCRIPT=====*/
-// 禁用asm.jsdisable asm.js [FF22+]
+// 禁用asm.js。disable asm.js [FF22+]
 // user_pref("javascript.options.asmjs", false);
-// 禁用Ion和基线 JIT以防范JS漏洞disable Ion and baseline JIT to harden against JS exploits [NOTE] When both Ion and JIT are disabled, and trustedprincipals is enabled, then Ion can still be used by extensions
+// 禁用Ion和基线JIT以防范JS漏洞disable Ion and baseline JIT to harden against JS exploits [NOTE] When both Ion and JIT are disabled, and trustedprincipals is enabled, then Ion can still be used by extensions
 // user_pref("javascript.options.ion", false);
 // user_pref("javascript.options.baselinejit", false);
 // user_pref("javascript.options.jit_trustedprincipals", true); // [FF75+] [HIDDEN PREF]
@@ -996,13 +1064,72 @@ user_pref("dom.push.userAgentID", "");
 // user_pref("javascript.options.wasm", false);
 // 启用（有限但充分的）window.opener保护 [FF65+]enable (limited but sufficient) window.opener protection [FF65+]. Makes rel=noopener implicit for target=_blank in anchor and area elements when no rel attribute is set
 user_pref("dom.targetBlankNoOpener.enabled", true); // [DEFAULT: true FF79+]
+/*=====指纹识别=====*/
+// 以下参数不足以帮助防指纹，弊大于利。不能与RESIST FINGERPRINTING一起使用。RESIST FINGERPRINTING已经涵盖这些功能，会引发干扰They are insufficient to help anti-fingerprinting and do more harm than good. [WARNING] DO NOT USE with RESIST FINGERPRINTING. RESIST FINGERPRINTING already covers these and they can interfere
+// 禁用navigator.mediaDevices和getUserMedia()支持，禁用媒体设备枚举disable navigator.mediaDevices and getUserMedia() support. See also media.peerconnection.enabled. disable media device enumeration [FF29+]
+// user_pref("media.navigator.enabled", false);
+// 禁用网络音频应用程序接口disable Web Audio API [FF51+]
+// user_pref("dom.webaudio.enabled", false);
+/*=====FIRST PARTY ISOLATION=====*/
+// 强制不执行第一方隔离[FF51+]enforce no First Party Isolation [FF51+] [WARNING] Replaced with network partitioning (FF85+) and TCP(browser.contentblocking.category, Enhanced Tracking Protection Strict Mode enables Total Cookie Protection), and enabling FPI. disables those. FPI is no longer maintained except at Tor Project for Tor Browser's config
+user_pref("privacy.firstparty.isolate", false); // [DEFAULT: false]
+// 对window.opener强制实施第一方隔离限制[FF54+]。参数值为false，同一域名的两个窗口具有不同的第一方域（顶级URL）可以通过window.opener访问资源。此参数仅在 privacy.firstparty.isolate为true时生效enforce First Party Isolation restriction for window.opener [FF54+]. If false, two windows in the same domain with different first party domains (top level URLs) can access resources through window.opener. This pref is effective only when "privacy.firstparty.isolate" is true.
+// user_pref("privacy.firstparty.isolate.restrict_opener_access", true); // [DEFAULT: true]
+// 参数值为真，将阻止postMessage跨越不同的第一方域If 'privacy.firstparty.isolate.block_post_message' is true, we will block postMessage across different first party domains.
+// user_pref("privacy.firstparty.isolate.block_post_message", true);
+// 启用第一方隔离方案[FF78+]enable scheme with First Party Isolation [FF78+]
+// user_pref("privacy.firstparty.isolate.use_site", true);
 
 
 
-// 禁止监视系统联机/脱机连接状态Don't monitor OS online/offline connection state. If true, network link events will change the value of navigator.onLine
-user_pref("network.manage-offline-status", false);
-// 使用JavaScript时，强制使用en-US区域设置，防止泄漏程序区域/日期格式use en-US locale regardless of the system or region locale. [SETUP-WEB] May break some input methods e.g xim/ibus for CJK languages. Prevent leaking application locale/date format using JavaScript.
-user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
-// 禁用HTTP替代服务[FF37+]disable HTTP Alternative Services [FF37+]. [WHY] Already isolated with network partitioning (FF85+). alt-svc allows separation of transport routing from the origin host without using a proxy.
-user_pref("network.http.altsvc.enabled", false);
-user_pref("network.http.altsvc.oe", false);
+/*==========按键==========*/
+// 定义退格键的功能Backspace and Shift+Backspace behavior. 0 goes Back/Forward. 1 act like PgUp/PgDown. 2 and other values, nothing.
+user_pref("browser.backspace_action", 2); 
+// 禁止Alt键激活菜单栏Make sure Alt key doesn't show the menubar
+user_pref("ui.key.menuAccessKeyFocuses", false);
+// 禁止Alt键搭配其他键位激活菜单栏的菜单项（如Alt+F，激活菜单栏“文件”菜单项）。参数值默认18，指定Alt键；17，指定Ctrl+Shift。disable alt key toggling the menu bar
+user_pref("ui.key.menuAccessKey", 0);
+// 1，单击滚动条滚动到与点击点对应的视图。
+user_pref("ui.scrollToClick", 1);
+// 禁止Ctrl+Q按键退出浏览器[LINUX] [MAC]disable Ctrl-Q quit shortcut [LINUX] [MAC] [FF87+]. Don't quit the browser when Ctrl + Q is pressed.
+// user_pref("browser.quitShortcut.disabled", true); 
+// 启用TSF（似仅适用于XP系统）。参数值true，Gecko支持TSF；false，仅支持 IMM。TSF是Win系统取代IMM API的现代IME API集。 除非为了避免启用TSF后出现的问题，否则不应将参数值改为false，因为IMM处理程序现在已不再维护，也未在Win最新系统中进行测试。需要重新启动生效。Whether making Gecko TSF-aware or only working with IMM.  TSF is a modern IME API set of Windows which replaces IMM APIs.  Unless you can avoid the problem which you see with enabling TSF, you shouldn't change this pref to false since IMM handler is now not maintained nor tested with latest Windows.  Restart required to apply this pref change.
+user_pref("intl.tsf.enabled", true);
+// 在新标签页查看“页面/选中内容”的源代码。若启用外部编辑器查看页面源代码，此参数无效
+user_pref("view_source.tab", true); 
+// 启用外部编辑器查看页面源代码Check if external view source is enabled.  If so, try it.  If it fails, fallback to internal view source.
+user_pref("view_source.editor.external", true);
+// 指定查看页面源代码的外部编辑器路径
+user_pref("view_source.editor.path", "d:\\Program Files\\EmEditor\\EmEditor.exe");
+// 查看页面源代码时自动换行
+user_pref("view_source.wrap_long_lines", true);
+
+
+
+/*==========杂项==========*/
+// 取消AboutConfig警告disable about:config warning. FF71-72: chrome://global/content/config.xul. FF73-86: chrome://global/content/config.xhtml( jar:file:///C:/Program Files/Mozilla Firefox/omni.ja!/chrome/toolkit/content/global/config.xhtml)
+// FF新版本:chrome://global/content/aboutconfig/aboutconfig.html(jar:file:///C:/Program Files/Mozilla Firefox/omni.ja!/chrome/toolkit/content/global/aboutconfig/aboutconfig.html)
+// http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/XUL_Tutorial/The_Chrome_URL.html
+// user_pref("general.warnOnAboutConfig", false); // XHTML version
+user_pref("browser.aboutConfig.showWarning", false); // HTML version [FF71+]
+// 实施CSP（内容安全策略）enforce CSP (Content Security Policy)
+// user_pref("security.csp.enable", true);
+// 安装附加组件的等待时间enforce a security delay on some confirmation dialogs such as install, open/save
+user_pref("security.dialog_enable_delay", 500); // [DEFAULT: 1000]
+// 阻止无障碍服务接入浏览器prevent accessibility services from accessing your browser [RESTART]
+user_pref("accessibility.force_disabled", 1);
+// 删除用外部程序打开的临时文件remove temp files opened with an external application
+user_pref("browser.helperApps.deleteTempFileOnExit", true);
+// 禁用beacon异步HTTP传输（用于分析）Disable "beacon" asynchronous HTTP transfers (used for analytics). Is support for Navigator.sendBeacon enabled?
+user_pref("beacon.enabled", false);
+// 禁用UITour后台，使远程页面无法使用它disable UITour backend so there is no chance that a remote page can use it
+user_pref("browser.uitour.enabled", false);
+// user_pref("browser.uitour.url", ""); // Defense-in-depth
+// 禁用数学标记语言[FF51+]disable MathML (Mathematical Markup Language) [FF51+]
+// user_pref("mathml.disabled", true);
+// 禁用内容内SVG（可缩放矢量图形）[FF53+]disable in-content SVG (Scalable Vector Graphics) [FF53+]
+// user_pref("svg.disabled", true);
+// 在Win8/8.1/10上禁用启动应用商店的链接disable links launching Windows Store on Windows 8/8.1/10 [WINDOWS]
+user_pref("network.protocol-handler.external.ms-windows-store", false);
+// 启用userChrome/userContent支持，自定义界面Support for legacy customizations that rely on checking the user profile directory for these stylesheets: userContent.css, userChrome.css.
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true); 
