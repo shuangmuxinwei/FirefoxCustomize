@@ -1,7 +1,8 @@
 /******
+
 *    name: shuangmuxinwei user.js
-*    date: 28 July 2023
-*    version: 113
+*    date: 30 July 2023
+*    version: 115
 *    url: https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main/Settings
 
 * 免责声明：
@@ -12,6 +13,7 @@
   4、部分参数值涉及路径，如“d:\\Program Files\\EmEditor\\EmEditor.exe”等，需要修改为用户自己本电脑的路径。否则，参数失效。
   5、本user.js文件参数的顺序，依照设置页面about:preferences的选项顺序依次排列，如“常规>启动”“常规>标签页”等。其余相关的参数，则尽量归类于设置页面选项之后或者文件最末。
   6、部分参数设置和注释说明，由于本人的知识和经验所限，不一定正确。欢迎指正。
+
 ******/
 
 
@@ -109,8 +111,8 @@ user_pref("layout.css.visited_links_enabled", false);
 user_pref("browser.display.use_system_colors", false);
 // 为链接添加下划线
 user_pref("browser.underline_anchors", true);
-// 在所有页面选择自定义的颜色覆盖页面指定的颜色
-user_pref("browser.display.document_color_use", 2);
+// 仅在使用高对比度主题时，选择自定义的颜色覆盖页面指定的颜色
+user_pref("browser.display.document_color_use", 0);
 
 
 /*==========常规>语言与外观>字体==========*/
@@ -178,7 +180,7 @@ user_pref("media.gmp-provider.enabled", false);
 user_pref("media.gmp-widevinecdm.enabled", false);
 // 去除播放DRM内容黄条提示
 user_pref("media.gmp-widevinecdm.visible", false);
-// 禁用OpenH264视频编码器disable the OpenH264 Video Codec. Firefox will make use of the OpenH264 codec provided by Cisco in order to support the H.264 video codec in WebRTC, a technology allowing for peer-to-peer video communication on the web. The OpenH264 codec is not distributed with Firefox but gets downloaded at the first start of Firefox. In case you want to prohibit that, you will have to preconfigure the browser and set the media.gmp-gmpopenh264.enabled preference to false. This is the bundled codec used for video chat in WebRTC.
+// 禁用OpenH264视频编码器
 user_pref("media.gmp-gmpopenh264.enabled", false);
 user_pref("media.gmp-gmpopenh264.visible", false);
 /*=====WebRTC=====*/
@@ -308,10 +310,6 @@ user_pref("browser.urlbar.suggest.searches", false);
 user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
 // 禁止在隐私窗口中显示搜索建议
 user_pref("browser.search.suggest.enabled.private", false);
-// 地址栏不显示赞助的快速建议结果
-user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
-// 地址栏不显示非赞助的快速建议结果
-user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false); // [FF95+]
 
 
 /*==========搜索>搜索引擎==========*/
@@ -418,6 +416,12 @@ user_pref("privacy.clearOnShutdown.siteSettings", false);
 user_pref("browser.urlbar.suggest.topsites", false); 
 // 禁用地址栏结果显示建议：搜索引擎
 user_pref("browser.urlbar.suggest.engines", false);
+// 地址栏不显示非赞助的快速建议结果
+user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false); // [FF95+]
+// 地址栏不显示赞助的快速建议结果
+user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
+// 禁止地址栏快速建议数据收集
+user_pref("browser.urlbar.quicksuggest.dataCollection.enabled", false);
 // 禁止地址栏自动填充
 user_pref("browser.urlbar.autoFill", false);
 // 地址栏下拉列表显示的条目数量
@@ -518,8 +522,10 @@ user_pref("dom.disable_beforeunload", true);
 // user_pref("dom.event.clipboardevents.enabled", false);
 // 禁用Javascript脚本设置的“剪切/复制到剪贴板”功能
 // user_pref("dom.allow_cut_copy", false);
-// 禁止Linux上自动将所选内容发送到剪贴板
+// Linux系统上，禁止自动将所选内容发送到剪贴板
 // user_pref("clipboard.autocopy", false); 
+// 启用（有限但充分的）window.opener保护 
+user_pref("dom.targetBlankNoOpener.enabled", true); // [DEFAULT: true FF79+]
 // 禁用DOM（文档对象模型）存储
 // user_pref("dom.storage.enabled", false);
 // 禁用service worker缓存和缓存存储
@@ -629,14 +635,16 @@ user_pref("security.mixed_content.block_active_content", true); // [DEFAULT: tru
 // user_pref("security.mixed_content.block_object_subrequest", true);
 
 
+/*==========安全>基于HTTPS的DNS==========*/
+// 禁用DNS-over-HTTPS
+user_pref("network.trr.mode", 5);
+// user_pref("network.trr.uri", "https://firefox.dns.nextdns.io/");
 
-/*==========同步==========*/
+
+
+/*==========同步及其他设置项==========*/
 // 禁止火狐帐户和同步
 user_pref("identity.fxaccounts.enabled", false); 
-
-
-
-/*==========设置==========*/
 // 禁用about:preferences的Mozilla产品
 user_pref("browser.preferences.moreFromMozilla", false);
 // 在设置页面关闭搜索栏
@@ -965,8 +973,6 @@ user_pref("dom.push.userAgentID", "");
 // user_pref("javascript.options.jit_trustedprincipals", true); // [FF75+] [HIDDEN PREF]
 // 禁用WebAssembly
 // user_pref("javascript.options.wasm", false);
-// 启用（有限但充分的）window.opener保护 
-user_pref("dom.targetBlankNoOpener.enabled", true); // [DEFAULT: true FF79+]
 /*=====指纹识别=====*/
 // 禁用navigator.mediaDevices和getUserMedia()支持
 // user_pref("media.navigator.enabled", false);
