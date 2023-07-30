@@ -1,7 +1,8 @@
 /******
+
 *    name: shuangmuxinwei user.js
-*    date: 28 July 2023
-*    version: 113
+*    date: 30 July 2023
+*    version: 115
 *    url: https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main/Settings
 
 * 免责声明：
@@ -116,9 +117,9 @@ user_pref("layout.css.visited_links_enabled", false);
 user_pref("browser.display.use_system_colors", false);
 // 为链接添加下划线Underline links
 user_pref("browser.underline_anchors", true);
-// 在所有页面选择自定义的颜色覆盖页面指定的颜色Override the colors specified by the page. 0 = Only with High Contrast themes . 1 = Never. 2 = Always. 
+// 仅在使用高对比度主题时，选择自定义的颜色覆盖页面指定的颜色Override the colors specified by the page. 0 = Only with High Contrast themes . 1 = Never. 2 = Always. 
 // [SETTING] General>Language and Appearance>Fonts and Colors>Colors>Override the colors specified by the page with your selections above
-user_pref("browser.display.document_color_use", 2);
+user_pref("browser.display.document_color_use", 0);
 
 
 /*==========常规>语言与外观>字体==========*/
@@ -350,11 +351,6 @@ user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
 // 禁止在隐私窗口中显示搜索建议disable "Show search suggestions in Private Windows"
 // [SETTING] Search>Search Suggestions>Show search suggestions in Private Windows
 user_pref("browser.search.suggest.enabled.private", false);
-// 禁用地址栏上下文建议[FF92+]，地址栏不显示赞助的快速建议结果。disable location bar contextual suggestions [FF92+]. Whether sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
-// [SETTING] Privacy & Security>Address Bar>Suggestions from...
-user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
-// 地址栏不显示非赞助的快速建议结果Whether non-sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
-user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false); // [FF95+]
 
 
 /*==========搜索>搜索引擎==========*/
@@ -479,6 +475,15 @@ user_pref("privacy.clearOnShutdown.siteSettings", false);
 user_pref("browser.urlbar.suggest.topsites", false); 
 // 禁用地址栏结果显示建议：搜索引擎disable tab-to-search [FF85+]. Alternatively, you can exclude on a per-engine basis by unchecking them in Options>Search. 
 user_pref("browser.urlbar.suggest.engines", false);
+// 地址栏不显示非赞助的快速建议结果Whether non-sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
+// [SETTING] Privacy & Security>Address Bar>Suggestions from the web. Get suggestions from Firefox related to your search.
+user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false); // [FF95+]
+// 禁用地址栏上下文建议[FF92+]，地址栏不显示赞助的快速建议结果。disable location bar contextual suggestions [FF92+]. Whether sponsored quick suggest results are shown in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
+// [SETTING] Privacy & Security>Address Bar>Suggestions from sponsors. Support the development of Firefox with occasional sponsored suggestions.
+user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
+// 禁止地址栏快速建议数据收集Whether data collection is enabled for quick suggest results in the urlbar. This pref is exposed to the user in the UI, and it's sticky so that its user-branch value persists regardless of whatever Firefox Suggest scenarios, with their various default-branch values, the user is enrolled in over time.
+// [SETTING] Privacy & Security>Address Bar>Improve the Firefox experience. Help create a richer search experience by allowing Mozilla to process your search queries.
+user_pref("browser.urlbar.quicksuggest.dataCollection.enabled", false);
 // 禁止地址栏自动填充disable location bar autofill. Disable inline autocomplete in URL bar
 user_pref("browser.urlbar.autoFill", false);
 // 地址栏下拉列表显示的条目数量controls the total number of entries to appear in the location bar dropdown
@@ -587,8 +592,10 @@ user_pref("dom.disable_beforeunload", true);
 // user_pref("dom.event.clipboardevents.enabled", false);
 // 禁用Javascript脚本设置的“剪切/复制到剪贴板”功能[FF41+]。会破坏合法的基于JS的“复制到剪贴板”功能。disable clipboard commands (cut/copy) from "non-privileged" content [FF41+]. this disables document.execCommand("cut"/"copy") to protect your clipboard. Disable "copy to clipboard" functionality via Javascript (Firefox >= 41). NOTICE: Disabling clipboard operations will break legitimate JS-based "copy to clipboard" functionality.
 // user_pref("dom.allow_cut_copy", false);
-// 禁止Linux上自动将所选内容发送到剪贴板。除ANDROID、XP_MACOSX、XP_UNIX系统外，参数值默认true。Do not automatically send selection to clipboard on some Linux platforms
+// Linux系统上，禁止自动将所选内容发送到剪贴板。除ANDROID、XP_MACOSX、XP_UNIX系统外，参数值默认true。Do not automatically send selection to clipboard on some Linux platforms
 // user_pref("clipboard.autocopy", false); 
+// 启用（有限但充分的）window.opener保护 [FF65+]enable (limited but sufficient) window.opener protection [FF65+]. Makes rel=noopener implicit for target=_blank in anchor and area elements when no rel attribute is set
+user_pref("dom.targetBlankNoOpener.enabled", true); // [DEFAULT: true FF79+]
 // 禁用DOM（文档对象模型）存储disable DOM (Document Object Model) Storage
 // user_pref("dom.storage.enabled", false);
 // 禁用service worker缓存和缓存存储disable service worker cache and cache storage
@@ -716,14 +723,16 @@ user_pref("security.mixed_content.block_active_content", true); // [DEFAULT: tru
 // user_pref("security.mixed_content.block_object_subrequest", true);
 
 
+/*==========安全>基于HTTPS的DNS==========*/
+// 禁用DNS-over-HTTPS[FF60+]。0=默认关闭，2=TRR（受信任递归解析器）优先，3=仅TRR，5=显式关闭disable DNS-over-HTTPS (DoH) rollout [FF60+]. 0=off by default, 2=TRR (Trusted Recursive Resolver) first, 3=TRR only, 5=explicitly off
+user_pref("network.trr.mode", 5);
+// user_pref("network.trr.uri", "https://firefox.dns.nextdns.io/");
 
-/*==========同步==========*/
+
+
+/*==========同步及其他设置项==========*/
 // 禁止火狐帐户和同步disable Firefox Accounts & Sync [FF60+] [RESTART]. If set to false, FxAccounts and Sync will be unavailable. A restart is mandatory after flipping that preference.
 user_pref("identity.fxaccounts.enabled", false); 
-
-
-
-/*==========设置==========*/
 // 禁用about:preferences的Mozilla产品More from Mozilla
 user_pref("browser.preferences.moreFromMozilla", false);
 // 在设置页面关闭搜索栏Toggling Search bar on and off in about:preferences
@@ -1062,8 +1071,6 @@ user_pref("dom.push.userAgentID", "");
 // user_pref("javascript.options.jit_trustedprincipals", true); // [FF75+] [HIDDEN PREF]
 // 禁用WebAssembly[FF52+]。越来越多的漏洞被发现，包括多年前在本地程序中已知并已修复的漏洞。WASM拥有强大的底层访问能力，更有可能会引发某些攻击（暴力破解）和漏洞disable WebAssembly [FF52+]. Vulnerabilities have increasingly been found, including those known and fixed in native programs years ago. WASM has powerful low-level access, making certain attacks (brute-force) and vulnerabilities more possible. [STATS] ~0.2% of websites, about half of which are for crytopmining / malvertising
 // user_pref("javascript.options.wasm", false);
-// 启用（有限但充分的）window.opener保护 [FF65+]enable (limited but sufficient) window.opener protection [FF65+]. Makes rel=noopener implicit for target=_blank in anchor and area elements when no rel attribute is set
-user_pref("dom.targetBlankNoOpener.enabled", true); // [DEFAULT: true FF79+]
 /*=====指纹识别=====*/
 // 以下参数不足以帮助防指纹，弊大于利。不能与RESIST FINGERPRINTING一起使用。RESIST FINGERPRINTING已经涵盖这些功能，会引发干扰They are insufficient to help anti-fingerprinting and do more harm than good. [WARNING] DO NOT USE with RESIST FINGERPRINTING. RESIST FINGERPRINTING already covers these and they can interfere
 // 禁用navigator.mediaDevices和getUserMedia()支持，禁用媒体设备枚举disable navigator.mediaDevices and getUserMedia() support. See also media.peerconnection.enabled. disable media device enumeration [FF29+]
