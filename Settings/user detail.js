@@ -1078,7 +1078,7 @@ user_pref("dom.push.userAgentID", "");
 // 禁用网络音频应用程序接口disable Web Audio API [FF51+]
 // user_pref("dom.webaudio.enabled", false);
 /*=====FIRST PARTY ISOLATION=====*/
-// 强制不执行第一方隔离[FF51+]enforce no First Party Isolation [FF51+] [WARNING] Replaced with network partitioning (FF85+) and TCP(browser.contentblocking.category, Enhanced Tracking Protection Strict Mode enables Total Cookie Protection), and enabling FPI. disables those. FPI is no longer maintained except at Tor Project for Tor Browser's config
+// 强制不执行第一方隔离[FF51+]enforce no First Party Isolation [FF51+] [WARNING] Replaced with network partitioning (FF85+) and TCP(browser.contentblocking.category, Enhanced Tracking Protection Strict Mode enables Total Cookie Protection), and enabling First Party Isolation. disables those. First Party Isolation is no longer maintained except at Tor Project for Tor Browser's config
 user_pref("privacy.firstparty.isolate", false); // [DEFAULT: false]
 // 对window.opener强制实施第一方隔离限制[FF54+]。参数值为false，同一域名的两个窗口具有不同的第一方域（顶级URL）可以通过window.opener访问资源。此参数仅在 privacy.firstparty.isolate为true时生效enforce First Party Isolation restriction for window.opener [FF54+]. If false, two windows in the same domain with different first party domains (top level URLs) can access resources through window.opener. This pref is effective only when "privacy.firstparty.isolate" is true.
 // user_pref("privacy.firstparty.isolate.restrict_opener_access", true); // [DEFAULT: true]
