@@ -1,8 +1,8 @@
 /******
 
 *    name: shuangmuxinwei user.js
-*    date: 30 July 2023
-*    version: 115
+*    date: 9 August 2023
+*    version: 116
 *    url: https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main/Settings
 
 * 免责声明：
@@ -28,6 +28,8 @@ user_pref("startup.homepage_override_url", "");
 // 禁止火狐首次启动时跳转页面
 user_pref("startup.homepage_welcome_url", "");
 user_pref("startup.homepage_welcome_url.additional", "");
+// 替换about:welcome页为新标签页
+user_pref("browser.aboutwelcome.enabled", false);
 // 禁止启动时显示空白页，加快启动速度
 user_pref("browser.startup.blankWindow", false);
 // 在加载libxul之前，显示skeleton UI窗口
@@ -111,8 +113,8 @@ user_pref("layout.css.visited_links_enabled", false);
 user_pref("browser.display.use_system_colors", false);
 // 为链接添加下划线
 user_pref("browser.underline_anchors", true);
-// 仅在使用高对比度主题时，选择自定义的颜色覆盖页面指定的颜色
-user_pref("browser.display.document_color_use", 0);
+// 始终不用自定义的颜色覆盖页面指定的颜色
+user_pref("browser.display.document_color_use", 1);
 
 
 /*==========常规>语言与外观>字体==========*/
@@ -174,7 +176,7 @@ user_pref("media.eme.enabled", false);
 // user_pref("browser.eme.ui.enabled", false);
 // 禁用GMP（Gecko媒体插件）
 user_pref("media.gmp-provider.enabled", false);
-// 更新GMP（Gecko媒体插件）安装/更新的服务地址Update service URL for GMP install/updates
+// 更新GMP（Gecko媒体插件）安装/更新的服务地址
 // user_pref("media.gmp-manager.url", "");
 // 禁用Widevine内容解密模块
 user_pref("media.gmp-widevinecdm.enabled", false);
@@ -216,6 +218,8 @@ user_pref("app.update.staging.enabled", false);
 user_pref("browser.preferences.defaultPerformanceSettings.enabled", false);
 // 内容进程限制为2
 user_pref("dom.ipc.processCount", 2);
+// 每个源的最大独立内容进程数
+user_pref("dom.ipc.processCount.webIsolated", 2);
 // 启用硬件加速
 user_pref("layers.acceleration.disabled", false);
 // 开启direct2d，用于硬件加速
@@ -585,9 +589,9 @@ user_pref("default-browser-agent.enabled", false);
 
 
 /*==========安全>欺诈内容和危险软件防护==========*/
-// 开启安全浏览功能
-user_pref("browser.safebrowsing.malware.enabled", true);
-user_pref("browser.safebrowsing.phishing.enabled", true);
+// 关闭安全浏览功能
+user_pref("browser.safebrowsing.malware.enabled", false);
+user_pref("browser.safebrowsing.phishing.enabled", false);
 // 禁用安全浏览功能查杀下载文件
 user_pref("browser.safebrowsing.downloads.enabled", false);
 // 禁用安全浏览功能查杀下载文件（远程）
@@ -610,7 +614,7 @@ user_pref("security.OCSP.require", true);
 // 禁用Win8.1的微软家庭安全证书
 user_pref("security.family_safety.mode", 0);
 // 启用严格的PKP（公钥锁定）
-user_pref("security.cert_pinning.enforcement_level", 2);
+// user_pref("security.cert_pinning.enforcement_level", 2);
 // 启用CRLite
 user_pref("security.remote_settings.crlite_filters.enabled", true);
 user_pref("security.pki.crlite_mode", 2);
@@ -880,7 +884,7 @@ user_pref("security.insecure_connection_text.enabled", true);
 user_pref("security.insecure_connection_text.pbmode.enabled", true);
 /*=====HEADERS / REFERERS=====*/
 // 控制何时发送跨站referer。0=始终（默认），1=仅当基本域名匹配时，2=仅当主机匹配时
-user_pref("network.http.referer.XOriginPolicy", 2);
+user_pref("network.http.referer.XOriginPolicy", 0);
 // 控制发送的跨站信息量
 user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
 // 强制不启用referer欺骗，referer spoof影响跨站点请求伪造保护
@@ -903,7 +907,7 @@ user_pref("network.http.referer.spoofSource", false); // [DEFAULT: false]
 user_pref("privacy.window.maxInnerWidth", 1600);
 user_pref("privacy.window.maxInnerHeight", 900);
 // 启用反指纹识别信箱
-user_pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
+// user_pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
 // user_pref("privacy.resistFingerprinting.letterboxing.dimensions", ""); // [HIDDEN PREF]
 // 实验性反指纹识别
 // user_pref("privacy.resistFingerprinting.exemptedDomains", "*.example.invalid");
@@ -943,6 +947,11 @@ user_pref("network.manage-offline-status", false);
 user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
 // 在国际化域名中使用Punycode消除可能的欺骗
 user_pref("network.IDN_show_punycode", true);
+// 首次渲染网页前等待的时间间隔
+user_pref("nglayout.initialpaint.delay", 0);
+user_pref("nglayout.initialpaint.delay_in_oopif", 0);
+// 定义通知间隔（微秒）
+user_pref("content.notify.interval", 100000);
 // 禁用HTTP替代服务
 // user_pref("network.http.altsvc.enabled", false);
 // user_pref("network.http.altsvc.oe", false);
@@ -991,7 +1000,7 @@ user_pref("privacy.firstparty.isolate", false); // [DEFAULT: false]
 
 
 /*==========按键==========*/
-// 定义退格键的功能
+// 去除退格键的功能
 user_pref("browser.backspace_action", 2); 
 // 禁止Alt键激活菜单栏
 user_pref("ui.key.menuAccessKeyFocuses", false);
