@@ -1,8 +1,8 @@
 /******
 
 *    name: shuangmuxinwei user.js
-*    date: 30 July 2023
-*    version: 115
+*    date: 9 August 2023
+*    version: 116
 *    url: https://github.com/shuangmuxinwei/FirefoxCustomize/tree/main/Settings
 
 * 免责声明：
@@ -29,6 +29,8 @@ user_pref("startup.homepage_override_url", "");
 // 禁止火狐首次启动时跳转页面When Firefox is started with a new profile (usually, the first time it’s started after installation), the URL specified in this preference will be loaded (even if the user imported their own homepage). This is similar to startup.homepage_override_url, which specifies the URL loaded when Firefox is first started after an upgrade, but this preference allows specifying the page a first-time user would see.
 user_pref("startup.homepage_welcome_url", "");
 user_pref("startup.homepage_welcome_url.additional", "");
+// 替换about:welcome页为新标签页Should users see about:welcome? If this is false, users will see a regular new tab instead.
+user_pref("browser.aboutwelcome.enabled", false);
 // 禁止启动时显示空白页，加快启动速度disable showing about:blank/maximized window as soon as possible during startup [FF60+]
 user_pref("browser.startup.blankWindow", false);
 // 在加载libxul之前，显示skeleton UI窗口Show a skeleton UI window prior to loading libxul. Only visible for windows users as it is not implemented anywhere else.
@@ -117,9 +119,9 @@ user_pref("layout.css.visited_links_enabled", false);
 user_pref("browser.display.use_system_colors", false);
 // 为链接添加下划线Underline links
 user_pref("browser.underline_anchors", true);
-// 仅在使用高对比度主题时，选择自定义的颜色覆盖页面指定的颜色Override the colors specified by the page. 0 = Only with High Contrast themes . 1 = Never. 2 = Always. 
+// 始终不用自定义的颜色覆盖页面指定的颜色Override the colors specified by the page. 0 = Only with High Contrast themes . 1 = Never. 2 = Always. 
 // [SETTING] General>Language and Appearance>Fonts and Colors>Colors>Override the colors specified by the page with your selections above
-user_pref("browser.display.document_color_use", 0);
+user_pref("browser.display.document_color_use", 1);
 
 
 /*==========常规>语言与外观>字体==========*/
@@ -237,6 +239,8 @@ user_pref("app.update.staging.enabled", false);
 user_pref("browser.preferences.defaultPerformanceSettings.enabled", false);
 // 内容进程限制为2
 user_pref("dom.ipc.processCount", 2);
+// 每个源的最大独立内容进程数Maximum number of isolated content processes per-origin.
+user_pref("dom.ipc.processCount.webIsolated", 2);
 // 启用硬件加速enable hardware acceleration to reduce graphics fingerprinting
 // [SETTING] General>Performance>Use hardware acceleration when available
 user_pref("layers.acceleration.disabled", false);
@@ -665,10 +669,10 @@ user_pref("default-browser-agent.enabled", false);
 
 
 /*==========安全>欺诈内容和危险软件防护==========*/
-// 开启安全浏览功能。安全浏览功能采取许多措施保护隐私，不会向谷歌发送完整网址，只会发送前缀的部分哈希值，与其他真实的部分哈希值一起隐藏起来。火狐采取的措施包括去掉识别参数，自FF57+起甚至不使用cookie(打开 browser.safebrowsing.debug监控这一活动）。enable Safe Browsing. SAFE BROWSING has taken many steps to preserve privacy. If required, a full url is never sent to Google, only a part-hash of the prefix, hidden with noise of other real part-hashes. Firefox takes measures such as stripping out identifying parameters and since SBv4 (FF57+) doesn't even use cookies. (#Turn on browser.safebrowsing.debug to monitor this activity). 
+// 关闭安全浏览功能。安全浏览功能采取许多措施保护隐私，不会向谷歌发送完整网址，只会发送前缀的部分哈希值，与其他真实的部分哈希值一起隐藏起来。火狐采取的措施包括去掉识别参数，自FF57+起甚至不使用cookie(打开 browser.safebrowsing.debug监控这一活动）。enable Safe Browsing. SAFE BROWSING has taken many steps to preserve privacy. If required, a full url is never sent to Google, only a part-hash of the prefix, hidden with noise of other real part-hashes. Firefox takes measures such as stripping out identifying parameters and since SBv4 (FF57+) doesn't even use cookies. (#Turn on browser.safebrowsing.debug to monitor this activity). 
 // [SETTING] Privacy & Security>Security>... Block dangerous and deceptive content
-user_pref("browser.safebrowsing.malware.enabled", true);
-user_pref("browser.safebrowsing.phishing.enabled", true);
+user_pref("browser.safebrowsing.malware.enabled", false);
+user_pref("browser.safebrowsing.phishing.enabled", false);
 // 禁用安全浏览功能查杀下载文件。主开关，决定browser.safebrowsing.downloads.remote.enabled、remote.url、remote.block_potentially_unwanted、remote.block_uncommon参数。disable Safe Browsing checks for downloads (both local lookups + remote). This is the master switch for the safebrowsing.downloads* prefs.
 // [SETTING] Privacy & Security>Security>... "Block dangerous downloads"
 user_pref("browser.safebrowsing.downloads.enabled", false);
@@ -697,7 +701,7 @@ user_pref("security.OCSP.require", true);
 // 禁用Win8.1的微软家庭安全证书[FF50+]。0=禁止检测家庭安全模式和导入根证书。1=只尝试检测家庭安全模式（不导入根证书）。2=检测家庭安全模式并导入根证书disable Windows 8.1's Microsoft Family Safety cert [FF50+] [WIN]. 0=disable detecting Family Safety mode and importing the root. 1=only attempt to detect Family Safety mode (don't import the root). 2=detect Family Safety mode and import the root.
 user_pref("security.family_safety.mode", 0);
 // 启用严格的PKP（公钥锁定）。0=禁用，1=允许用户中间人设备（如杀毒软件），2=严格。如果依靠杀毒软件通过检查所有网络流量来保护网络浏览，保持默认值=1。enable strict PKP (Public Key Pinning). 0=disabled, 1=allow user MiTM (default; such as your antivirus), 2=strict. If you rely on an AV (antivirus) to protect your web browsing by inspecting ALL your web traffic, then leave at current default=1. [SETUP-WEB] MOZILLA_PKIX_ERROR_KEY_PINNING_FAILURE
-user_pref("security.cert_pinning.enforcement_level", 2);
+// user_pref("security.cert_pinning.enforcement_level", 2);
 // 启用CRLite[FF73+]。0=禁用。1=查询CRLite，但只收集遥测数据。2=查询CRLite并同时执行 "已撤销 "和 "未撤销 "结果。3=查询CRLite并执行 "未撤销 "结果，但将 "已撤销 "结果交由OCSP处理enable CRLite [FF73+]. 0 = disabled. 1 = consult CRLite but only collect telemetry. 2 = consult CRLite and enforce both "Revoked" and "Not Revoked" results. 3 = consult CRLite and enforce "Not Revoked" results, but defer to OCSP for "Revoked" (FF99+, default FF100+)
 user_pref("security.remote_settings.crlite_filters.enabled", true);
 user_pref("security.pki.crlite_mode", 2);
@@ -974,9 +978,9 @@ user_pref("security.insecure_connection_text.enabled", true);
 user_pref("security.insecure_connection_text.pbmode.enabled", true);
 /*=====HEADERS / REFERERS=====*/
 // 控制何时发送跨站referer。0=始终（默认），1=仅当基本域名匹配时，2=仅当主机匹配时。如果太严格，那么改为“0”并使用Smart Referer扩展（严格模式+添加例外）control when to send a cross-origin referer. 0=always (default), 1=only if base domains match, 2=only if hosts match. [SETUP-WEB] Breakage: older modems/routers and some sites e.g banks, vimeo, icloud, instagram. If "2" is too strict, then override to "0" and use Smart Referer extension (Strict mode + add exceptions).
-user_pref("network.http.referer.XOriginPolicy", 2);
+// user_pref("network.http.referer.XOriginPolicy", 2);
 // 控制发送的跨站信息量[FF52+]。0=发送完整URI（默认），1=协议+主机+端口+路径，2=协议+主机+端口control the amount of cross-origin information to send [FF52+]. 0=send full URI (default), 1=scheme+host+port+path, 2=scheme+host+port
-user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
+// user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
 // 强制不启用referer欺骗，referer spoof影响跨站点请求伪造保护enforce no referer spoofing [WHY] Spoofing can affect CSRF (Cross-Site Request Forgery) protections. false=real referer, true=spoof referer (use target URI as referer).
 user_pref("network.http.referer.spoofSource", false); // [DEFAULT: false]
 // 设置默认Referrer策略[FF59+]。0=无引用，1=同源，2=跨来源时限制来源，3=降级时无Referrer。网站Referrer策略可以覆盖参数值set the default Referrer Policy [FF59+]. 0=no-referer, 1=same-origin, 2=strict-origin-when-cross-origin, 3=no-referrer-when-downgrade. [WHY] Defaults are fine. They can be overridden by a site-controlled Referrer Policy
@@ -996,8 +1000,8 @@ user_pref("network.http.referer.spoofSource", false); // [DEFAULT: false]
 // 设置新窗口大小最大值[FF55+]宽度为200的倍数，高度为100的倍数set new window size rounding max values [FF55+][SETUP-CHROME] sizes round down in hundreds: width to 200s and height to 100s, to fit your screen
 user_pref("privacy.window.maxInnerWidth", 1600);
 user_pref("privacy.window.maxInnerHeight", 900);
-// 启用反指纹识别信箱[FF67+]。通过应用阶梯范围的边距，动态调整内部窗口大小。如果使用privacy.resistFingerprinting.letterboxing.dimensions参数，那么只会应用这些分辨率。格式为 "width1xheight1, width2xheight2, ..."(如 "800x600、1000x1000"）。这与反指纹识别无关。如果不使用反指纹识别，或使用但不喜欢边距，那么改变此参数值。它是能够被指纹别的。privacy.resistFingerprinting.letterboxing.dimensions仅用于测试enable RESIST FINGERPRINTING letterboxing [FF67+]. Dynamically resizes the inner window by applying margins in stepped ranges. If you use the dimension pref, then it will only apply those resolutions. The format is "width1xheight1, width2xheight2, ..." (e.g. "800x600, 1000x1000"). [SETUP-WEB] This is independent of RESIST FINGERPRINTING. If you're not using RESIST FINGERPRINTING, or you are but dislike the margins, then flip this pref, keeping in mind that it is effectively fingerprintable. [WARNING] DO NOT USE: the dimension pref is only meant for testing
-user_pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
+// 启用反指纹识别信箱[FF67+]。通过应用阶梯式范围的边距，动态调整内部窗口大小。如果使用privacy.resistFingerprinting.letterboxing.dimensions参数，那么只会应用这些分辨率。格式为"width1xheight1, ..."(如"800x600"）。这与反指纹识别无关。如果不使用反指纹识别，或使用但不喜欢边距，那么改变此参数值。它是能够被指纹别的。privacy.resistFingerprinting.letterboxing.dimensions仅用于测试。参数值true，浏览器窗口四周各有一段边距。enable RESIST FINGERPRINTING letterboxing [FF67+]. Dynamically resizes the inner window by applying margins in stepped ranges. If you use the dimension pref, then it will only apply those resolutions. The format is "width1xheight1, width2xheight2, ..." (e.g. "800x600, 1000x1000"). [SETUP-WEB] This is independent of RESIST FINGERPRINTING. If you're not using RESIST FINGERPRINTING, or you are but dislike the margins, then flip this pref, keeping in mind that it is effectively fingerprintable. [WARNING] DO NOT USE: the dimension pref is only meant for testing
+// user_pref("privacy.resistFingerprinting.letterboxing", true); // [HIDDEN PREF]
 // user_pref("privacy.resistFingerprinting.letterboxing.dimensions", ""); // [HIDDEN PREF]
 // 实验性反指纹识别experimental RESIST FINGERPRINTING [FF91+][WARNING] DO NOT USE unless testing
 // user_pref("privacy.resistFingerprinting.exemptedDomains", "*.example.invalid");
@@ -1041,6 +1045,12 @@ user_pref("network.manage-offline-status", false);
 user_pref("javascript.use_us_english_locale", true); // [HIDDEN PREF]
 // 在国际化域名中使用Punycode消除可能的欺骗use Punycode in Internationalized Domain Names to eliminate possible spoofing. [SETUP-WEB] Might be undesirable for non-latin alphabet users since legitimate IDN's are also punycoded. [TEST] https://www.xn--80ak6aa92e.com/ (www.apple.com)
 user_pref("network.IDN_show_punycode", true);
+// Mozilla程序以增量方式渲染网页：在下载整个网页前，先显示已收到的网页内容。由于网页开始时通常不会显示太多有用的信息，因此Mozilla程序在首次渲染网页前会等待一小段时间。此参数控制首次渲染网页前等待的时间间隔：首次显示页面前等待的毫秒数。数值越小，页面的初始显示速度越快，但完成渲染所需的时间也越长。数值越大，效果越相反。Mozilla applications render web pages incrementally - they display what's been received of a page before the entire page has been downloaded. Since the start of a web page normally doesn't have much useful information to display, Mozilla applications will wait a short interval before first rendering a page. This preference controls that interval. The number of milliseconds to wait before first displaying the page. Lower values will make a page initially display more quickly, but will make the page take longer to finish rendering. Higher values will have the opposite effect. 
+user_pref("nglayout.initialpaint.delay", 0);
+user_pref("nglayout.initialpaint.delay_in_oopif", 0);
+// 定义通知间隔（微秒）。通知间隔对慢速连接初始显示内容所需的时间有显著影响。当前值可在不增加页面加载时间的情况下增量显示内容。值设置低于1/10秒，会开始影响页面加载性能。Notification interval in microseconds. The notification interval has a dramatic effect on how long it takes to initially display content for slow connections. The current value provides good incremental display of content without causing an increase in page load time. If this value is set below 1/10 of a second it starts to impact page load performance.
+// Mozilla程序不会等到页面完全下载完成后才向用户显示，而是定期呈现已收到的内容。由于每次接收到额外数据时都会重新显示页面，这大大降低总页面加载时间，因此添加一个计时器，以避免页面过于频繁地重新显示。此参数规定两次页面重新显示之间的最短等待时间。页面重新显示之间的最小微秒数（1秒=1000000微秒）。Rather than wait until a page has completely downloaded to display it to the user, Mozilla applications will periodically render what has been received to that point. Because reflowing the page every time additional data is received greatly slows down total page load time, a timer was added so that the page would not reflow too often. This preference specfies the minimum amount of time to wait between reflows. The minimum number of microseconds (1 second = 1,000,000 microseconds) between reflows. 
+user_pref("content.notify.interval", 100000);
 // 禁用HTTP替代服务[FF37+]disable HTTP Alternative Services [FF37+]. [WHY] Already isolated with network partitioning (FF85+). alt-svc allows separation of transport routing from the origin host without using a proxy.
 // user_pref("network.http.altsvc.enabled", false);
 // user_pref("network.http.altsvc.oe", false);
@@ -1090,7 +1100,7 @@ user_pref("privacy.firstparty.isolate", false); // [DEFAULT: false]
 
 
 /*==========按键==========*/
-// 定义退格键的功能Backspace and Shift+Backspace behavior. 0 goes Back/Forward. 1 act like PgUp/PgDown. 2 and other values, nothing.
+// 去除退格键的功能Backspace and Shift+Backspace behavior. 0 goes Back/Forward. 1 act like PgUp/PgDown. 2 and other values, nothing.
 user_pref("browser.backspace_action", 2); 
 // 禁止Alt键激活菜单栏Make sure Alt key doesn't show the menubar
 user_pref("ui.key.menuAccessKeyFocuses", false);
